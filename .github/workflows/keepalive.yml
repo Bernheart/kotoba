@@ -1,0 +1,22 @@
+# Free Supabase projects pause after 7 days without activity. If you set the SUPABASE_URL and
+# SUPABASE_ANON_KEY repository variables, this pings the API twice a week so sync stays awake
+# even when you take a break. Without the variables it does nothing.
+name: Keep Supabase awake
+
+on:
+  schedule:
+    - cron: '17 6 * * 1,4'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase
+        env:
+          URL: ${{ vars.SUPABASE_URL }}
+          KEY: ${{ vars.SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$URL" ] || [ -z "$KEY" ]; then echo "Supabase not configured — skipping"; exit 0; fi
+          curl -sS "$URL/rest/v1/kotoba_records?select=id&limit=1" -H "apikey: $KEY" -o /dev/null -w "rest %{http_code}\n"
+          curl -sS "$URL/auth/v1/health" -H "apikey: $KEY" -o /dev/null -w "auth %{http_code}\n"

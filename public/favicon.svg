@@ -1,1 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#ee5d3e"/><text x="32" y="45" font-size="38" text-anchor="middle" font-family="'Hiragino Mincho ProN','Noto Serif JP',serif" font-weight="700" fill="#fff6f0">言</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14.08" fill="#ee5d3e"/>
+  <rect x="3.84" y="3.84" width="56.32" height="56.32" rx="11.264000000000001" fill="none" stroke="#fff6f0" stroke-opacity="0.18" stroke-width="0.768"/>
+  
+  <g transform="translate(10.24 10.24) scale(0.6799999999999999)" fill="#fff6f0">
+    <rect x="28.5" y="6" width="7" height="10" rx="3" transform="rotate(-18 32 11)"/>
+    <rect x="11" y="19" width="42" height="5.2" rx="2.4"/>
+    <rect x="17.5" y="29" width="29" height="4.6" rx="2.2"/>
+    <rect x="17.5" y="38" width="29" height="4.6" rx="2.2"/>
+    <path d="M19 47.5h26a2.5 2.5 0 0 1 2.5 2.5v9.5a2.5 2.5 0 0 1-2.5 2.5H19a2.5 2.5 0 0 1-2.5-2.5V50a2.5 2.5 0 0 1 2.5-2.5zm2.2 4.4v6.2h21.6v-6.2z"/>
+  </g>
+</svg>

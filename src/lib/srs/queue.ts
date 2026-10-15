@@ -188,6 +188,6 @@ export async function undoAnswer(res: AnswerResult) {
     if (res.prev) await db.cards.put({ ...res.prev, updatedAt: now, dirty: 1 })
     else await db.cards.put({ ...res.card, ...newCardRow(res.card.wordId, res.card.dir, now) })
     // Logs are append-only for sync, so an undone answer is tombstoned rather than removed.
-    await db.reviewLogs.put({ ...res.log, deleted: 1, dirty: 1 })
+    await db.reviewLogs.put({ ...res.log, deleted: 1, dirty: 1, updatedAt: now })
   })
 }

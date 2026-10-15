@@ -10,9 +10,12 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
     "check": "npm run typecheck && npm run test",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "build:single": "vite build --mode single",
+    "icons": "node scripts/gen-icons.mjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
     "dexie": "^4.4.6",
     "dexie-react-hooks": "^4.4.0",
     "motion": "^14.3.0",
@@ -35,9 +38,13 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
     "fake-indexeddb": "^6.2.5",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "vite": "^8.3.4",
-    "vitest": "^5.0.5"
+    "vite-plugin-pwa": "^2.0.0",
+    "vite-plugin-singlefile": "^2.3.3",
+    "vitest": "^5.0.5",
+    "workbox-window": "^7.4.1"
   }
 }

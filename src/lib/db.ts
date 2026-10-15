@@ -71,6 +71,8 @@ export interface ReviewLogRow {
   dirty: 0 | 1
   /** Undone answers are tombstoned (logs are append-only for sync) */
   deleted?: 0 | 1
+  /** Set when a log is changed after creation (undo); defaults to `at` */
+  updatedAt?: number
 }
 
 /** Live (non-undone) logs */

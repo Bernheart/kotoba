@@ -1,4 +1,6 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { daysSinceBackup } from '../../lib/backup'
+import { useSyncStatus } from '../../lib/sync/engine'
 import { Link, useLocation } from 'wouter'
 import { fitSize, SentenceJP, WordJP } from '../../components/Furigana'
 import { Page } from '../../components/Page'
@@ -37,6 +39,13 @@ export function TodayPage() {
   const settings = useSettings()
   const stats = useTodayStats(words)
   const [, navigate] = useLocation()
+  const sync = useSyncStatus()
+  const [backupDays, setBackupDays] = useState<number | null>(null)
+  useEffect(() => {
+    void daysSinceBackup().then(setBackupDays)
+  }, [])
+  const syncHealthy = sync.state === 'idle' || sync.state === 'syncing'
+  const nudge = backupDays !== null && (stats?.answeredToday ?? 0) + (stats?.streak.current ?? 0) > 0 && backupDays >= (syncHealthy ? 30 : 7)
   const g = greeting()
   const wotd = useMemo(() => {
     const pool = words.filter((w) => w.example && w.type !== 'number' && w.type !== 'particle')
@@ -110,6 +119,15 @@ export function TodayPage() {
           )}
         </Card>
       </section>
+
+      {nudge && (
+        <div className="mb-6 flex items-center justify-between gap-3 rounded-2xl border border-warn/30 bg-warn/10 px-4 py-3">
+          <p className="text-[14px] text-warn">{t.today.backupNudge(backupDays ?? 9999)}</p>
+          <Button size="sm" onClick={() => navigate('/settings')}>
+            {t.today.backupNow}
+          </Button>
+        </div>
+      )}
 
       {wotd && (
         <section className="mb-8">
