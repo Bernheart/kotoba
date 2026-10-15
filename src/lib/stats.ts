@@ -114,3 +114,86 @@ export function useTodayStats(words: Word[]): TodayStats | undefined {
     return computeToday(words, cards, todayLogs, [...new Set(days as string[])])
   }, [words])
 }
+
+/* ---------- Dashboard ---------- */
+
+export interface Bucket {
+  key: string
+  n: number
+  correct: number
+}
+
+export interface DashboardStats {
+  perDay: Map<string, number>
+  streak: Streak
+  learned: number
+  mature: number
+  answersToday: number
+  retention30: number | null
+  retentionN: number
+  byType: Bucket[]
+  byLesson: Bucket[]
+  byMode: Bucket[]
+  forecast: number[]
+  total: number
+}
+
+export function computeDashboard(words: Word[], cards: CardRow[], logs: ReviewLogRow[], now = Date.now()): DashboardStats {
+  const live = logs.filter((l) => !l.deleted)
+  const byWord = new Map(words.map((w) => [w.id, w]))
+  const perDay = new Map<string, number>()
+  for (const l of live) perDay.set(l.day, (perDay.get(l.day) ?? 0) + 1)
+  const today = studyDay(now)
+
+  const recog = cards.filter((c) => c.dir === 'recog' && !c.deleted)
+  const learned = new Set(recog.filter((c) => c.state !== 0).map((c) => c.wordId)).size
+  const mature = recog.filter((c) => c.state === 2 && c.stability >= 21).length
+
+  const since = now - 30 * 86_400_000
+  const matureAnswers = live.filter((l) => l.scheduled && l.state === 2 && l.at >= since)
+  const retention30 = matureAnswers.length ? matureAnswers.filter((l) => l.rating > 1).length / matureAnswers.length : null
+
+  const bucket = (keyOf: (l: ReviewLogRow) => string | undefined) => {
+    const m = new Map<string, Bucket>()
+    for (const l of live) {
+      const k = keyOf(l)
+      if (k === undefined) continue
+      const b = m.get(k) ?? { key: k, n: 0, correct: 0 }
+      b.n++
+      b.correct += l.correct
+      m.set(k, b)
+    }
+    return [...m.values()]
+  }
+  const byType = bucket((l) => byWord.get(l.wordId)?.type)
+  const byLesson = bucket((l) => {
+    const w = byWord.get(l.wordId)
+    return w ? String(w.genkiLesson) : undefined
+  }).sort((a, b) => Number(a.key) - Number(b.key))
+  const byMode = bucket((l) => l.mode).sort((a, b) => b.n - a.n)
+  const forecast = Array.from({ length: 7 }, (_, i) => {
+    const day = addDays(today, i + 1)
+    return cards.filter((c) => !c.deleted && !c.suspended && c.state !== 0 && studyDay(c.due) === day).length
+  })
+  return {
+    perDay,
+    streak: computeStreak(perDay.keys(), today),
+    learned,
+    mature,
+    answersToday: perDay.get(today) ?? 0,
+    retention30,
+    retentionN: matureAnswers.length,
+    byType,
+    byLesson,
+    byMode,
+    forecast,
+    total: live.length,
+  }
+}
+
+export function useDashboard(words: Word[]): DashboardStats | undefined {
+  return useLiveQuery(async () => {
+    const [cards, logs] = await Promise.all([db.cards.toArray(), db.reviewLogs.toArray()])
+    return computeDashboard(words, cards, logs)
+  }, [words])
+}

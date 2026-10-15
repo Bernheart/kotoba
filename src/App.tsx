@@ -26,6 +26,7 @@ const MatchingPage = lazy(() => import('./features/quiz/MatchingPage').then((m) 
 const QuizPage = lazy(() => import('./features/quiz/QuizPage').then((m) => ({ default: m.QuizPage })))
 const SessionPage = lazy(() => import('./features/quiz/SessionPage').then((m) => ({ default: m.SessionPage })))
 const ShadowingPage = lazy(() => import('./features/quiz/ShadowingPage').then((m) => ({ default: m.ShadowingPage })))
+const StatsPage = lazy(() => import('./features/stats/StatsPage').then((m) => ({ default: m.StatsPage })))
 const FOCUS_ROUTES = ['/review', '/session', '/quiz', '/conjugation', '/kana', '/shadowing', '/matching']
 
 function useApplySettings() {
@@ -73,6 +74,7 @@ function Shell() {
           <Route path="/settings" component={SettingsPage} />
           <Route path="/review" component={ReviewPage} />
           <Route path="/study" component={StudyPage} />
+          <Route path="/stats" component={StatsPage} />
           <Route path="/quiz/:mode" component={QuizPage} />
           <Route path="/matching" component={MatchingPage} />
           <Route path="/conjugation" component={ConjugationPage} />
