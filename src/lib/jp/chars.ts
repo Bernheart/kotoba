@@ -2,7 +2,7 @@
 
 const KANJI_CHAR = /[㐀-䶿一-鿿豈-﫿々〆ヵヶ]/
 const HAS_KANJI = /[㐀-䶿一-鿿豈-﫿々〆]/
-const KANA_ONLY = /^[ぁ-ゟ゠-ヿㇰ-ㇿー～〜・\s]+$/u
+const KANA_ONLY = /^[ぁ-ゟ゠-ヿㇰ-ㇿー～〜・、。！？\s]+$/u
 
 export const isKanji = (ch: string) => KANJI_CHAR.test(ch)
 export const hasKanji = (s: string) => HAS_KANJI.test(s)

@@ -58,7 +58,7 @@ export function TodayPage() {
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
                 <div style={{ fontSize: fitSize(wotd.japanese, 56) }}>
-                  <WordJP word={wotd} className="jp-serif leading-[1.35] font-medium" />
+                  <WordJP word={wotd} className="jp-serif ruby-display font-medium" />
                 </div>
                 <p className="mt-1 text-[17px] text-text">{meaning(wotd, lang)}</p>
                 <p className="mt-0.5 text-[13px] text-faint">

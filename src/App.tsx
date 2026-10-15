@@ -5,7 +5,11 @@ import { useHashLocation } from 'wouter/use-hash-location'
 import { BottomNav, SideRail } from './components/Nav'
 import { Page } from './components/Page'
 import { ToastProvider } from './components/ui'
+import { ImportPage } from './features/library/ImportPage'
+import { LibraryPage } from './features/library/LibraryPage'
+import { SettingsPage } from './features/settings/SettingsPage'
 import { TodayPage } from './features/today/TodayPage'
+import { WordSheetProvider } from './features/word/WordSheet'
 import { useSettings } from './lib/settings'
 import { VocabProvider } from './lib/vocab-context'
 
@@ -33,6 +37,9 @@ function Shell() {
       <div className={focus ? '' : 'lg:pl-60'}>
         <Switch>
           <Route path="/" component={TodayPage} />
+          <Route path="/library" component={LibraryPage} />
+          <Route path="/import" component={ImportPage} />
+          <Route path="/settings" component={SettingsPage} />
           <Route>
             <Page title="404">
               <p className="text-muted">Not found.</p>
@@ -51,7 +58,9 @@ export default function App() {
       <Router hook={useHashLocation}>
         <ToastProvider>
           <VocabProvider>
-            <Shell />
+            <WordSheetProvider>
+              <Shell />
+            </WordSheetProvider>
           </VocabProvider>
         </ToastProvider>
       </Router>
