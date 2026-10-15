@@ -69,7 +69,12 @@ export interface ReviewLogRow {
   /** Card state before the answer (0 new, 1 learning, 2 review, 3 relearning) */
   state?: number
   dirty: 0 | 1
+  /** Undone answers are tombstoned (logs are append-only for sync) */
+  deleted?: 0 | 1
 }
+
+/** Live (non-undone) logs */
+export const liveLog = (l: Pick<ReviewLogRow, 'deleted'>) => !l.deleted
 
 export interface SettingRow extends Syncable {
   key: string

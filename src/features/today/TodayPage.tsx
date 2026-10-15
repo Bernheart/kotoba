@@ -1,9 +1,12 @@
 import { useMemo } from 'react'
-import { Link } from 'wouter'
+import { Link, useLocation } from 'wouter'
 import { fitSize, SentenceJP, WordJP } from '../../components/Furigana'
 import { Page } from '../../components/Page'
 import { SpeakButton, wordSpeech } from '../../components/SpeakButton'
-import { Card, SectionTitle } from '../../components/ui'
+import { IconFlame } from '../../components/icons'
+import { Button, Card, Ring, SectionTitle } from '../../components/ui'
+import { useSettings } from '../../lib/settings'
+import { useTodayStats } from '../../lib/stats'
 import { exampleTranslation, meaning, useLang, useT } from '../../lib/i18n'
 import { stripMarkup } from '../../lib/jp/markup'
 import { studyDay } from '../../lib/time'
@@ -31,6 +34,9 @@ export function TodayPage() {
   const t = useT()
   const lang = useLang()
   const { words } = useVocab()
+  const settings = useSettings()
+  const stats = useTodayStats(words)
+  const [, navigate] = useLocation()
   const g = greeting()
   const wotd = useMemo(() => {
     const pool = words.filter((w) => w.example && w.type !== 'number' && w.type !== 'particle')
@@ -49,7 +55,61 @@ export function TodayPage() {
           </h1>
           <p className="text-[15px] text-muted">{lang === 'pl' ? g.pl : g.en}</p>
         </div>
+        {stats && (
+          <div
+            className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[14px] font-semibold ${
+              stats.streak.current ? 'border-warn/40 bg-warn/10 text-warn' : 'border-line text-faint'
+            }`}
+            title={stats.streak.current ? t.today.streak(stats.streak.current) : t.today.streakNone}
+          >
+            <IconFlame size={18} />
+            <span className="tabular-nums">{stats.streak.current}</span>
+          </div>
+        )}
       </header>
+
+      <section className="mb-8">
+        <Card className="card-face relative overflow-hidden p-5">
+          <div className="flex items-center gap-5">
+            <Ring value={stats ? stats.answeredToday / settings.dailyGoal : 0} size={92} stroke={8} color="var(--k-good)">
+              <div className="text-center leading-tight">
+                <div className="text-[22px] font-bold tabular-nums">{stats?.answeredToday ?? 0}</div>
+                <div className="text-[11px] text-faint">/ {settings.dailyGoal}</div>
+              </div>
+            </Ring>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-baseline gap-2">
+                <span className="text-[44px] leading-none font-bold tabular-nums">{stats?.due ?? '–'}</span>
+                <span className="text-[15px] text-muted">{t.today.due(stats?.due ?? 0).replace(/^\d+\s*/, '')}</span>
+              </div>
+              <p className="mt-1 text-[14px] text-faint">
+                {t.today.newToday(stats?.newAvailable ?? 0)} · {t.today.goal.toLowerCase()} {Math.min(100, Math.round(((stats?.answeredToday ?? 0) / settings.dailyGoal) * 100))}%
+              </p>
+              {stats && stats.streak.current > 0 && stats.streak.freezeAvailable && (
+                <p className="mt-0.5 text-[12px] text-faint">❄ {t.today.freezeLeft}</p>
+              )}
+            </div>
+          </div>
+          <div className="mt-5 grid gap-2">
+            {stats && stats.due + stats.newAvailable > 0 ? (
+              <Button variant="primary" size="lg" onClick={() => navigate('/review?')}>
+                {t.today.reviewNow}
+                {stats.due + stats.newAvailable > 0 && <span className="rounded-full bg-black/15 px-2 py-0.5 text-[13px] tabular-nums">{stats.due + stats.newAvailable}</span>}
+              </Button>
+            ) : (
+              <p className="py-2 text-center text-[15px] text-muted">{t.today.allCaughtUp}</p>
+            )}
+            <Button onClick={() => navigate('/session?')}>
+              {t.today.fiveMin}
+            </Button>
+          </div>
+          {stats && stats.leeches > 0 && (
+            <Link href="/library" className="mt-3 block text-center text-[13px] text-accent" onClick={() => localStorage.setItem('kotoba.library', JSON.stringify({ sort: 'weakest', group: 'none', filter: { lessons: [], types: [], tags: [], status: 'leech' } }))}>
+              {t.today.leeches}: {stats.leeches}
+            </Link>
+          )}
+        </Card>
+      </section>
 
       {wotd && (
         <section className="mb-8">
@@ -57,7 +117,7 @@ export function TodayPage() {
           <Card className="card-face relative overflow-hidden p-6">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
-                <div style={{ fontSize: fitSize(wotd.japanese, 56) }}>
+                <div style={{ fontSize: fitSize(wotd.japanese, 56, 240) }}>
                   <WordJP word={wotd} className="jp-serif ruby-display font-medium" />
                 </div>
                 <p className="mt-1 text-[17px] text-text">{meaning(wotd, lang)}</p>

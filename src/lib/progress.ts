@@ -35,7 +35,7 @@ export function computeProgress(cards: CardRow[], logs: Pick<ReviewLogRow, 'word
   }
   // Recent answers weigh more: only the last 20 per word count towards the error rate.
   const recent = new Map<string, { c: number; n: number }>()
-  const sorted = [...logs].sort((a, b) => b.at - a.at)
+  const sorted = logs.filter((l) => !(l as { deleted?: number }).deleted).sort((a, b) => b.at - a.at)
   for (const l of sorted) {
     const p = get(l.wordId)
     p.attempts++

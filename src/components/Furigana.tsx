@@ -67,13 +67,8 @@ export function SentenceJP({
   return <Ruby segs={segs} className={className} blank={blank} />
 }
 
-/** Font size that keeps a word on one line on a phone card (in px). */
-export function fitSize(text: string, max: number): number {
-  const n = [...text].length
-  if (n <= 3) return max
-  if (n <= 4) return max * 0.85
-  if (n <= 5) return max * 0.72
-  if (n <= 7) return max * 0.58
-  if (n <= 9) return max * 0.48
-  return max * 0.4
+/** Font size (px) that keeps a word on one line in a box roughly `width` px wide. */
+export function fitSize(text: string, max: number, width = 300): number {
+  const n = Math.max(1, [...text].length)
+  return Math.min(max, (width / n) * 0.94)
 }

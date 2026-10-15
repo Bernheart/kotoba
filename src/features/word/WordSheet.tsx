@@ -65,7 +65,7 @@ function WordDetail({ word, onEdit, onDeleted }: { word: VocabEntry; onEdit: () 
     <div className="pb-2">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <div style={{ fontSize: fitSize(word.japanese, 60) }}>
+          <div style={{ fontSize: fitSize(word.japanese, 60, 260) }}>
             <WordJP word={word} className="jp-serif ruby-display" />
           </div>
           <p className="mt-1 text-[13px] tracking-wide text-faint">{word.romaji}</p>

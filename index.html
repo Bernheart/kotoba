@@ -27,6 +27,21 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // If the app fails to start (e.g. an unsupported browser), show the error instead of a blank screen.
+      ;(function () {
+        function show(msg) {
+          if (document.getElementById('root').childElementCount) return
+          var el = document.getElementById('boot-error') || document.createElement('pre')
+          el.id = 'boot-error'
+          el.style.cssText = 'white-space:pre-wrap;color:#ece6dc;font:13px ui-monospace,monospace;padding:calc(24px + env(safe-area-inset-top)) 20px 20px'
+          el.textContent = 'Kotoba could not start:\n\n' + msg
+          document.body.appendChild(el)
+        }
+        window.addEventListener('error', function (e) { show((e.message || e) + '\n' + (e.filename || '') + ':' + (e.lineno || '')) })
+        window.addEventListener('unhandledrejection', function (e) { show(String(e.reason && (e.reason.stack || e.reason.message) || e.reason)) })
+      })()
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
