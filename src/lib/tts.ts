@@ -117,3 +117,12 @@ export function speak(
 export function stopSpeaking() {
   if (ttsSupported) window.speechSynthesis.cancel()
 }
+
+/** iOS only lets speech start from a user gesture; a silent utterance inside a tap unlocks later auto-play. */
+export function unlockSpeech() {
+  if (!ttsSupported) return
+  const u = new SpeechSynthesisUtterance(' ')
+  u.volume = 0
+  u.lang = 'ja-JP'
+  window.speechSynthesis.speak(u)
+}

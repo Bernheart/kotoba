@@ -9,13 +9,20 @@ import { ToastProvider } from './components/ui'
 import { ImportPage } from './features/library/ImportPage'
 import { LibraryPage } from './features/library/LibraryPage'
 import { ReviewPage } from './features/review/ReviewPage'
+import { ConjugationPage } from './features/quiz/ConjugationPage'
+import { KanaPage } from './features/quiz/KanaPage'
+import { MatchingPage } from './features/quiz/MatchingPage'
+import { QuizPage } from './features/quiz/QuizPage'
+import { SessionPage } from './features/quiz/SessionPage'
+import { ShadowingPage } from './features/quiz/ShadowingPage'
+import { StudyPage } from './features/study/StudyPage'
 import { SettingsPage } from './features/settings/SettingsPage'
 import { TodayPage } from './features/today/TodayPage'
 import { WordSheetProvider } from './features/word/WordSheet'
 import { useSettings } from './lib/settings'
 import { VocabProvider } from './lib/vocab-context'
 
-const FOCUS_ROUTES = ['/review', '/session', '/quiz', '/conjugation', '/kana', '/shadowing', '/learn']
+const FOCUS_ROUTES = ['/review', '/session', '/quiz', '/conjugation', '/kana', '/shadowing', '/matching']
 
 function useApplySettings() {
   const s = useSettings()
@@ -44,6 +51,13 @@ function Shell() {
           <Route path="/import" component={ImportPage} />
           <Route path="/settings" component={SettingsPage} />
           <Route path="/review" component={ReviewPage} />
+          <Route path="/study" component={StudyPage} />
+          <Route path="/quiz/:mode" component={QuizPage} />
+          <Route path="/matching" component={MatchingPage} />
+          <Route path="/conjugation" component={ConjugationPage} />
+          <Route path="/kana" component={KanaPage} />
+          <Route path="/shadowing" component={ShadowingPage} />
+          <Route path="/session" component={SessionPage} />
           <Route>
             <Page title="404">
               <p className="text-muted">Not found.</p>

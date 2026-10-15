@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
   type ButtonHTMLAttributes,
+  type ComponentProps,
   type ReactNode,
 } from 'react'
 import { IconClose } from './icons'
@@ -19,7 +20,7 @@ export function Button({
   className = '',
   children,
   ...rest
-}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: BtnVariant; size?: 'sm' | 'md' | 'lg' }) {
+}: ComponentProps<'button'> & { variant?: BtnVariant; size?: 'sm' | 'md' | 'lg' }) {
   const v: Record<BtnVariant, string> = {
     primary: 'bg-accent text-accent-ink font-semibold shadow-[0_8px_24px_-10px_var(--k-accent)] active:brightness-95',
     secondary: 'bg-raised text-text border border-line active:bg-surface',

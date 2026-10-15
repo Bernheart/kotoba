@@ -368,7 +368,7 @@ export function ReviewPage() {
   )
 }
 
-function IntroCard({ word, onDone }: { word: VocabEntry; onDone: () => void }) {
+export function IntroCard({ word, onDone }: { word: VocabEntry; onDone: () => void }) {
   const t = useT()
   const lang = useLang()
   const other = lang === 'pl' ? word.en : word.pl
