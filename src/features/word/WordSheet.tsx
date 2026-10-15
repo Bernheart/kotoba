@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
+import { useLocation } from 'wouter'
 import { SentenceJP, WordJP, fitSize } from '../../components/Furigana'
 import { IconEdit, IconTrash } from '../../components/icons'
 import { SpeakButton, wordSpeech } from '../../components/SpeakButton'
@@ -47,6 +48,7 @@ function WordDetail({ word, onEdit, onDeleted }: { word: VocabEntry; onEdit: () 
   const t = useT()
   const lang = useLang()
   const toast = useToast()
+  const [, navigate] = useLocation()
   const data = useLiveQuery(async () => {
     const [cards, logs] = await Promise.all([
       db.cards.where('wordId').equals(word.id).toArray(),
@@ -140,6 +142,16 @@ function WordDetail({ word, onEdit, onDeleted }: { word: VocabEntry; onEdit: () 
       </section>
 
       <div className="mt-6 flex flex-wrap gap-2">
+        <Button
+          size="sm"
+          variant="primary"
+          onClick={() => {
+            onDeleted()
+            navigate(`/review?word=${encodeURIComponent(word.id)}`)
+          }}
+        >
+          {t.word.studyNow}
+        </Button>
         <Button size="sm" onClick={onEdit}>
           <IconEdit size={16} /> {t.common.edit}
         </Button>

@@ -8,6 +8,7 @@ import { SpeakButton, wordSpeech } from '../../components/SpeakButton'
 import { IconFlame } from '../../components/icons'
 import { Button, Card, Ring, SectionTitle } from '../../components/ui'
 import { useSettings } from '../../lib/settings'
+import { useProgress } from '../../lib/progress'
 import { useTodayStats } from '../../lib/stats'
 import { exampleTranslation, meaning, useLang, useT } from '../../lib/i18n'
 import { stripMarkup } from '../../lib/jp/markup'
@@ -38,6 +39,17 @@ export function TodayPage() {
   const { words } = useVocab()
   const settings = useSettings()
   const stats = useTodayStats(words)
+  const progress = useProgress()
+  const lessonProgress = useMemo(() => {
+    const m = new Map<number, { total: number; started: number }>()
+    for (const w of words) {
+      const e = m.get(w.genkiLesson) ?? { total: 0, started: 0 }
+      e.total++
+      if (progress?.get(w.id)?.status && progress.get(w.id)!.status !== 'new') e.started++
+      m.set(w.genkiLesson, e)
+    }
+    return m
+  }, [words, progress])
   const [, navigate] = useLocation()
   const sync = useSyncStatus()
   const [backupDays, setBackupDays] = useState<number | null>(null)
@@ -170,7 +182,15 @@ export function TodayPage() {
               <div className="text-[12px] font-semibold text-accent">{t.common.lesson(l.lesson)}</div>
               {l.title.ja && <SentenceJP markup={l.title.ja} className="mt-1 block text-[17px] leading-[1.9]" />}
               <div className="truncate text-[13px] text-muted">{l.title[lang]}</div>
-              <div className="mt-2 text-[12px] text-faint">{t.common.words(l.words.length)}</div>
+              <div className="mt-2 text-[12px] text-faint">
+                {lessonProgress.get(l.lesson)?.started ?? 0} / {t.common.words(lessonProgress.get(l.lesson)?.total ?? l.words.length)}
+              </div>
+              <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-line/60">
+                <div
+                  className="h-full rounded-full bg-good"
+                  style={{ width: `${((lessonProgress.get(l.lesson)?.started ?? 0) / Math.max(1, lessonProgress.get(l.lesson)?.total ?? 1)) * 100}%` }}
+                />
+              </div>
             </Link>
           ))}
         </div>

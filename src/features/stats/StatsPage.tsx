@@ -147,12 +147,17 @@ function Heatmap({ perDay, lang }: { perDay: Map<string, number>; lang: string }
         const n = perDay.get(day) ?? 0
         max = Math.max(max, n)
         col.push({ day, n, future: day > today })
-        if ((day.endsWith('-01') || (w === 0 && i === 0)) && !months.some((m) => w - m.col < 3)) {
+        if (day.endsWith('-01')) {
           const [yy, mm] = day.split('-').map(Number) as [number, number]
           months.push({ col: w, label: new Date(yy, mm - 1, 1).toLocaleDateString(lang, { month: 'short' }) })
         }
       }
       cols.push(col)
+    }
+    // Label the partial first month only if the next month label is far enough away.
+    if (!months.length || months[0]!.col >= 3) {
+      const [yy, mm] = start.split('-').map(Number) as [number, number]
+      months.unshift({ col: 0, label: new Date(yy, mm - 1, 1).toLocaleDateString(lang, { month: 'short' }) })
     }
     return { cols, months, max }
   }, [perDay, today, lang])
