@@ -28,6 +28,7 @@ test('learn new words, flip and rate cards', async ({ page }, info) => {
 test('type mode checks answers', async ({ page }, info) => {
   await page.goto('/#/settings')
   await page.getByRole('radio', { name: 'Type the answer' }).click()
+  await page.waitForTimeout(400) // let the IndexedDB write finish before navigating
   await page.goto('/?safe=1#/review')
   await page.getByRole('button', { name: 'Got it' }).click()
   await page.getByRole('button', { name: 'Got it' }).click()

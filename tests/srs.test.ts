@@ -103,6 +103,7 @@ describe('answer checking', () => {
     expect(checkMeaning('university', { en: 'university; college', pl: 'uczelnia' })).toBe('correct')
     expect(checkMeaning('univercity', { en: 'university; college', pl: 'uczelnia' })).toBe('almost')
     expect(checkMeaning('drink', w)).toBe('wrong')
+    expect(checkMeaning('to get married', { en: 'to get married ((結婚している) to be married)', pl: '' })).toBe('correct')
   })
   it('handles long vowels in katakana answers', () => {
     expect(checkJapanese('こーひー', { japanese: 'コーヒー', kana: 'コーヒー' })).toBe('correct')

@@ -23,9 +23,12 @@ export function levenshtein(a: string, b: string): number {
 
 /** Normalise an English/Polish meaning for comparison. */
 export function normMeaning(s: string): string {
-  return foldDiacritics(s)
+  let t = foldDiacritics(s)
+  // drop parenthesised notes, innermost first (handles nesting)
+  while (/\([^()]*\)/.test(t)) t = t.replace(/\([^()]*\)/g, ' ')
+  return t
+    .replace(/[()]/g, ' ')
     .replace(/[‘’`]/g, "'")
-    .replace(/\(.*?\)/g, ' ')
     .replace(/[…."!?]/g, ' ')
     .replace(/^\s*(to|a|an|the|be)\s+/, '')
     .replace(/\s+/g, ' ')
