@@ -15,6 +15,7 @@ import { ReviewPage } from './features/review/ReviewPage'
 import { StudyPage } from './features/study/StudyPage'
 import { SettingsPage } from './features/settings/SettingsPage'
 import { TodayPage } from './features/today/TodayPage'
+import { WelcomeSheet } from './features/today/WelcomeSheet'
 import { WordSheetProvider } from './features/word/WordSheet'
 import { useSettings } from './lib/settings'
 import { VocabProvider } from './lib/vocab-context'
@@ -92,6 +93,7 @@ function Shell() {
       </div>
       {!focus && <BottomNav />}
       <PwaUpdater />
+      <WelcomeSheet />
     </div>
   )
 }

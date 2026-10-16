@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/#/library')
-  await page.evaluate(() => localStorage.clear())
+  await page.evaluate(() => localStorage.removeItem('kotoba.library'))
 })
 
 test('search by romaji, kana and Polish, open word details', async ({ page }, info) => {

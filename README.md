@@ -130,6 +130,14 @@ Audio uses the Web Speech API with Japanese voices. **On iPhone**, if you hear n
 | / | Search the library |
 | Esc | Exit |
 
+## Sharing with classmates
+
+The site is public, so anyone with the link can use it. Each person's progress lives in their own browser, there's no tracking, and nothing is sent anywhere unless they sign in to sync.
+
+- **Sync is private.** It uses the owner's Supabase project, and visitors see a "Private sync" notice instead of a sign-in form. To keep it that way, turn off **Allow new users to sign up** in Supabase (Authentication → Sign In / Providers). A classmate who wants sync can create a free project of their own (steps above) and use **Settings → Sync → Use my own Supabase**.
+- **New visitors** get a one-time welcome screen: language, current Genki lesson, how to install, and a reminder to back up.
+- **Disclaimer.** The vocabulary and example sentences were written for this app with AI help and proofread, but not by a teacher. They are not official course material and may contain mistakes. The app is not affiliated with Genki or The Japan Times; "Genki" is used only to describe which lessons the words belong to.
+
 ## How it's built
 
 - Vite, React 19, TypeScript, Tailwind CSS 4 and Motion.

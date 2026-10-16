@@ -6,7 +6,12 @@ export default defineConfig({
   timeout: 30_000,
   fullyParallel: true,
   reporter: [['list']],
-  use: { baseURL: 'http://localhost:5173', trace: 'off' },
+  use: {
+    baseURL: 'http://localhost:5173',
+    trace: 'off',
+    // skip the first-run welcome sheet (tested on its own in welcome.spec.ts)
+    storageState: { cookies: [], origins: [{ origin: 'http://localhost:5173', localStorage: [{ name: 'kotoba.nowelcome', value: '1' }] }] },
+  },
   projects: [
     {
       name: 'iphone',

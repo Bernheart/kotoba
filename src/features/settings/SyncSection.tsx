@@ -11,6 +11,7 @@ import {
   signUpWithPassword,
   syncConfig,
   syncNow,
+  usingBuiltInServer,
   useSyncStatus,
   verifyCode,
 } from '../../lib/sync/engine'
@@ -32,7 +33,10 @@ export function SyncSection() {
   const [busy, setBusy] = useState(false)
   const [url, setUrl] = useState(s.supabaseUrl)
   const [key, setKey] = useState(s.supabaseKey)
+  const [ownerMode, setOwnerMode] = useState(false)
+  const [customOpen, setCustomOpen] = useState(false)
   const configured = !!syncConfig()
+  const builtIn = usingBuiltInServer()
 
   useEffect(() => {
     void refreshAuth()
@@ -43,7 +47,9 @@ export function SyncSection() {
     try {
       await f()
     } catch (e) {
-      toast({ text: t.sync.failed(e instanceof Error ? e.message : String(e)), tone: 'bad', ms: 6000 })
+      const msg = e instanceof Error ? e.message : String(e)
+      if (/signups? not allowed|signup.*disabled/i.test(msg)) toast({ text: t.sync.signupsClosed, tone: 'bad', ms: 9000 })
+      else toast({ text: t.sync.failed(msg), tone: 'bad', ms: 6000 })
     } finally {
       setBusy(false)
     }
@@ -52,7 +58,7 @@ export function SyncSection() {
   return (
     <Group title={t.settings.sync}>
       <div className="space-y-3 px-4 py-4">
-        {!configured || st.state === 'off' ? (
+        {!configured || st.state === 'off' || customOpen ? (
           <>
             <p className="text-[14px] text-muted">{t.sync.notConfigured}</p>
             <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder={`${t.sync.url} — https://xxxx.supabase.co`} className={inputCls} autoCapitalize="off" autoCorrect="off" />
@@ -64,15 +70,22 @@ export function SyncSection() {
                   await setSetting('supabaseUrl', url.trim())
                   await setSetting('supabaseKey', key.trim())
                   await refreshAuth()
+                  setCustomOpen(false)
                 })
               }
             >
               {t.common.save}
             </Button>
+            {customOpen && (
+              <button className="ml-3 text-[14px] text-muted" onClick={() => setCustomOpen(false)}>
+                {t.common.cancel}
+              </button>
+            )}
           </>
         ) : st.email ? (
           <>
             <p className="text-[15px]">{t.sync.signedIn(st.email)}</p>
+            {!builtIn && import.meta.env.VITE_SUPABASE_URL && <p className="text-[12px] text-faint">{s.supabaseUrl}</p>}
             <p className={`text-[13px] ${st.state === 'error' ? 'text-accent' : 'text-faint'}`}>
               {st.state === 'syncing'
                 ? t.sync.syncing
@@ -91,6 +104,19 @@ export function SyncSection() {
               <Button size="sm" variant="ghost" onClick={() => run(signOut)}>
                 {t.sync.signOut}
               </Button>
+            </div>
+          </>
+        ) : builtIn && !ownerMode ? (
+          <>
+            <p className="text-[15px] font-semibold">🔒 {t.sync.privateTitle}</p>
+            <p className="text-[14px] text-muted">{t.sync.privateBody}</p>
+            <div className="flex flex-wrap items-center gap-3">
+              <Button size="sm" onClick={() => setCustomOpen(true)}>
+                {t.sync.useOwn}
+              </Button>
+              <button className="text-[13px] text-faint underline-offset-4 hover:underline" onClick={() => setOwnerMode(true)}>
+                {t.sync.ownerSignIn}
+              </button>
             </div>
           </>
         ) : (
@@ -146,6 +172,23 @@ export function SyncSection() {
                   >
                     {t.sync.createAccount}
                   </Button>
+                  {!builtIn && import.meta.env.VITE_SUPABASE_URL && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() =>
+                        run(async () => {
+                          await setSetting('supabaseUrl', '')
+                          await setSetting('supabaseKey', '')
+                          setUrl('')
+                          setKey('')
+                          await refreshAuth()
+                        })
+                      }
+                    >
+                      {t.sync.useDefault}
+                    </Button>
+                  )}
                 </div>
               </form>
             ) : (

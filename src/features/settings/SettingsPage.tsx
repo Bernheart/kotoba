@@ -30,7 +30,7 @@ export function Group({ title, children }: { title: string; children: ReactNode 
   )
 }
 
-function Stepper({ value, min, max, step = 1, onChange, format }: { value: number; min: number; max: number; step?: number; onChange: (v: number) => void; format?: (v: number) => string }) {
+export function Stepper({ value, min, max, step = 1, onChange, format }: { value: number; min: number; max: number; step?: number; onChange: (v: number) => void; format?: (v: number) => string }) {
   return (
     <div className="flex items-center gap-1 rounded-2xl border border-line bg-bg-2 p-1">
       <button className="h-9 w-9 rounded-xl text-[18px] active:bg-raised disabled:opacity-30" disabled={value <= min} onClick={() => onChange(Math.max(min, +(value - step).toFixed(2)))} aria-label="−">
@@ -166,6 +166,15 @@ export function SettingsPage() {
 
       <Group title={t.settings.install}>
         <div className="px-4 py-3.5 text-[14px] text-muted">{standalone ? `✓ ${t.settings.standalone}` : t.settings.installSteps}</div>
+      </Group>
+
+      <Group title={t.settings.about}>
+        <div className="space-y-2 px-4 py-3.5 text-[14px] text-muted">
+          <p>{t.settings.aboutBody}</p>
+          <a className="inline-block text-accent underline-offset-4 hover:underline" href="https://github.com/Bernheart/kotoba" target="_blank" rel="noreferrer">
+            {t.settings.source} ↗
+          </a>
+        </div>
       </Group>
 
       <p className="mt-8 text-center text-[12px] text-faint">{t.settings.version(__APP_VERSION__)}</p>

@@ -39,6 +39,12 @@ export function syncConfig(): { url: string; key: string } | null {
   return url && key ? { url, key } : null
 }
 
+/** True when sync uses the server baked into this deployment (the owner's), not one set in Settings. */
+export function usingBuiltInServer(): boolean {
+  const s = getSettings()
+  return !s.supabaseUrl && !!import.meta.env.VITE_SUPABASE_URL
+}
+
 let client: SupabaseClient | null = null
 let clientKey = ''
 
