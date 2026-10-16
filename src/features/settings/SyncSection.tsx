@@ -1,9 +1,19 @@
 import { useEffect, useState } from 'react'
 import { IconSync } from '../../components/icons'
-import { Button, useToast } from '../../components/ui'
+import { Button, Segmented, useToast } from '../../components/ui'
 import { relativeDay, useLang, useT } from '../../lib/i18n'
 import { setSetting, useSettings } from '../../lib/settings'
-import { refreshAuth, sendCode, signOut, syncConfig, syncNow, useSyncStatus, verifyCode } from '../../lib/sync/engine'
+import {
+  refreshAuth,
+  sendCode,
+  signInWithPassword,
+  signOut,
+  signUpWithPassword,
+  syncConfig,
+  syncNow,
+  useSyncStatus,
+  verifyCode,
+} from '../../lib/sync/engine'
 import { Group } from './SettingsPage'
 
 const inputCls = 'h-12 w-full rounded-2xl border border-line bg-bg-2 px-3.5 text-[16px] placeholder:text-faint focus:border-accent/60 focus:outline-none'
@@ -15,6 +25,8 @@ export function SyncSection() {
   const toast = useToast()
   const st = useSyncStatus()
   const [email, setEmail] = useState('')
+  const [method, setMethod] = useState<'password' | 'code'>('password')
+  const [password, setPassword] = useState('')
   const [code, setCode] = useState('')
   const [sent, setSent] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -84,6 +96,14 @@ export function SyncSection() {
         ) : (
           <>
             <p className="text-[14px] text-muted">{t.sync.intro}</p>
+            <Segmented
+              value={method}
+              onChange={setMethod}
+              options={[
+                { value: 'password', label: t.sync.methodPassword },
+                { value: 'code', label: t.sync.methodCode },
+              ]}
+            />
             <input
               type="email"
               inputMode="email"
@@ -94,35 +114,74 @@ export function SyncSection() {
               className={inputCls}
               autoCapitalize="off"
             />
-            {sent && (
-              <input
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                value={code}
-                onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                placeholder={t.sync.code}
-                className={`${inputCls} tracking-[0.3em]`}
-              />
-            )}
-            <div className="flex gap-2">
-              <Button
-                disabled={busy || !/.+@.+\..+/.test(email)}
-                onClick={() =>
-                  run(async () => {
-                    await sendCode(email.trim())
-                    setSent(true)
-                    toast({ text: t.sync.codeSent, tone: 'good' })
-                  })
-                }
+            {method === 'password' ? (
+              <form
+                className="space-y-3"
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  void run(() => signInWithPassword(email.trim(), password))
+                }}
               >
-                {t.sync.sendCode}
-              </Button>
-              {sent && (
-                <Button variant="primary" disabled={busy || code.length < 6} onClick={() => run(() => verifyCode(email.trim(), code))}>
-                  {t.sync.verify}
-                </Button>
-              )}
-            </div>
+                <input
+                  type="password"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder={t.sync.password}
+                  className={inputCls}
+                />
+                <div className="flex flex-wrap gap-2">
+                  <Button type="submit" variant="primary" disabled={busy || !/.+@.+\..+/.test(email) || password.length < 6}>
+                    {t.sync.signIn}
+                  </Button>
+                  <Button
+                    type="button"
+                    disabled={busy || !/.+@.+\..+/.test(email) || password.length < 6}
+                    onClick={() =>
+                      run(async () => {
+                        const r = await signUpWithPassword(email.trim(), password)
+                        if (r === 'confirm-email') toast({ text: t.sync.confirmEmail, ms: 12000 })
+                      })
+                    }
+                  >
+                    {t.sync.createAccount}
+                  </Button>
+                </div>
+              </form>
+            ) : (
+              <>
+                <p className="text-[12px] text-faint">{t.sync.codeNeedsSmtp}</p>
+                {sent && (
+                  <input
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    value={code}
+                    onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                    placeholder={t.sync.code}
+                    className={`${inputCls} tracking-[0.3em]`}
+                  />
+                )}
+                <div className="flex gap-2">
+                  <Button
+                    disabled={busy || !/.+@.+\..+/.test(email)}
+                    onClick={() =>
+                      run(async () => {
+                        await sendCode(email.trim())
+                        setSent(true)
+                        toast({ text: t.sync.codeSent, tone: 'good' })
+                      })
+                    }
+                  >
+                    {t.sync.sendCode}
+                  </Button>
+                  {sent && (
+                    <Button variant="primary" disabled={busy || code.length < 6} onClick={() => run(() => verifyCode(email.trim(), code))}>
+                      {t.sync.verify}
+                    </Button>
+                  )}
+                </div>
+              </>
+            )}
           </>
         )}
       </div>

@@ -93,7 +93,34 @@ export async function verifyCode(email: string, token: string) {
   if (!c) throw new Error('Sync is not configured')
   const { error } = await c.auth.verifyOtp({ email, token: token.trim(), type: 'email' })
   if (error) throw error
-  // First sign-in on this device: merge everything from the server.
+  await afterSignIn()
+}
+
+/**
+ * Email + password: needs no emails at all (Supabase's built-in mailer can't send codes without custom SMTP),
+ * and works inside the iOS Home Screen app.
+ */
+export async function signInWithPassword(email: string, password: string) {
+  const c = await getClient()
+  if (!c) throw new Error('Sync is not configured')
+  const { error } = await c.auth.signInWithPassword({ email, password })
+  if (error) throw error
+  await afterSignIn()
+}
+
+/** Returns 'confirm-email' when the project still requires email confirmation. */
+export async function signUpWithPassword(email: string, password: string): Promise<'signed-in' | 'confirm-email'> {
+  const c = await getClient()
+  if (!c) throw new Error('Sync is not configured')
+  const { data, error } = await c.auth.signUp({ email, password })
+  if (error) throw error
+  if (!data.session) return 'confirm-email'
+  await afterSignIn()
+  return 'signed-in'
+}
+
+// First sign-in on this device: merge everything from the server.
+async function afterSignIn() {
   await setMeta('syncCursor', 0)
   await refreshAuth()
   await syncNow()

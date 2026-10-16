@@ -60,18 +60,15 @@ Sync is optional. Without it the app works fully offline on one device. Setup ta
 
 1. Create a free account and project at <https://supabase.com>. Any region is fine. Save the database password somewhere.
 2. Open **SQL Editor**, then **New query**. Paste the contents of [`supabase/schema.sql`](supabase/schema.sql) and click **Run**.
-3. Go to **Authentication → Sign In / Providers**. Make sure **Email** is enabled. Turning off "Confirm email" is fine.
-4. Go to **Authentication → Emails → Magic Link** and replace the template body with:
-   ```html
-   <h2>Your Kotoba code</h2>
-   <p>Enter this code in the app: <strong>{{ .Token }}</strong></p>
-   ```
-   The app uses the **6-digit code**, not the link. A link would open in Safari, which can't sign in the installed Home Screen app because its storage is separate.
-5. Go to **Project Settings → API** (or **Data API**). Copy the **Project URL** and the **anon / publishable key**.
-6. Paste both into the app on each device. Either:
-   - in **Settings → Sync between devices** on each device, or
+3. Go to **Authentication → Sign In / Providers → Email**. Keep Email enabled, turn **off "Confirm email"**, and save.
+4. Go to **Project Settings → API keys** (older dashboards: **API**). Copy the **Project URL** and the **publishable / anon key**. Never use the `service_role` or secret key in the app.
+5. Put both into the app. Either:
+   - paste them in **Settings → Sync between devices** on each device, or
    - once, for everyone: add them as repository **variables** `SUPABASE_URL` and `SUPABASE_ANON_KEY` under *GitHub → repo → Settings → Secrets and variables → Actions → Variables*, then re-run the deploy.
-7. On each device, enter your email, tap **Send code**, then type the code. You stay signed in.
+6. On the first device: enter your email and a password, then tap **Create account**. On the other device, use **Sign in** with the same details. You stay signed in on both.
+7. Optional lock-down once both devices are signed in: in **Authentication → Sign In / Providers**, turn off **"Allow new users to sign up"**, so nobody else can create accounts in your project.
+
+**Why a password and not an email link?** On iOS the Home Screen app keeps its storage separately from Safari. A login link from an email opens in Safari, so it signs in Safari, not the app. The app also has an **Email code** option (a 6-digit code typed into the app). It only works if you set up **custom SMTP** (Authentication → Emails, e.g. Gmail with an app password, or Resend), because Supabase's built-in mailer no longer lets you edit templates to include `{{ .Token }}`.
 
 **How sync works:**
 - **Local-first.** Everything is saved locally first. Sync runs on launch, when you come back online, when the app returns to the foreground, a few seconds after you answer, and when you tap *Sync now*.
