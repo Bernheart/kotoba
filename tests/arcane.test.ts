@@ -6,10 +6,13 @@ import {
   assignExamples,
   classify,
   coverage,
+  fixSlangVerbs,
   fromKuromoji,
   guessBaseReading,
   isFragment,
   isKnown,
+  joinNames,
+  knownIndex,
   knownSet,
   lineMarkup,
   mergeCompounds,
@@ -138,6 +141,25 @@ describe('word filtering and ranking', () => {
     expect(isKnown({ japanese: '扉', kana: 'とびら' }, k)).toBe(false)
   })
 
+  it('finds the known word behind a lemma', () => {
+    const words = [
+      { japanese: '分かる', kana: 'わかる', id: 'a' },
+      { japanese: '一緒に', kana: 'いっしょに', id: 'b' },
+      { japanese: 'ちょっと', kana: 'ちょっと', id: 'c' },
+      { japanese: '何', kana: 'なに', alt: ['なん'], id: 'd' },
+    ]
+    const find = knownIndex(words, [['一緒', words[1]!]])
+    expect(find({ japanese: 'わかる', kana: 'わかる' })?.id).toBe('a')
+    expect(find({ japanese: '一緒', kana: 'いっしょ' })?.id).toBe('b')
+    expect(find({ japanese: '一寸', kana: 'ちょっと' })?.id).toBe('c')
+    expect(find({ japanese: 'なん', kana: 'なん' })?.id).toBe('d')
+    expect(find({ japanese: '扉', kana: 'とびら' })).toBeUndefined()
+    // a katakana loanword doesn't match a kanji word with the same reading
+    const find2 = knownIndex([{ japanese: 'クラス', kana: 'クラス', id: 'e' }])
+    expect(find2({ japanese: '暮らす', kana: 'くらす' })).toBeUndefined()
+    expect(isKnown({ japanese: '暮らす', kana: 'くらす' }, knownSet([{ japanese: 'クラス', kana: 'クラス' }]))).toBe(false)
+  })
+
   it('ranks by count × episode spread, and reports coverage gains', () => {
     const line = (id: number, ep: string, words: string[]): Line => ({ id, ep, start: id, text: words.join(''), ref: '', toks: words.map((w) => tok(w, '名詞', '一般', w, 'ア')) })
     // 鍵: 4× in one episode (score 4); 扉: 3× over 3 episodes (score 9)
@@ -215,6 +237,20 @@ describe('markup from tokens (real tokenizer, made-up lines)', () => {
     expect(s.plain).toBe('古い扉を開けた')
     expect(s.chunks.map((c) => c.text)).toEqual(['古い', '扉を', '開けた'])
     expect(s.chunks.find((c) => c.target)?.text).toBe('開けた')
+  })
+
+  it('joins names the tokenizer splits', () => {
+    const toks = joinNames(tokenizer.tokenize('どうした マイロ').map(fromKuromoji), new Set(['マイロ']))
+    expect(toks.map((t) => t.surface)).toContain('マイロ')
+    expect(classify(toks.find((t) => t.surface === 'マイロ')!)).toBe('name')
+  })
+
+  it('tells 要る from いる, and reads いかれる', () => {
+    const base = (text: string) => fixSlangVerbs(tokenizer.tokenize(text).map(fromKuromoji)).map((t) => t.base)
+    expect(base('休みはいらない')).toContain('要る')
+    expect(base('ここにいない')).toContain('いる')
+    expect(base('あいつはいかれてる')).toContain('いかれる')
+    expect(base('どうでもいい')).toContain('いい')
   })
 
   it('reads 行って as 行く', () => {

@@ -30,6 +30,9 @@ export interface ImportRow {
   /** Custom deck (JSON imports only); deck words keep their frequency rank for the study order */
   deck?: string
   frequency?: number
+  /** Furigana override / speech text (JSON imports only) */
+  furigana?: string
+  tts?: string
   problem?: 'missing-japanese' | 'missing-reading'
 }
 
@@ -354,6 +357,9 @@ function fromRecord(r: Record<string, unknown>, opts: { lesson?: number; tags?: 
           : undefined,
     ...(deck ? { deck } : {}),
     ...(frequency > 0 ? { frequency } : {}),
+    ...(Array.isArray(r.alt) && r.alt.length ? { alt: r.alt.map(String) } : {}),
+    ...(typeof r.furigana === 'string' && r.furigana ? { furigana: r.furigana } : {}),
+    ...(typeof r.tts === 'string' && r.tts ? { tts: r.tts } : {}),
   })
 }
 

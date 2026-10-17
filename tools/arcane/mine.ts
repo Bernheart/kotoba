@@ -3,7 +3,7 @@
  * report, one unique example line per word, and Kotoba sentence markup. Pure functions over tokenizer
  * output (kuromoji / IPADIC features), so they're testable with made-up fixtures.
  */
-import { hasKanji, isKanaOnly, kataToHira, normalizeKana } from '../../src/lib/jp/chars'
+import { hasKanji, isKanaOnly, isKatakanaWord, kataToHira, normalizeKana } from '../../src/lib/jp/chars'
 import type { WordType } from '../../src/lib/types'
 
 /** The tokenizer features we use (kuromoji's IpadicFeatures, renamed). */
@@ -35,6 +35,12 @@ export function fromKuromoji(t: KuromojiToken): Tok {
   // IPADIC reads 行っ(て/た) as 行う (おこなう); in speech it is almost always 行く (いく)
   if (t.surface_form === '行っ' && t.basic_form === '行う')
     return { surface: '行っ', pos: '動詞', pos1: '自立', pos2: '*', ctype: '五段・カ行促音便', base: '行く', reading: 'イッ' }
+  // いい read as 言う (どうでもいい) is the adjective いい
+  if (t.surface_form === 'いい' && t.basic_form === 'いう')
+    return { surface: 'いい', pos: '形容詞', pos1: '自立', pos2: '*', ctype: '形容詞・イイ', base: 'いい', reading: 'イイ' }
+  // いる conjugated as a godan verb (いらない, いります) is 要る "to need", not いる "to be"
+  if (t.basic_form === 'いる' && t.conjugated_type.startsWith('五段'))
+    return { surface: t.surface_form, pos: t.pos, pos1: t.pos_detail_1, pos2: t.pos_detail_2, ctype: t.conjugated_type, base: '要る', reading: t.reading ?? '' }
   return {
     surface: t.surface_form,
     pos: t.pos,
@@ -82,6 +88,38 @@ export function mergeCompounds(toks: Tok[]): Tok[] {
         pos1: t.pos2 === '形容動詞語幹' ? '形容動詞語幹' : '一般',
       }
     } else out.push(t)
+  }
+  return out
+}
+
+/** Casual verbs IPADIC lacks: いかれる "to be crazy" is read as 行か + れる (passive of 行く). */
+export function fixSlangVerbs(toks: Tok[]): Tok[] {
+  const out: Tok[] = []
+  for (let i = 0; i < toks.length; i++) {
+    const t = toks[i]!
+    const next = toks[i + 1]
+    if (t.surface === 'いか' && (t.base === '行く' || t.base === 'いく') && next?.base === 'れる') {
+      out.push({ surface: 'いかれ', pos: '動詞', pos1: '自立', pos2: '*', ctype: '一段', base: 'いかれる', reading: 'イカレ' })
+      i++
+    } else out.push(t)
+  }
+  return out
+}
+
+/** Names the tokenizer splits (マイ+ロ) are joined back when the pieces spell a name from the list. */
+export function joinNames(toks: Tok[], names: Set<string>): Tok[] {
+  const out: Tok[] = []
+  for (let i = 0; i < toks.length; i++) {
+    let n = 3
+    while (n >= 2 && !(i + n <= toks.length && names.has(toks.slice(i, i + n).map((t) => t.surface).join('')))) n--
+    if (n < 2) {
+      out.push(toks[i]!)
+      continue
+    }
+    const part = toks.slice(i, i + n)
+    const surface = part.map((t) => t.surface).join('')
+    out.push({ surface, pos: '名詞', pos1: '固有名詞', pos2: '*', ctype: '*', base: surface, reading: part.map((t) => t.reading || t.surface).join('') })
+    i += n - 1
   }
   return out
 }
@@ -141,7 +179,8 @@ export function knownSet(words: { japanese: string; kana: string; alt?: string[]
     for (const a of w.alt ?? []) k.forms.add(a.replace(/[～〜]/g, ''))
     const kana = normalizeKana(w.kana)
     k.kana.add(kana)
-    if (isKanaOnly(jp)) k.kanaWords.add(kana)
+    // hiragana words match any spelling with the same reading; katakana loanwords (クラス) don't match kanji (暮らす)
+    if (isKanaOnly(jp) && !isKatakanaWord(jp)) k.kanaWords.add(kana)
   }
   return k
 }
@@ -155,6 +194,32 @@ export function isKnown(lemma: { japanese: string; kana: string }, k: KnownSet):
   const kana = normalizeKana(lemma.kana)
   if (isKanaOnly(lemma.japanese) && (k.kana.has(kana) || k.forms.has(kataToHira(lemma.japanese)))) return true
   return k.kanaWords.has(kana)
+}
+
+/**
+ * The known word a lemma belongs to (for a deck of known words seen in the show). Same rules as `isKnown`:
+ * written form (also forms of its tokens, 一緒 → 一緒に, and alternative spellings), or the reading when either
+ * side is written in kana.
+ */
+export function knownIndex<W extends { japanese: string; kana: string; alt?: string[] }>(words: W[], tokenForms: [string, W][] = []) {
+  const byForm = new Map<string, W>()
+  const byKana = new Map<string, W[]>()
+  const plain = (s: string) => s.replace(/[～〜]/g, '')
+  for (const w of words) {
+    if (!byForm.has(plain(w.japanese))) byForm.set(plain(w.japanese), w)
+    for (const a of w.alt ?? []) if (!byForm.has(a)) byForm.set(a, w)
+    const k = normalizeKana(w.kana)
+    byKana.set(k, [...(byKana.get(k) ?? []), w])
+  }
+  for (const [f, w] of tokenForms) if (!byForm.has(f)) byForm.set(f, w)
+  return (l: { japanese: string; kana: string }): W | undefined => {
+    const hit = byForm.get(l.japanese) ?? byForm.get(kataToHira(l.japanese))
+    if (hit) return hit
+    const same = byKana.get(normalizeKana(l.kana)) ?? []
+    const kanaWord = same.find((w) => isKanaOnly(plain(w.japanese)) && !isKatakanaWord(plain(w.japanese)))
+    if (isKanaOnly(l.japanese)) return kanaWord ?? (same.length === 1 ? same[0] : undefined)
+    return kanaWord
+  }
 }
 
 /* ---------- Lines, ranking and coverage ---------- */

@@ -143,6 +143,33 @@ describe('custom decks: import', () => {
   })
 })
 
+describe('custom decks: words you also have elsewhere', () => {
+  beforeEach(async () => {
+    await db.userWords.clear()
+  })
+
+  it('a deck word with the same spelling as a lesson word becomes its own card', async () => {
+    const lessonWord = buildVocab([]).words.find((w) => w.japanese === '食べる')!
+    const json = JSON.stringify({
+      words: [
+        { japanese: '食べる', kana: 'たべる', en: 'to eat', pl: 'jeść', type: 'verb-ru', deck: 'demo-known', frequency: 1, tags: [], alt: ['たべる'] },
+        { japanese: '今日', kana: 'きょう', furigana: '{今日|きょう}', en: 'today', pl: 'dziś', type: 'noun', deck: 'demo-known', frequency: 2, tags: [] },
+      ],
+    })
+    const plan = planImport(buildRows(parseText(json), [], {}), buildVocab([]).words)
+    expect(plan.map((p) => p.action)).toEqual(['new', 'new'])
+    await applyImport(plan, { updateLessons: false, defaultLesson: 0 })
+    const vocab = buildVocab(await db.userWords.toArray())
+    const copies = vocab.words.filter((w) => w.japanese === '食べる')
+    expect(copies.map((w) => w.deck ?? 'main').sort()).toEqual(['demo-known', 'main'])
+    expect(vocab.byId.get(lessonWord.id)!.deck).toBeUndefined()
+    expect(vocab.words.find((w) => w.japanese === '今日' && w.deck)!.furigana).toBe('{今日|きょう}')
+    // a plain list import still merges into the lesson word, not the deck copy
+    const plain = planImport(buildRows(parseText('食べる\tたべる\tto eat'), ['japanese', 'kana', 'en'], {}), vocab.words)
+    expect(plain[0]!.target?.id).toBe(lessonWord.id)
+  })
+})
+
 describe('custom decks: library and practice scope', () => {
   const vocab = buildVocab([
     { id: 'u-1', kind: 'custom', word: deckWord('u-1', 2), createdAt: 0, updatedAt: 0, dirty: 0 },

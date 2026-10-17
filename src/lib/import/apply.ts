@@ -13,12 +13,16 @@ export interface PlanItem {
 
 export function planImport(rows: ImportRow[], existing: VocabEntry[]): PlanItem[] {
   const seen = new Set<string>()
+  // A deck is its own set of words: deck rows only match words of the same deck, other rows only the main
+  // words — so a deck can hold words you also have in your lessons (e.g. known words seen in a show).
+  const byTrack = new Map<string, VocabEntry[]>()
+  for (const w of existing) byTrack.set(w.deck ?? '', [...(byTrack.get(w.deck ?? '') ?? []), w])
   return rows.map((row) => {
     if (row.problem) return { row, action: 'skip' }
-    const key = `${row.japanese}|${normalizeKana(row.kana)}`
+    const key = `${row.deck ?? ''}|${row.japanese}|${normalizeKana(row.kana)}`
     if (seen.has(key)) return { row, action: 'skip' }
     seen.add(key)
-    const target = findMatch(row, existing)
+    const target = findMatch(row, byTrack.get(row.deck ?? '') ?? [])
     return target ? { row, action: 'merge', target } : { row, action: 'new' }
   })
 }
@@ -48,6 +52,9 @@ export async function applyImport(
           ...(row.example ? { example: row.example } : {}),
           ...(row.deck ? { deck: row.deck } : {}),
           ...(row.frequency ? { frequency: row.frequency } : {}),
+          ...(row.alt?.length ? { alt: row.alt } : {}),
+          ...(row.furigana ? { furigana: row.furigana } : {}),
+          ...(row.tts ? { tts: row.tts } : {}),
           ...(row.typeGuessed ? { verify: 'Word type was guessed during import.' } : {}),
         }
         puts.push({ id, kind: 'custom', word, createdAt: now, updatedAt: now, dirty: 1 })
@@ -68,6 +75,9 @@ export async function applyImport(
             tags: [...new Set([...base.tags.filter((t) => !t.startsWith(`${row.deck}-`)), ...row.tags])],
             ...(row.example ? { example: row.example } : {}),
             ...(row.frequency ? { frequency: row.frequency } : {}),
+            ...(row.alt?.length ? { alt: row.alt } : {}),
+            ...(row.furigana ? { furigana: row.furigana } : {}),
+            ...(row.tts ? { tts: row.tts } : {}),
           }
           puts.push({ id: target.id, kind: 'custom', word, mnemonic: prev?.mnemonic, createdAt: prev?.createdAt ?? now, updatedAt: now, dirty: 1 })
           merged++
