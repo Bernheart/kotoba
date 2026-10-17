@@ -97,20 +97,34 @@ export function parseSubtitles(text: string, ep: string, fileName = ''): Cue[] {
 }
 
 /**
- * Japanese subtitles split long sentences over cues with a trailing ― (dash). Join those with the next cue
+ * Japanese subtitles split long sentences over cues with a trailing ― or ⸺ (dash). Join those with the next cue
  * (when it follows within `gap` seconds) so example sentences are whole.
  */
 export function mergeContinuations(cues: Cue[], gap = 1.5): Cue[] {
   const out: Cue[] = []
   for (const c of cues) {
     const prev = out.at(-1)
-    if (prev && prev.ep === c.ep && /[―—]$/u.test(prev.text) && c.start - prev.end <= gap) {
-      prev.text = `${prev.text.replace(/[―—]+$/u, '')}${c.text}`
+    if (prev && prev.ep === c.ep && /[―—⸺]$/u.test(prev.text) && c.start - prev.end <= gap) {
+      prev.text = `${prev.text.replace(/[―—⸺]+$/u, '')}${c.text}`
       prev.end = c.end
     } else out.push({ ...c })
   }
-  for (const c of out) c.text = c.text.replace(/[―—]+$/u, '…')
+  for (const c of out) c.text = c.text.replace(/[―—⸺]+$/u, '…')
   return out
+}
+
+const PL_WORDS = /\b(nie|się|jest|już|tak|czy|jak|ale|mnie|tylko|teraz|tu|tam|co|to|ty|ja|go|jej|mi|mam|masz|był|była|było|żeby|może|wiem|chcesz|dobra|chodź|proszę|dlaczego|kurwa)\b/iu
+
+/**
+ * Language of one cue. asbplayer can export several loaded tracks into one file (Japanese, English and
+ * Polish cues interleaved), so each cue is sorted on its own: Japanese script → ja, Polish letters or
+ * common Polish words → pl, other Latin text → en.
+ */
+export function cueLanguage(text: string): 'ja' | 'en' | 'pl' | undefined {
+  if (/[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]/u.test(text)) return 'ja'
+  if (!/\p{L}/u.test(text)) return undefined
+  if (/[ąćęłńóśźż]/iu.test(text) || PL_WORDS.test(text)) return 'pl'
+  return 'en'
 }
 
 /** Drop channel idents and on-screen titles that aren't dialogue. */

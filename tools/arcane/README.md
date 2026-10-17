@@ -48,7 +48,7 @@ Write `<subs>/arcane-meanings.json`, keyed by the word's written form:
 ```
 
 Optional fields:
-- `kana` / `type` / `furigana` fix the tokenizer's guesses.
+- `japanese` / `kana` / `type` / `furigana` fix the tokenizer's guesses (e.g. 愛す → 愛する).
 - `ja` replaces the example markup.
 - `skip` drops a misparsed token or a name. Skipped words count as known in the report.
 - `ex.line` is the plain line the translation belongs to. If a later run picks a different line (for example after adding episodes), the word is imported without that example and listed until you update the translation.

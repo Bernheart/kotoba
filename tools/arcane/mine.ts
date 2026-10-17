@@ -32,6 +32,9 @@ export interface KuromojiToken {
 }
 
 export function fromKuromoji(t: KuromojiToken): Tok {
+  // IPADIC reads 行っ(て/た) as 行う (おこなう); in speech it is almost always 行く (いく)
+  if (t.surface_form === '行っ' && t.basic_form === '行う')
+    return { surface: '行っ', pos: '動詞', pos1: '自立', pos2: '*', ctype: '五段・カ行促音便', base: '行く', reading: 'イッ' }
   return {
     surface: t.surface_form,
     pos: t.pos,
@@ -51,7 +54,7 @@ export const KNOWN_GRAMMAR = ['ない', 'よい', 'いい', 'する', 'ある', 
 
 /** Slang adjectives written in katakana (ヤバい) confuse the tokenizer; read them in hiragana. */
 export function normalizeSlang(text: string): string {
-  return text.replace(/(ヤバ|マズ|スゴ|ウマ|ダサ|キモ|ウザ|エグ|ムカ)(?=[いくかけさそ])/gu, (m) => [...m].map((c) => String.fromCodePoint(c.codePointAt(0)! - 0x60)).join(''))
+  return text.replace(/(ヤバ|マズ|スゴ|ウマ|ダサ|キモ|ウザ|エグ|ムカ)(?=[いくかけさそ])|イカ(?=れ)/gu, (m) => [...m].map((c) => String.fromCodePoint(c.codePointAt(0)! - 0x60)).join(''))
 }
 
 /**
@@ -91,8 +94,10 @@ const JP = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u
 /** What a token counts as: a word to learn (content), grammar, a name, a number or punctuation. */
 export function classify(t: Tok, names: Set<string> = new Set()): TokClass {
   if (t.pos === '記号' || !JP.test(t.surface)) return /\p{N}/u.test(t.surface) ? 'number' : 'symbol'
+  if (/\p{N}/u.test(t.surface)) return 'number' // １つ, ２人
   if (t.pos === '名詞' && t.pos1 === '固有名詞') return 'name'
-  if (names.has(t.base) || names.has(t.surface)) return 'name'
+  // a name, also with a one-kanji suffix merged on (メダルダ家)
+  if (names.has(t.base) || names.has(t.surface) || (hasKanji(t.base.slice(-1)) && names.has(t.base.slice(0, -1)))) return 'name'
   if (t.pos === '名詞' && t.pos1 === '数') return 'number'
   if (!CONTENT_POS.has(t.pos)) return 'grammar'
   if (t.pos === '名詞' && ['非自立', '接尾', '特殊'].includes(t.pos1)) return 'grammar'
@@ -268,11 +273,16 @@ export interface Assignment {
   candidates: number
 }
 
+/** A line that trails off or breaks mid-sentence (ends in a dash, ellipsis, comma or a particle). */
+export function isFragment(text: string): boolean {
+  return /([―—⸺…、]|[をがにとはのでもや]|から|より|けど)$/u.test(text.trim())
+}
+
 /**
  * One unique line per word. Candidates are lines of `minLen`–`maxLen` characters containing the word
  * (falling back to any length when there are none). A line's cost is the number of other words in it that
- * are still new when this word comes up (unknown words, or deck words ranked later), then its distance
- * from an easy ~14 characters. Words with the fewest candidates choose first; a line is never reused.
+ * are still new when this word comes up (unknown words, or deck words ranked later), then whether it's a
+ * sentence fragment, then its distance from an easy ~14 characters. Words with the fewest candidates choose first; a line is never reused.
  */
 export function assignExamples(
   targets: string[],
@@ -306,7 +316,7 @@ export function assignExamples(
     for (const line of cands.get(key)!) {
       if (used.has(line.id)) continue
       const other = otherNew(key, line)
-      const cost = other.length * 100 + Math.abs(len(line.text) - 14)
+      const cost = other.length * 100 + (isFragment(line.text) ? 40 : 0) + Math.abs(len(line.text) - 14)
       if (!best || cost < best.cost) best = { line, cost, other }
     }
     if (best) used.add(best.line.id)

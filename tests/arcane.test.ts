@@ -8,6 +8,7 @@ import {
   coverage,
   fromKuromoji,
   guessBaseReading,
+  isFragment,
   isKnown,
   knownSet,
   lineMarkup,
@@ -18,10 +19,19 @@ import {
   type Line,
   type Tok,
 } from '../tools/arcane/mine'
-import { episodeOf, isDialogue, languageOf, mergeContinuations, parseSubtitles, refOf } from '../tools/arcane/subs'
+import { cueLanguage, episodeOf, isDialogue, languageOf, mergeContinuations, parseSubtitles, refOf } from '../tools/arcane/subs'
 import { wordProblems } from '../tools/arcane/validate'
 
 // All subtitle text below is made up for the tests.
+const SRT_S2 = `1
+00:00:01,000 --> 00:00:02,000
+扉を開けて⸺
+
+2
+00:00:02,100 --> 00:00:03,000
+早く
+`
+
 const SRT = `1
 00:00:01,000 --> 00:00:02,500
 （ミナ）
@@ -58,9 +68,10 @@ describe('subtitles', () => {
     expect(cues[3]!.start).toBeCloseTo(62.345)
   })
 
-  it('joins sentences continued with ― across cues', () => {
+  it('joins sentences continued with ― or ⸺ across cues', () => {
     const merged = mergeContinuations(parseSubtitles(SRT, 'S1E1'))
     expect(merged.map((c) => c.text)).toContain('扉を開けて早く！')
+    expect(mergeContinuations(parseSubtitles(SRT_S2, 'S2E1')).map((c) => c.text)).toEqual(['扉を開けて早く'])
   })
 
   it('parses WebVTT and ASS', () => {
@@ -68,6 +79,14 @@ describe('subtitles', () => {
     expect(parseSubtitles(vtt, 'S2E1')[0]).toMatchObject({ text: '静かに', start: 1 })
     const ass = '[Script Info]\n[Events]\nDialogue: 0,0:00:03.50,0:00:05.00,Default,,0,0,0,,{\\i1}走れ\\N今すぐ\n'
     expect(parseSubtitles(ass, 'S2E1', 'x.ass')[0]).toMatchObject({ text: '走れ 今すぐ', start: 3.5 })
+  })
+
+  it('sorts the cues of a multi-track export by language', () => {
+    expect(cueLanguage('扉を開けて')).toBe('ja')
+    expect(cueLanguage('Open the door.')).toBe('en')
+    expect(cueLanguage('Otwórz drzwi.')).toBe('pl')
+    expect(cueLanguage('Nie teraz')).toBe('pl')
+    expect(cueLanguage('...')).toBeUndefined()
   })
 
   it('reads episode and language from file names', () => {
@@ -162,6 +181,17 @@ describe('example lines', () => {
     expect(new Set(out.map((a) => a.lineId)).size).toBe(3)
   })
 
+  it('prefers whole sentences over fragments', () => {
+    expect(isFragment('扉を開けて⸺')).toBe(true)
+    expect(isFragment('君の扉を')).toBe(true)
+    expect(isFragment('扉を開けて')).toBe(false)
+    const lines = [
+      { id: 0, text: 'あいうえおかきくけを', keys: new Set(['A']) },
+      { id: 1, text: 'あいうえおかきくけこさしすせ', keys: new Set(['A']) },
+    ]
+    expect(assignExamples(['A'], lines, () => 0)[0]!.lineId).toBe(1)
+  })
+
   it('leaves a word without a line rather than reusing one', () => {
     const lines = [{ id: 0, text: 'あいうえおかき', keys: new Set(['A', 'B']) }]
     const out = assignExamples(['A', 'B'], lines, () => 0)
@@ -187,11 +217,16 @@ describe('markup from tokens (real tokenizer, made-up lines)', () => {
     expect(s.chunks.find((c) => c.target)?.text).toBe('開けた')
   })
 
+  it('reads 行って as 行く', () => {
+    const t = tokenizer.tokenize('どこに行ってた').map(fromKuromoji).find((x) => x.surface === '行っ')!
+    expect([t.base, t.reading]).toEqual(['行く', 'イッ'])
+  })
+
   it('joins a noun and a one-kanji suffix into one word', () => {
     const toks = mergeCompounds(tokenizer.tokenize('評議会の科学者たち').map(fromKuromoji))
     expect(toks.map((t) => t.base)).toEqual(['評議会', 'の', '科学者', 'たち'])
     expect(toks[0]!.reading).toBe('ヒョウギカイ')
-    expect(normalizeSlang('ヤバいな マズかった ヤバ')).toBe('やばいな まずかった ヤバ')
+    expect(normalizeSlang('ヤバいな マズかった ヤバ イカれてる')).toBe('やばいな まずかった ヤバ いかれてる')
   })
 
   it('produces words that pass the vocabulary rules', () => {

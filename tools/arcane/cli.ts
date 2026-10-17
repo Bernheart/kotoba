@@ -31,7 +31,7 @@ import {
   type Line,
   type Tok,
 } from './mine'
-import { episodeOf, isDialogue, languageOf, mergeContinuations, parseSubtitles, refOf, type Cue } from './subs'
+import { cueLanguage, episodeOf, isDialogue, languageOf, mergeContinuations, parseSubtitles, refOf, type Cue } from './subs'
 import { wordProblems, type DeckWord } from './validate'
 
 const ROOT = resolve(import.meta.dirname, '..', '..')
@@ -57,7 +57,8 @@ function args() {
 interface Meaning {
   en: string
   pl: string
-  /** Reading / type corrections, or `skip` for misparsed tokens and names */
+  /** Written form / reading / type corrections (愛す → 愛する), or `skip` for misparsed tokens and names */
+  japanese?: string
   kana?: string
   type?: DeckWord['type']
   furigana?: string
@@ -76,6 +77,7 @@ const buildTokenizer = () =>
 function readCues(dir: string) {
   const ja: Cue[] = []
   const en: Cue[] = []
+  const pl: Cue[] = []
   const files = readdirSync(dir).filter((f) => /\.(srt|vtt|ass|ssa)$/i.test(f))
   const eps = new Set<string>()
   for (const f of files.sort()) {
@@ -89,10 +91,14 @@ function readCues(dir: string) {
     const cues = parseSubtitles(text, ep, f)
     if (lang === 'ja') {
       eps.add(ep)
-      ja.push(...mergeContinuations(cues).filter((c) => isDialogue(c.text)))
+      // a Japanese file may also hold other tracks' cues (multi-track export): sort them by language
+      const own = cues.filter((c) => cueLanguage(c.text) === 'ja')
+      ja.push(...mergeContinuations(own).filter((c) => isDialogue(c.text)))
+      en.push(...cues.filter((c) => cueLanguage(c.text) === 'en'))
+      pl.push(...cues.filter((c) => cueLanguage(c.text) === 'pl'))
     } else en.push(...cues)
   }
-  return { ja, en, eps: [...eps].sort(epOrder) }
+  return { ja, en, pl, eps: [...eps].sort(epOrder) }
 }
 
 function epOrder(a: string, b: string) {
@@ -135,9 +141,9 @@ async function main() {
   const skip = new Set(Object.entries(meanings).filter(([, m]) => m.skip).map(([k]) => k))
 
   console.log(`Reading ${o.subs}`)
-  const { ja, en, eps } = readCues(o.subs)
+  const { ja, en, pl, eps } = readCues(o.subs)
   if (!ja.length) throw new Error('No Japanese subtitle files found (names need SxxEyy).')
-  console.log(`  ${eps.length} episodes (${eps.join(' ')}), ${ja.length} lines${en.length ? `, ${en.length} English cues as hints` : ''}`)
+  console.log(`  ${eps.length} episodes (${eps.join(' ')}), ${ja.length} lines${en.length + pl.length ? `, ${en.length} English + ${pl.length} Polish cues as translation hints` : ''}`)
 
   const tokenizer = await buildTokenizer()
   const tokenize = (text: string) => mergeCompounds(tokenizer.tokenize(text).map(fromKuromoji))
@@ -199,10 +205,11 @@ async function main() {
     (k) => rankOf.get(k),
   )
 
-  const enHint = (l: Line) => {
+  // other tracks' lines overlapping the Japanese line: context for translating, not copied into the deck
+  const hint = (track: Cue[], l: Line) => {
     const c = ja[l.id]!
-    return en
-      .filter((e) => e.ep === c.ep && e.start < c.end + 0.5 && e.end > c.start - 0.5)
+    return track
+      .filter((e) => e.ep === c.ep && e.start < c.end - 0.2 && e.end > c.start + 0.2)
       .map((e) => e.text)
       .join(' ')
   }
@@ -217,11 +224,15 @@ async function main() {
       type: w.type,
       count: w.count,
       episodes: w.episodes.length,
-      ...(line && markup ? { example: { ja: markup, plain: line.text, ref: line.ref, otherNew: a.otherNew, ...(enHint(line) ? { enHint: enHint(line) } : {}) } } : {}),
+      ...(line && markup
+        ? { example: { ja: markup, plain: line.text, ref: line.ref, otherNew: a.otherNew, enHint: hint(en, line), plHint: hint(pl, line) } }
+        : {}),
     }
   })
   const draftPath = join(o.subs, `${o.deck}-draft.json`)
-  writeFileSync(draftPath, JSON.stringify({ deck: o.deck, episodes: eps, coverage: cov, words: draft }, null, 1))
+  // the next new words after the deck, for reviewing names and choosing replacements
+  const more = ranked.slice(o.top, o.top + 300).map((w) => `${w.japanese}[${w.kana}] ${w.count}/${w.episodes.length}`)
+  writeFileSync(draftPath, JSON.stringify({ deck: o.deck, episodes: eps, coverage: cov, words: draft, more }, null, 1))
   console.log(`\nDraft: ${draftPath} (${draft.length} words, ${draft.filter((d) => !d.example).length} without an example line)`)
 
   // Merge meanings → deck JSON
@@ -243,7 +254,7 @@ async function main() {
     if (d.example && m.ex && !exOk) stale.push(d.japanese)
     const band = Math.min(3, Math.ceil(d.rank / 100))
     const w: DeckWord = {
-      japanese: d.japanese,
+      japanese: m.japanese ?? d.japanese,
       kana: m.kana ?? d.kana,
       ...(m.furigana ? { furigana: m.furigana } : {}),
       en: m.en,
