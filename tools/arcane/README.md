@@ -41,7 +41,7 @@ Write `<subs>/arcane-meanings.json`, keyed by the word's written form:
 
 ```json
 {
-  "扉": { "en": "door", "pl": "drzwi", "ex": { "en": "Open the door.", "pl": "Otwórz drzwi." } },
+  "扉": { "en": "door", "pl": "drzwi", "ex": { "line": "扉を開けて", "en": "Open the door.", "pl": "Otwórz drzwi." } },
   "大勢": { "kana": "おおぜい", "en": "crowd; many people", "pl": "tłum; wiele osób", "ex": { "en": "…", "pl": "…" } },
   "作れる": { "skip": true, "en": "", "pl": "" }
 }
@@ -51,6 +51,7 @@ Optional fields:
 - `kana` / `type` / `furigana` fix the tokenizer's guesses.
 - `ja` replaces the example markup.
 - `skip` drops a misparsed token or a name. Skipped words count as known in the report.
+- `ex.line` is the plain line the translation belongs to. If a later run picks a different line (for example after adding episodes), the word is imported without that example and listed until you update the translation.
 
 Run the same command again. It merges the meanings and validates every word with the rules of `tests/vocab.test.ts`, then writes `<subs>/arcane-deck.json`:
 - `deck: "arcane"`

@@ -62,8 +62,8 @@ interface Meaning {
   type?: DeckWord['type']
   furigana?: string
   skip?: boolean
-  /** Translation of the example line as spoken */
-  ex?: { en: string; pl: string }
+  /** Translation of the example line as spoken; `line` = the line it translates (plain text), so a changed pick is caught */
+  ex?: { line?: string; en: string; pl: string }
   /** Hand-fixed example markup (when the tokenizer split the line badly) */
   ja?: string
 }
@@ -231,6 +231,7 @@ async function main() {
   }
   const deck: DeckWord[] = []
   const missing: string[] = []
+  const stale: string[] = []
   const problems: string[] = []
   for (const d of draft) {
     const m = meanings[d.japanese]
@@ -238,6 +239,8 @@ async function main() {
       missing.push(d.japanese)
       continue
     }
+    const exOk = !!(d.example && m.ex && (!m.ex.line || m.ex.line === d.example.plain))
+    if (d.example && m.ex && !exOk) stale.push(d.japanese)
     const band = Math.min(3, Math.ceil(d.rank / 100))
     const w: DeckWord = {
       japanese: d.japanese,
@@ -250,12 +253,13 @@ async function main() {
       deck: o.deck,
       frequency: d.rank,
       tags: [`${o.deck}-${band}`],
-      ...(d.example && m.ex ? { example: { ja: m.ja ?? d.example.ja, en: m.ex.en, pl: m.ex.pl, ref: d.example.ref } } : {}),
+      ...(d.example && m.ex && exOk ? { example: { ja: m.ja ?? d.example.ja, en: m.ex.en, pl: m.ex.pl, ref: d.example.ref } } : {}),
     }
     const p = wordProblems(w)
     if (p.length) problems.push(`  #${d.rank} ${d.japanese}: ${p.join('; ')}`)
     deck.push(w)
   }
+  if (stale.length) console.log(`Example line changed since it was translated (${stale.length}, imported without example until updated): ${stale.join(' ')}`)
   if (missing.length) console.log(`Missing meanings for ${missing.length}: ${missing.slice(0, 40).join(' ')}${missing.length > 40 ? ' …' : ''}`)
   if (problems.length) {
     console.log(`Validation problems (${problems.length}):\n${problems.join('\n')}`)
