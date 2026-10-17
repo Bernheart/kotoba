@@ -215,4 +215,9 @@ describe('asbplayer export', () => {
     ]
     expect(asbplayerWords(words, progress)).toEqual(['食べる', '年生'])
   })
+
+  it('leaves out names, which Yomitan would split into pieces', () => {
+    const progress = new Map([['n', { status: 'learning' } as WordProgress]])
+    expect(asbplayerWords([{ id: 'n', japanese: 'ジンクス', deck: 'demo-names' }], progress)).toEqual([])
+  })
 })

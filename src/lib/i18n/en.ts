@@ -415,7 +415,7 @@ export const en = {
     installSteps: 'Open this site in Safari → Share → “Add to Home Screen”. Installed apps keep data more reliably and run full-screen.',
     standalone: 'Running as an installed app',
     asbHint:
-      'For asbplayer: a .txt of the words you study, one per line. In asbplayer open Settings → Annotation → My word database → Import Words (Yomitan must be running).',
+      'For asbplayer: a .txt of the words you study, one per line (names are left out: mark them with Q+I while watching). In asbplayer open Settings → Annotation → My word database → Import Words (Yomitan must be running).',
     asbExport: (n: number) => `Known words for asbplayer (${n})`,
   },
   sync: {

@@ -418,7 +418,7 @@ export const pl: Dict = {
       'Otwórz tę stronę w Safari → Udostępnij → „Do ekranu początkowego”. Zainstalowana aplikacja pewniej przechowuje dane i działa na pełnym ekranie.',
     standalone: 'Działa jako zainstalowana aplikacja',
     asbHint:
-      'Dla asbplayera: plik .txt ze słowami, których się uczysz, po jednym w linii. W asbplayerze otwórz Settings → Annotation → My word database → Import Words (Yomitan musi być uruchomiony).',
+      'Dla asbplayera: plik .txt ze słowami, których się uczysz, po jednym w linii (bez imion: oznaczaj je Q+I podczas oglądania). W asbplayerze otwórz Settings → Annotation → My word database → Import Words (Yomitan musi być uruchomiony).',
     asbExport: (n: number) => `Znane słowa dla asbplayera (${n})`,
   },
   sync: {
