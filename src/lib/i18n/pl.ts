@@ -109,6 +109,9 @@ export const pl: Dict = {
     groupLesson: 'Lekcja',
     groupType: 'Typ',
     groupTag: 'Tag',
+    groupDeck: 'Zestaw',
+    decks: 'Zestawy',
+    mainTrack: 'Genki i moje słowa',
     sortLesson: 'Lekcja',
     sortKana: 'Gojūon (あいう)',
     sortType: 'Typ',
@@ -198,6 +201,7 @@ export const pl: Dict = {
     run: (n: number) => `Importuj ${n} ${słowa(n)}`,
     done: (n: number, m: number) => `Zaimportowano ${n} ${plPlural(n, 'nowe słowo', 'nowe słowa', 'nowych słów')}, scalono ${m}.`,
     typeGuess: 'Typy słów są zgadywane — sprawdź czasowniki w bibliotece.',
+    deckNote: (d: string) => `Zestaw: ${d}. Dostaje własny kafelek w Nauce i własną kolejkę, oddzielnie od powtórek z Genki.`,
   },
   review: {
     again: 'Znowu',
@@ -271,6 +275,8 @@ export const pl: Dict = {
     time: 'Czas',
     mistakes: 'Błędy',
     notEnough: 'Za mało słów ze zdaniami przykładowymi w tym wyborze.',
+    decks: 'Zestawy',
+    deckDesc: (due: number, fresh: number) => `${due} do powtórki · ${fresh} ${plPlural(fresh, 'nowe', 'nowe', 'nowych')} dziś`,
   },
   conj: {
     title: 'Trener odmiany',
@@ -367,6 +373,8 @@ export const pl: Dict = {
     currentLesson: 'Bieżąca lekcja Genki',
     currentLessonHint: 'Nowe karty pochodzą tylko z lekcji do tej włącznie.',
     newPerDay: 'Nowe słowa dziennie',
+    deckNewPerDay: 'Nowe słowa dziennie w zestawach',
+    deckNewPerDayHint: 'Każdy zestaw ma własny limit i kolejkę, niezależne od powtórek z Genki.',
     dailyGoal: 'Cel dzienny (odpowiedzi)',
     reviewStyle: 'Styl powtórek',
     reviewFlip: 'Odwróć i oceń',
@@ -409,6 +417,9 @@ export const pl: Dict = {
     installSteps:
       'Otwórz tę stronę w Safari → Udostępnij → „Do ekranu początkowego”. Zainstalowana aplikacja pewniej przechowuje dane i działa na pełnym ekranie.',
     standalone: 'Działa jako zainstalowana aplikacja',
+    asbHint:
+      'Dla asbplayera: plik .txt ze słowami, których się uczysz, po jednym w linii. W asbplayerze otwórz Settings → Annotation → My word database → Import Words (Yomitan musi być uruchomiony).',
+    asbExport: (n: number) => `Znane słowa dla asbplayera (${n})`,
   },
   sync: {
     intro: 'Zaloguj się tym samym e-mailem i hasłem na Macu i iPhonie. Postępy synchronizują się same, gdy jest internet.',

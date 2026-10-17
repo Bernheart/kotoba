@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'wouter'
 import { FocusLayout } from '../../components/Page'
 import { Button } from '../../components/ui'
 import { db } from '../../lib/db'
+import { isMainWord } from '../../lib/decks'
 import { useT } from '../../lib/i18n'
 import { canBuild, distractors, hasCloze, weakWords, type Question } from '../../lib/practice'
 import { computeProgress } from '../../lib/progress'
@@ -23,7 +24,10 @@ let n = 0
 export function SessionPage() {
   const t = useT()
   const [, navigate] = useLocation()
-  const { words, byId } = useVocab()
+  const vocab = useVocab()
+  const { byId } = vocab
+  // The 5-minute session is the main track only; custom decks have their own queue.
+  const words = useMemo(() => vocab.words.filter(isMainWord), [vocab.words])
   const [qs, setQs] = useState<Question[] | null>(null)
   const [ready, setReady] = useState(false)
 

@@ -76,7 +76,11 @@ export function AddWordSheet({ open, onClose, initial }: { open: boolean; onClos
         .split(/[,，、]/)
         .map((s) => s.trim().toLowerCase())
         .filter(Boolean),
-      ...(exJa.trim() ? { example: { ja: fromAnkiFurigana(exJa.trim()), en: exEn.trim(), pl: exPl.trim() } } : {}),
+      ...(exJa.trim()
+        ? { example: { ja: fromAnkiFurigana(exJa.trim()), en: exEn.trim(), pl: exPl.trim(), ...(initial?.example?.ref ? { ref: initial.example.ref } : {}) } }
+        : {}),
+      ...(initial?.deck ? { deck: initial.deck } : {}),
+      ...(initial?.frequency ? { frequency: initial.frequency } : {}),
       ...(initial?.furigana ? { furigana: initial.furigana } : {}),
       ...(initial?.alt ? { alt: initial.alt } : {}),
       ...(initial?.tts ? { tts: initial.tts } : {}),

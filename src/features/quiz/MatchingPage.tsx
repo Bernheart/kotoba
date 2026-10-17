@@ -4,6 +4,7 @@ import { useLocation } from 'wouter'
 import { WordJP } from '../../components/Furigana'
 import { FocusLayout } from '../../components/Page'
 import { Button } from '../../components/ui'
+import { inScope } from '../../lib/decks'
 import { meaning, useLang, useT } from '../../lib/i18n'
 import { shuffle, logPractice } from '../../lib/srs/queue'
 import type { VocabEntry } from '../../lib/vocab'
@@ -35,7 +36,7 @@ export function MatchingPage() {
 
   const begin = (v: SetupValue) => {
     setSetup(v)
-    const pool = words.filter((w) => v.lessons.includes(w.genkiLesson) && w.type !== 'particle')
+    const pool = words.filter((w) => inScope(w, v.lessons, v.decks) && w.type !== 'particle')
     // avoid duplicate meanings on one board
     const seen = new Set<string>()
     const picked: VocabEntry[] = []

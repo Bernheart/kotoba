@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useLocation } from 'wouter'
 import { Chip, Segmented } from '../../components/ui'
+import { inScope } from '../../lib/decks'
 import { useT } from '../../lib/i18n'
 import { ADJ_FORMS, FORM_LESSON, isAdj, isVerb, VERB_FORMS, type Form } from '../../lib/jp/conjugate'
 import { makeQuestions, unlockedForms, type Question } from '../../lib/practice'
@@ -27,7 +28,7 @@ export function ConjugationPage() {
   const start = (v: SetupValue) => {
     setLast(v)
     const pool = words.filter(
-      (w) => v.lessons.includes(w.genkiLesson) && ((kinds !== 'adjectives' && isVerb(w.type)) || (kinds !== 'verbs' && isAdj(w.type))),
+      (w) => inScope(w, v.lessons, v.decks) && ((kinds !== 'adjectives' && isVerb(w.type)) || (kinds !== 'verbs' && isAdj(w.type))),
     )
     setQuestions(makeQuestions('conj', pool, v.count, { forms }))
   }

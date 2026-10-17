@@ -27,6 +27,9 @@ export interface ImportRow {
   lesson?: number
   tags: string[]
   example?: ExampleSentence
+  /** Custom deck (JSON imports only); deck words keep their frequency rank for the study order */
+  deck?: string
+  frequency?: number
   problem?: 'missing-japanese' | 'missing-reading'
 }
 
@@ -326,20 +329,31 @@ function fromRecord(r: Record<string, unknown>, opts: { lesson?: number; tags?: 
   const lesson = Number(pick(r, ['genkilesson', 'lesson', 'chapter']))
   const ex = r.example ?? r.exampleSentence
   const tags = Array.isArray(r.tags) ? (r.tags as string[]) : String(r.tags ?? '').split(/[,\s]+/).filter(Boolean)
+  const deck = pick(r, ['deck']).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+  const frequency = Number(pick(r, ['frequency', 'rank']))
+  const ref = ex && typeof ex === 'object' ? String((ex as ExampleSentence).ref ?? '').trim() : ''
   return finishRow({
     japanese: jp.japanese,
     kana,
     en: cleanMeaning(pick(r, ['en', 'english', 'meaning', 'back', 'definition'])),
     pl: cleanMeaning(pick(r, ['pl', 'polish', 'polski'])),
     type: mapType(pick(r, ['type', 'pos'])),
-    lesson: lesson > 0 ? lesson : opts.lesson,
+    // deck words aren't part of a lesson
+    lesson: deck ? 0 : lesson > 0 ? lesson : opts.lesson,
     tags: [...new Set([...(opts.tags ?? []), ...tags])],
     example:
       ex && typeof ex === 'object'
-        ? { ja: String((ex as ExampleSentence).ja ?? ''), en: String((ex as ExampleSentence).en ?? ''), pl: String((ex as ExampleSentence).pl ?? '') }
+        ? {
+            ja: String((ex as ExampleSentence).ja ?? ''),
+            en: String((ex as ExampleSentence).en ?? ''),
+            pl: String((ex as ExampleSentence).pl ?? ''),
+            ...(ref ? { ref } : {}),
+          }
         : typeof ex === 'string' && ex
           ? { ja: fromAnkiFurigana(ex), en: '', pl: '' }
           : undefined,
+    ...(deck ? { deck } : {}),
+    ...(frequency > 0 ? { frequency } : {}),
   })
 }
 

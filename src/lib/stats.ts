@@ -1,7 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db, type CardRow, type ReviewLogRow } from './db'
 import { getSettings } from './settings'
-import { buildQueue, newCandidates, newIntroducedToday } from './srs/queue'
+import { buildQueue, newIntroducedToday, newPerDayOf, trackCandidates, trackWords } from './srs/queue'
 import { addDays, dayDiff, studyDay } from './time'
 import type { Word } from './types'
 
@@ -80,26 +80,61 @@ export interface TodayStats {
   forecast: number[]
 }
 
-export function computeToday(words: Word[], cards: CardRow[], todayLogs: ReviewLogRow[], days: string[], now = Date.now()): TodayStats {
+/** Due reviews and new words available today in one track (main words, or one custom deck). */
+function trackToday(words: Word[], cards: CardRow[], live: ReviewLogRow[], now: number, deck?: string) {
   const s = getSettings()
-  const live = todayLogs.filter((l) => !l.deleted)
-  const queue = buildQueue({ words, cards, todayLogs: live, settings: s, now }, { includeNew: false })
+  const ids = new Set(trackWords(words, deck).map((w) => w.id))
+  const queue = buildQueue({ words, cards, todayLogs: live, settings: s, now }, { includeNew: false, deck })
   const byId = new Map(cards.map((c) => [c.id, c]))
-  const budget = Math.max(0, s.newPerDay - newIntroducedToday(live))
-  const newAvailable = Math.min(budget, newCandidates(words, byId, s.currentLesson).length)
+  const budget = Math.max(0, newPerDayOf(s, deck) - newIntroducedToday(live, ids))
+  const newAvailable = Math.min(budget, trackCandidates(words, byId, s, deck).length)
+  return { ids, due: queue.length, newAvailable }
+}
+
+export function computeToday(words: Word[], cards: CardRow[], todayLogs: ReviewLogRow[], days: string[], now = Date.now()): TodayStats {
+  const live = todayLogs.filter((l) => !l.deleted)
+  const main = trackToday(words, cards, live, now)
+  const mainCards = cards.filter((c) => main.ids.has(c.wordId))
   const forecast = Array.from({ length: 7 }, (_, i) => {
     const day = addDays(studyDay(now), i + 1)
-    return cards.filter((c) => !c.deleted && !c.suspended && c.state !== 0 && studyDay(c.due) === day).length
+    return mainCards.filter((c) => !c.deleted && !c.suspended && c.state !== 0 && studyDay(c.due) === day).length
   })
   return {
-    due: queue.length,
-    newAvailable,
+    due: main.due,
+    newAvailable: main.newAvailable,
     answeredToday: live.length,
     correctToday: live.filter((l) => l.correct).length,
     streak: computeStreak(days, studyDay(now)),
-    leeches: cards.filter((c) => c.leech && !c.deleted && !c.suspended).length,
+    leeches: mainCards.filter((c) => c.leech && !c.deleted && !c.suspended).length,
     forecast,
   }
+}
+
+export interface DeckStats {
+  deck: string
+  total: number
+  /** Words with at least one answered card */
+  started: number
+  due: number
+  newAvailable: number
+}
+
+export function computeDecks(words: Word[], cards: CardRow[], todayLogs: ReviewLogRow[], now = Date.now()): DeckStats[] {
+  const live = todayLogs.filter((l) => !l.deleted)
+  const decks = [...new Set(words.flatMap((w) => (w.deck ? [w.deck] : [])))].sort()
+  return decks.map((deck) => {
+    const tr = trackToday(words, cards, live, now, deck)
+    const started = new Set(cards.filter((c) => tr.ids.has(c.wordId) && !c.deleted && c.state !== 0).map((c) => c.wordId)).size
+    return { deck, total: tr.ids.size, started, due: tr.due, newAvailable: tr.newAvailable }
+  })
+}
+
+export function useDeckStats(words: Word[]): DeckStats[] | undefined {
+  return useLiveQuery(async () => {
+    if (!words.some((w) => w.deck)) return []
+    const [cards, todayLogs] = await Promise.all([db.cards.toArray(), db.reviewLogs.where('day').equals(studyDay()).toArray()])
+    return computeDecks(words, cards, todayLogs)
+  }, [words])
 }
 
 export function useTodayStats(words: Word[]): TodayStats | undefined {
@@ -166,10 +201,15 @@ export function computeDashboard(words: Word[], cards: CardRow[], logs: ReviewLo
     return [...m.values()]
   }
   const byType = bucket((l) => byWord.get(l.wordId)?.type)
+  // Deck words get a `deck:<id>` bucket after the lessons.
   const byLesson = bucket((l) => {
     const w = byWord.get(l.wordId)
-    return w ? String(w.genkiLesson) : undefined
-  }).sort((a, b) => Number(a.key) - Number(b.key))
+    return w ? (w.deck ? `deck:${w.deck}` : String(w.genkiLesson)) : undefined
+  }).sort((a, b) => {
+    const da = a.key.startsWith('deck:')
+    const db_ = b.key.startsWith('deck:')
+    return da !== db_ ? (da ? 1 : -1) : da ? a.key.localeCompare(b.key) : Number(a.key) - Number(b.key)
+  })
   const byMode = bucket((l) => l.mode).sort((a, b) => b.n - a.n)
   const forecast = Array.from({ length: 7 }, (_, i) => {
     const day = addDays(today, i + 1)

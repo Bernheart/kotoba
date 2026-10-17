@@ -4,6 +4,7 @@ import { Rating, type Grade } from 'ts-fsrs'
 import { fitSize, SentenceJP, WordJP } from '../../components/Furigana'
 import { SpeakButton, wordSpeech } from '../../components/SpeakButton'
 import type { Verdict } from '../../lib/answer'
+import { deckLabel } from '../../lib/decks'
 import { exampleTranslation, meaning, useLang, useT } from '../../lib/i18n'
 import { stripMarkup } from '../../lib/jp/markup'
 import type { Direction } from '../../lib/types'
@@ -184,7 +185,7 @@ function Answer({ word, dir, verdict }: { word: VocabEntry; dir: Direction; verd
       <p className="mt-3 text-[22px] leading-snug font-medium">{primary}</p>
       {other && other !== primary && <p className="mt-0.5 text-[15px] text-muted">{other}</p>}
       <p className="mt-2 text-[12px] text-faint">
-        {t.types[word.type]} · {t.common.lesson(word.genkiLesson)}
+        {t.types[word.type]} · {word.deck ? deckLabel(word.deck) : t.common.lesson(word.genkiLesson)}
       </p>
       {word.mnemonic && (
         <p className="mt-3 rounded-2xl border border-warn/30 bg-warn/10 px-3.5 py-2 text-[14px] text-warn">💡 {word.mnemonic}</p>
@@ -195,6 +196,7 @@ function Answer({ word, dir, verdict }: { word: VocabEntry; dir: Direction; verd
             <div className="min-w-0 flex-1">
               <SentenceJP markup={word.example.ja} highlight className="text-[18px] leading-[2]" />
               <p className="mt-0.5 text-[14px] text-muted">{exampleTranslation(word.example, lang)}</p>
+              {word.example.ref && <p className="mt-1 text-[12px] text-faint">{word.example.ref}</p>}
             </div>
             <div onClick={(e) => e.stopPropagation()}>
               <SpeakButton text={stripMarkup(word.example.ja)} size="sm" />

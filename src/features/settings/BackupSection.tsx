@@ -1,10 +1,13 @@
 import { useLiveQuery } from 'dexie-react-hooks'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { IconDownload, IconUpload } from '../../components/icons'
 import { Button, Segmented, useToast } from '../../components/ui'
+import { asbplayerFile, asbplayerWords } from '../../lib/asbplayer'
 import { backupFile, createBackup, eraseAll, parseBackup, restoreBackup, shareOrDownload } from '../../lib/backup'
 import { db } from '../../lib/db'
 import { relativeDay, useLang, useT } from '../../lib/i18n'
+import { useProgress } from '../../lib/progress'
+import { useVocab } from '../../lib/vocab-context'
 import { Group, Row } from './SettingsPage'
 
 export function BackupSection({ persisted }: { persisted: boolean | null }) {
@@ -21,6 +24,10 @@ export function BackupSection({ persisted }: { persisted: boolean | null }) {
   useEffect(() => {
     void createBackup().then((b) => setFile(backupFile(b)))
   }, [logCount, last])
+  const { words } = useVocab()
+  const progress = useProgress()
+  const known = useMemo(() => (progress ? asbplayerWords(words, progress) : []), [words, progress])
+  const knownFile = useMemo(() => (known.length ? asbplayerFile(known) : null), [known])
 
   return (
     <Group title={t.settings.data}>
@@ -72,6 +79,17 @@ export function BackupSection({ persisted }: { persisted: boolean | null }) {
             }
           }}
         />
+      </div>
+      <div className="space-y-2 border-b border-line/50 px-4 py-4">
+        <p className="text-[13px] text-faint">{t.settings.asbHint}</p>
+        <Button
+          disabled={!knownFile}
+          onClick={() => {
+            if (knownFile) void shareOrDownload(knownFile).then((r) => r !== 'cancelled' && toast({ text: t.common.saved, tone: 'good' }))
+          }}
+        >
+          <IconDownload size={18} /> {t.settings.asbExport(known.length)}
+        </Button>
       </div>
       <div className="px-4 py-3">
         <button

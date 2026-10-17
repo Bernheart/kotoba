@@ -26,6 +26,8 @@ export interface ExampleSentence {
   kana?: string
   en: string
   pl: string
+  /** Where the line comes from, e.g. `S1E3 · 12:34` (episode · time) for lines taken from a show. */
+  ref?: string
 }
 
 export interface Word {
@@ -49,7 +51,10 @@ export interface Word {
   tags: string[]
   example?: ExampleSentence
   difficulty?: 1 | 2 | 3
+  /** Rank in a frequency list (1 = most frequent); custom decks introduce new words in this order. */
   frequency?: number
+  /** Custom deck id (e.g. `arcane`). Deck words are studied in their own queue, never in the main reviews. */
+  deck?: string
   /** Note for the user to double-check this entry. */
   verify?: string
   /** Where the word comes from — set at load time. */

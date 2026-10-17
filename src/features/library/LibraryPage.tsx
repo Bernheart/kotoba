@@ -4,6 +4,7 @@ import { WordJP } from '../../components/Furigana'
 import { IconClose, IconFilter, IconPlus, IconSearch, IconUpload } from '../../components/icons'
 import { Page } from '../../components/Page'
 import { Button, Chip, IconButton, Segmented, Sheet } from '../../components/ui'
+import { deckLabel } from '../../lib/decks'
 import { meaning, useLang, useT } from '../../lib/i18n'
 import {
   EMPTY_FILTER,
@@ -35,13 +36,13 @@ function loadPrefs(): Prefs {
   } catch {
     /* ignore */
   }
-  return { sort: 'lesson', group: 'lesson', filter: { lessons: [], types: [], tags: [], status: 'all' } }
+  return { sort: 'lesson', group: 'lesson', filter: { lessons: [], decks: [], types: [], tags: [], status: 'all' } }
 }
 
 export function LibraryPage() {
   const t = useT()
   const lang = useLang()
-  const { words, lessons, tags } = useVocab()
+  const { words, lessons, decks, tags } = useVocab()
   const progress = useProgress()
   const openWord = useOpenWord()
   const [, navigate] = useLocation()
@@ -53,11 +54,13 @@ export function LibraryPage() {
   const [addOpen, setAddOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Deep link from Today: /library?lesson=3
+  // Deep links from Today / Study: /library?lesson=3 · /library?deck=arcane
   useEffect(() => {
-    const lesson = Number(new URLSearchParams(search).get('lesson'))
-    if (lesson) {
-      setPrefs((p) => ({ ...p, filter: { ...p.filter, lessons: [lesson] } }))
+    const params = new URLSearchParams(search)
+    const lesson = Number(params.get('lesson'))
+    const deck = params.get('deck')
+    if (lesson || deck) {
+      setPrefs((p) => ({ ...p, filter: { ...p.filter, lessons: lesson ? [lesson] : [], decks: deck ? [deck] : [] } }))
       navigate('/library?', { replace: true })
     }
   }, [search, navigate])
@@ -89,11 +92,13 @@ export function LibraryPage() {
     [words, progress, dq, prefs],
   )
   const groups = useMemo(() => (dq ? [{ key: 'all', words: shown }] : groupWords(shown, prefs.group)), [shown, prefs.group, dq])
+  const fDecks = prefs.filter.decks ?? []
   const activeCount =
-    prefs.filter.types.length + prefs.filter.tags.length + (prefs.filter.status !== 'all' ? 1 : 0) + prefs.filter.lessons.length
+    prefs.filter.types.length + prefs.filter.tags.length + (prefs.filter.status !== 'all' ? 1 : 0) + prefs.filter.lessons.length + fDecks.length
   const setFilter = (f: Partial<Prefs['filter']>) => setPrefs((p) => ({ ...p, filter: { ...p.filter, ...f } }))
   const toggleLesson = (n: number) =>
     setFilter({ lessons: prefs.filter.lessons.includes(n) ? prefs.filter.lessons.filter((x) => x !== n) : [...prefs.filter.lessons, n] })
+  const toggleDeck = (d: string) => setFilter({ decks: fDecks.includes(d) ? fDecks.filter((x) => x !== d) : [...fDecks, d] })
 
   return (
     <Page
@@ -147,12 +152,17 @@ export function LibraryPage() {
           </button>
         </div>
         <div className="no-scrollbar -mx-4 mt-2.5 flex gap-2 overflow-x-auto px-4 sm:-mx-6 sm:px-6">
-          <Chip active={!prefs.filter.lessons.length} onClick={() => setFilter({ lessons: [] })}>
+          <Chip active={!prefs.filter.lessons.length && !fDecks.length} onClick={() => setFilter({ lessons: [], decks: [] })}>
             {t.common.all}
           </Chip>
           {lessons.map((n) => (
             <Chip key={n} active={prefs.filter.lessons.includes(n)} onClick={() => toggleLesson(n)}>
               {n === 0 ? '—' : t.common.lessonShort(n)}
+            </Chip>
+          ))}
+          {decks.map((d) => (
+            <Chip key={d} active={fDecks.includes(d)} onClick={() => toggleDeck(d)}>
+              {deckLabel(d)}
             </Chip>
           ))}
         </div>
@@ -188,6 +198,7 @@ export function LibraryPage() {
         prefs={prefs}
         setPrefs={setPrefs}
         lessons={lessons}
+        decks={decks}
         tags={tags}
       />
       <AddWordSheet open={addOpen} onClose={() => setAddOpen(false)} />
@@ -198,7 +209,9 @@ export function LibraryPage() {
 function GroupHeader({ group, k, n, lang }: { group: GroupKey; k: string; n: number; lang: Lang }) {
   const t = useT()
   let label = k
-  if (group === 'lesson') {
+  if (k.startsWith('deck:')) label = deckLabel(k.slice(5))
+  else if (group === 'deck') label = t.library.mainTrack
+  else if (group === 'lesson') {
     const title = lessonTitle(Number(k))
     label = Number(k) === 0 ? '—' : `${t.common.lesson(Number(k))}${title ? ` · ${title[lang]}` : ''}`
   } else if (group === 'type') label = t.types[k as WordType]
@@ -231,7 +244,7 @@ const WordRow = memo(function WordRow({
           <p className="truncate text-[14px] text-muted">{meaning(w, lang)}</p>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-1">
-          <span className="text-[11px] text-faint">L{w.genkiLesson}</span>
+          <span className="text-[11px] text-faint">{w.deck ? deckLabel(w.deck) : `L${w.genkiLesson}`}</span>
           <span className="flex items-center gap-1.5">
             {w.verify && <span className="h-1.5 w-1.5 rounded-full bg-warn" title="verify" />}
             {p?.leech && <span className="text-[11px] font-semibold text-accent">!</span>}
@@ -249,6 +262,7 @@ function FilterSheet({
   prefs,
   setPrefs,
   lessons,
+  decks,
   tags,
 }: {
   open: boolean
@@ -256,6 +270,7 @@ function FilterSheet({
   prefs: Prefs
   setPrefs: (f: (p: Prefs) => Prefs) => void
   lessons: number[]
+  decks: string[]
   tags: string[]
 }) {
   const t = useT()
@@ -302,6 +317,7 @@ function FilterSheet({
               { value: 'lesson', label: t.library.groupLesson },
               { value: 'type', label: t.library.groupType },
               { value: 'tag', label: t.library.groupTag },
+              ...(decks.length ? [{ value: 'deck' as const, label: t.library.groupDeck }] : []),
             ]}
           />
         </div>
@@ -325,6 +341,18 @@ function FilterSheet({
             ))}
           </div>
         </div>
+        {decks.length > 0 && (
+          <div>
+            <h3 className="mb-2 text-[13px] font-semibold text-muted">{t.library.decks}</h3>
+            <div className="flex flex-wrap gap-2">
+              {decks.map((d) => (
+                <Chip key={d} active={(f.decks ?? []).includes(d)} onClick={() => set({ decks: toggle(f.decks ?? [], d) })}>
+                  {deckLabel(d)}
+                </Chip>
+              ))}
+            </div>
+          </div>
+        )}
         <div>
           <h3 className="mb-2 text-[13px] font-semibold text-muted">{t.library.types}</h3>
           <div className="flex flex-wrap gap-2">

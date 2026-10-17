@@ -15,6 +15,7 @@ import { stripMarkup } from '../../lib/jp/markup'
 import { studyDay } from '../../lib/time'
 import { LESSONS } from '../../lib/vocab'
 import { useVocab } from '../../lib/vocab-context'
+import { DeckTiles } from '../study/DeckTiles'
 
 export function greeting(h = new Date().getHours()) {
   if (h >= 4 && h < 11) return { ja: 'おはようございます', en: 'Good morning', pl: 'Dzień dobry' }
@@ -36,7 +37,7 @@ function hash(s: string) {
 export function TodayPage() {
   const t = useT()
   const lang = useLang()
-  const { words } = useVocab()
+  const { words, decks } = useVocab()
   const settings = useSettings()
   const stats = useTodayStats(words)
   const progress = useProgress()
@@ -60,7 +61,7 @@ export function TodayPage() {
   const nudge = backupDays !== null && (stats?.answeredToday ?? 0) + (stats?.streak.current ?? 0) > 0 && backupDays >= (syncHealthy ? 30 : 7)
   const g = greeting()
   const wotd = useMemo(() => {
-    const pool = words.filter((w) => w.example && w.type !== 'number' && w.type !== 'particle')
+    const pool = words.filter((w) => !w.deck && w.example && w.type !== 'number' && w.type !== 'particle')
     return pool.length ? pool[hash(studyDay()) % pool.length] : undefined
   }, [words])
 
@@ -131,6 +132,13 @@ export function TodayPage() {
           )}
         </Card>
       </section>
+
+      {decks.length > 0 && (
+        <section className="mb-8">
+          <SectionTitle>{t.study.decks}</SectionTitle>
+          <DeckTiles />
+        </section>
+      )}
 
       {nudge && (
         <div className="mb-6 flex items-center justify-between gap-3 rounded-2xl border border-warn/30 bg-warn/10 px-4 py-3">

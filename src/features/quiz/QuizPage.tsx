@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useLocation, useParams } from 'wouter'
 import { Segmented } from '../../components/ui'
+import { inScope } from '../../lib/decks'
 import { useT } from '../../lib/i18n'
 import { makeQuestions, weakWords, type Question, type QuestionKind } from '../../lib/practice'
 import { useProgress } from '../../lib/progress'
@@ -36,7 +37,7 @@ export function QuizPage() {
 
   const start = (v: SetupValue) => {
     setLast(v)
-    const pool = words.filter((w) => v.lessons.includes(w.genkiLesson))
+    const pool = words.filter((w) => inScope(w, v.lessons, v.decks))
     let qs: Question[]
     if (mode === 'weak') {
       const weak = weakWords(words, progress, v.count)
@@ -47,7 +48,9 @@ export function QuizPage() {
       ])
     } else {
       const kind: QuestionKind = mode === 'listening' ? listenKind : (mode as QuestionKind)
-      qs = makeQuestions(kind, pool, v.count, { dir: mode === 'listening' ? 'recog' : dir, distractorPool: words })
+      // deck words only appear as distractors when their deck is in scope
+      const distractorPool = words.filter((w) => !w.deck || v.decks.includes(w.deck))
+      qs = makeQuestions(kind, pool, v.count, { dir: mode === 'listening' ? 'recog' : dir, distractorPool })
     }
     setQuestions(qs)
   }

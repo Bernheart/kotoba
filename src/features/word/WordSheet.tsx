@@ -6,6 +6,7 @@ import { IconEdit, IconTrash } from '../../components/icons'
 import { SpeakButton, wordSpeech } from '../../components/SpeakButton'
 import { Button, Sheet, useToast } from '../../components/ui'
 import { db } from '../../lib/db'
+import { deckLabel } from '../../lib/decks'
 import { exampleTranslation, relativeDay, useLang, useT } from '../../lib/i18n'
 import { stripMarkup } from '../../lib/jp/markup'
 import { computeProgress } from '../../lib/progress'
@@ -81,8 +82,14 @@ function WordDetail({ word, onEdit, onDeleted }: { word: VocabEntry; onEdit: () 
       <div className="mt-3 flex flex-wrap gap-1.5 text-[12px]">
         <span className="rounded-full bg-raised px-2.5 py-1 text-muted">{t.types[word.type]}</span>
         <span className="rounded-full bg-raised px-2.5 py-1 text-muted">
-          {t.common.lesson(word.genkiLesson)}
-          {title ? ` · ${title[lang]}` : ''}
+          {word.deck ? (
+            deckLabel(word.deck)
+          ) : (
+            <>
+              {t.common.lesson(word.genkiLesson)}
+              {title ? ` · ${title[lang]}` : ''}
+            </>
+          )}
         </span>
         {word.tags.map((tag) => (
           <span key={tag} className="rounded-full border border-line px-2.5 py-1 text-faint">
@@ -104,6 +111,7 @@ function WordDetail({ word, onEdit, onDeleted }: { word: VocabEntry; onEdit: () 
             <div className="min-w-0 flex-1">
               <SentenceJP markup={word.example.ja} highlight className="text-[19px] leading-[2]" />
               <p className="mt-1 text-[14px] text-muted">{exampleTranslation(word.example, lang)}</p>
+              {word.example.ref && <p className="mt-1 text-[12px] text-faint">{word.example.ref}</p>}
             </div>
             <SpeakButton text={stripMarkup(word.example.ja)} size="sm" />
           </div>

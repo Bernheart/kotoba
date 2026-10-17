@@ -1,22 +1,25 @@
 import { toHiragana } from 'wanakana'
+import { inScope } from './decks'
 import { hasKanji, kataToHira, normalizeKana } from './jp/chars'
 import type { WordProgress } from './progress'
 import { WORD_TYPES, type WordType } from './types'
 import { foldDiacritics, type VocabEntry } from './vocab'
 
 export type SortKey = 'lesson' | 'kana' | 'type' | 'difficulty' | 'weakest'
-export type GroupKey = 'none' | 'lesson' | 'type' | 'tag'
+export type GroupKey = 'none' | 'lesson' | 'type' | 'tag' | 'deck'
 export type StatusFilter = 'all' | 'new' | 'learning' | 'known' | 'leech' | 'verify' | 'mine'
 
 export interface LibraryFilter {
   q: string
   lessons: number[]
+  /** Custom decks; together with `lessons` this is the scope (nothing selected = everything) */
+  decks?: string[]
   types: WordType[]
   tags: string[]
   status: StatusFilter
 }
 
-export const EMPTY_FILTER: LibraryFilter = { q: '', lessons: [], types: [], tags: [], status: 'all' }
+export const EMPTY_FILTER: LibraryFilter = { q: '', lessons: [], decks: [], types: [], tags: [], status: 'all' }
 
 export function difficultyOf(w: VocabEntry): 1 | 2 | 3 {
   if (w.difficulty) return w.difficulty
@@ -52,7 +55,7 @@ export function searchScore(w: VocabEntry, query: string): number {
 
 export function filterWords(words: VocabEntry[], f: LibraryFilter, progress?: Map<string, WordProgress>): VocabEntry[] {
   return words.filter((w) => {
-    if (f.lessons.length && !f.lessons.includes(w.genkiLesson)) return false
+    if ((f.lessons.length || f.decks?.length) && !inScope(w, f.lessons, f.decks ?? [])) return false
     if (f.types.length && !f.types.includes(w.type)) return false
     if (f.tags.length && !f.tags.some((t) => w.tags.includes(t))) return false
     if (f.status !== 'all') {
@@ -73,7 +76,15 @@ const kanaKey = (w: VocabEntry) => kataToHira(w.kana.replace(/^[～〜]/, ''))
 
 export function sortWords(words: VocabEntry[], key: SortKey, progress?: Map<string, WordProgress>, q = ''): VocabEntry[] {
   const arr = [...words]
-  const byLesson = (a: VocabEntry, b: VocabEntry) => a.genkiLesson - b.genkiLesson
+  // deck words come after the lessons, each deck in frequency order
+  const byLesson = (a: VocabEntry, b: VocabEntry) =>
+    a.deck || b.deck
+      ? !a.deck
+        ? -1
+        : !b.deck
+          ? 1
+          : a.deck.localeCompare(b.deck) || (a.frequency ?? Infinity) - (b.frequency ?? Infinity)
+      : a.genkiLesson - b.genkiLesson
   const byKana = (a: VocabEntry, b: VocabEntry) => collator.compare(kanaKey(a), kanaKey(b))
   const typeIdx = (w: VocabEntry) => WORD_TYPES.indexOf(w.type)
   const cmp: Record<SortKey, (a: VocabEntry, b: VocabEntry) => number> = {
@@ -102,13 +113,17 @@ export function groupWords(words: VocabEntry[], key: GroupKey): Group[] {
     list.push(w)
     map.set(k, list)
   }
+  // Deck words form `deck:<id>` groups (after the lessons) when grouping by lesson or deck.
   for (const w of words) {
-    if (key === 'lesson') add(String(w.genkiLesson), w)
+    if (key === 'lesson') add(w.deck ? `deck:${w.deck}` : String(w.genkiLesson), w)
+    else if (key === 'deck') add(w.deck ? `deck:${w.deck}` : '', w)
     else if (key === 'type') add(w.type, w)
     else for (const t of w.tags.length ? w.tags : ['—']) add(t, w)
   }
   const keys = [...map.keys()]
-  if (key === 'lesson') keys.sort((a, b) => Number(a) - Number(b))
+  const deckLast = (a: string, b: string) => Number(a.startsWith('deck:')) - Number(b.startsWith('deck:'))
+  if (key === 'lesson') keys.sort((a, b) => deckLast(a, b) || (a.startsWith('deck:') ? a.localeCompare(b) : Number(a) - Number(b)))
+  else if (key === 'deck') keys.sort((a, b) => deckLast(a, b) || a.localeCompare(b))
   else if (key === 'type') keys.sort((a, b) => WORD_TYPES.indexOf(a as WordType) - WORD_TYPES.indexOf(b as WordType))
   else keys.sort()
   return keys.map((k) => ({ key: k, words: map.get(k)! }))

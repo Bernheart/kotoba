@@ -5,6 +5,7 @@ import { IconUpload } from '../../components/icons'
 import { KanaInput } from '../../components/KanaInput'
 import { Page } from '../../components/Page'
 import { Button, Card, Segmented, Toggle, useToast } from '../../components/ui'
+import { deckLabel } from '../../lib/decks'
 import { useT } from '../../lib/i18n'
 import { applyImport, planImport } from '../../lib/import/apply'
 import { buildRows, COL_ROLES, detectRoles, lessonFromFilename, parseText, type ColRole, type ImportRow } from '../../lib/import/parse'
@@ -50,6 +51,7 @@ export function ImportPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [table, roles, lesson, tags, fixes])
   const plan = useMemo(() => planImport(rows, words), [rows, words])
+  const importDecks = [...new Set(rows.flatMap((r) => (r.deck ? [r.deck] : [])))]
   const counts = {
     add: plan.filter((p) => p.action === 'new').length,
     merge: plan.filter((p) => p.action === 'merge').length,
@@ -206,6 +208,7 @@ export function ImportPage() {
             {counts.skip > 0 && <span className="text-accent">{t.importer.problems(counts.skip)}</span>}
           </div>
           {plan.some((p) => p.row.typeGuessed && p.action === 'new') && <p className="mt-1 px-1 text-[12px] text-faint">{t.importer.typeGuess}</p>}
+          {importDecks.length > 0 && <p className="mt-1 px-1 text-[13px] text-muted">{t.importer.deckNote(importDecks.map(deckLabel).join(', '))}</p>}
 
           <ul className="mt-3 overflow-hidden rounded-3xl border border-line/60 bg-surface">
             {plan.slice(0, 60).map((p, i) => (
@@ -233,7 +236,7 @@ export function ImportPage() {
                     p.action === 'new' ? 'bg-good/15 text-good' : p.action === 'merge' ? 'bg-easy/15 text-easy' : 'bg-accent/15 text-accent'
                   }`}
                 >
-                  {p.action === 'new' ? '+' : p.action === 'merge' ? '⇄' : '×'} {p.row.lesson ? `L${p.row.lesson}` : ''}
+                  {p.action === 'new' ? '+' : p.action === 'merge' ? '⇄' : '×'} {p.row.deck ? deckLabel(p.row.deck) : p.row.lesson ? `L${p.row.lesson}` : ''}
                 </span>
               </li>
             ))}

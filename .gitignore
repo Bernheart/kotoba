@@ -10,3 +10,10 @@ test-results
 playwright-report
 e2e/screenshots
 coverage
+# Personal study material derived from copyrighted media (subtitles, mined decks) — never commit
+tools/arcane/data/
+*.srt
+*.vtt
+*.ass
+arcane-draft.json
+arcane-deck.json

@@ -22,7 +22,10 @@ export interface VocabEntry extends Word {
 export interface Vocab {
   words: VocabEntry[]
   byId: Map<string, VocabEntry>
+  /** Lessons of the main track (deck words don't add lesson 0) */
   lessons: number[]
+  /** Custom deck ids, sorted */
+  decks: string[]
   tags: string[]
 }
 
@@ -77,9 +80,10 @@ export function buildVocab(rows: UserWordRow[]): Vocab {
     words.push(entry(full, r.mnemonic))
   }
   const byId = new Map(words.map((w) => [w.id, w]))
-  const lessons = [...new Set(words.map((w) => w.genkiLesson))].sort((a, b) => a - b)
+  const lessons = [...new Set(words.filter((w) => !w.deck).map((w) => w.genkiLesson))].sort((a, b) => a - b)
+  const decks = [...new Set(words.flatMap((w) => (w.deck ? [w.deck] : [])))].sort()
   const tags = [...new Set(words.flatMap((w) => w.tags))].sort()
-  return { words, byId, lessons, tags }
+  return { words, byId, lessons, decks, tags }
 }
 
 export function lessonTitle(n: number): LessonFile['title'] | undefined {

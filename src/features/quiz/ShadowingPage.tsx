@@ -5,6 +5,7 @@ import { IconMic, IconSpeaker } from '../../components/icons'
 import { FocusLayout } from '../../components/Page'
 import { useSpeak } from '../../components/SpeakButton'
 import { Button, ProgressBar, Segmented } from '../../components/ui'
+import { inScope } from '../../lib/decks'
 import { exampleTranslation, useLang, useT } from '../../lib/i18n'
 import { stripMarkup } from '../../lib/jp/markup'
 import { logPractice, shuffle } from '../../lib/srs/queue'
@@ -34,7 +35,7 @@ export function ShadowingPage() {
         counts={[5, 10, 15]}
         onStart={(v) => {
           setPos(0)
-          setItems(shuffle(words.filter((w) => v.lessons.includes(w.genkiLesson) && w.example && stripMarkup(w.example.ja).length >= 6)).slice(0, v.count))
+          setItems(shuffle(words.filter((w) => inScope(w, v.lessons, v.decks) && w.example && stripMarkup(w.example.ja).length >= 6)).slice(0, v.count))
         }}
       />
     )

@@ -6,6 +6,7 @@ import { useT } from '../../lib/i18n'
 import { setSetting, useSettings } from '../../lib/settings'
 import { useSpeak } from '../../components/SpeakButton'
 import { ttsSupported, useJapaneseVoices } from '../../lib/tts'
+import { useVocab } from '../../lib/vocab-context'
 import { BackupSection } from './BackupSection'
 import { SyncSection } from './SyncSection'
 
@@ -47,6 +48,7 @@ export function Stepper({ value, min, max, step = 1, onChange, format }: { value
 export function SettingsPage() {
   const t = useT()
   const s = useSettings()
+  const { decks } = useVocab()
   const { voices, loaded } = useJapaneseVoices()
   const say = useSpeak()
   const [persisted, setPersisted] = useState<boolean | null>(null)
@@ -104,6 +106,11 @@ export function SettingsPage() {
         <Row label={t.settings.newPerDay}>
           <Stepper value={s.newPerDay} min={0} max={50} step={5} onChange={(v) => setSetting('newPerDay', v)} />
         </Row>
+        {decks.length > 0 && (
+          <Row label={t.settings.deckNewPerDay} hint={t.settings.deckNewPerDayHint}>
+            <Stepper value={s.deckNewPerDay} min={0} max={50} step={5} onChange={(v) => setSetting('deckNewPerDay', v)} />
+          </Row>
+        )}
         <Row label={t.settings.dailyGoal}>
           <Stepper value={s.dailyGoal} min={10} max={300} step={10} onChange={(v) => setSetting('dailyGoal', v)} />
         </Row>

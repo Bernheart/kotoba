@@ -10,6 +10,7 @@ import { Button, ProgressBar, Sheet } from '../../components/ui'
 import { useKeyboardInset } from '../../components/useKeyboardInset'
 import { checkJapanese, checkMeaning, type Verdict } from '../../lib/answer'
 import { db, type CardRow } from '../../lib/db'
+import { deckLabel } from '../../lib/decks'
 import { exampleTranslation, meaning, shortInterval, useLang, useT } from '../../lib/i18n'
 import { stripMarkup } from '../../lib/jp/markup'
 import { getSettings, setSetting, useSettings } from '../../lib/settings'
@@ -30,7 +31,7 @@ const RATINGS: { r: Grade; key: 'again' | 'hard' | 'good' | 'easy'; cls: string 
   { r: Rating.Easy, key: 'easy', cls: 'text-easy border-easy/40' },
 ]
 
-/** SRS review session. `?new=1` = only learn new words; `?word=<id>` = study one word now. */
+/** SRS review session. `?new=1` = only learn new words; `?word=<id>` = study one word now; `?deck=<id>` = a custom deck's queue. */
 export function ReviewPage() {
   const t = useT()
   const settings = useSettings()
@@ -49,12 +50,16 @@ export function ReviewPage() {
   const [history, setHistory] = useState<{ res: AnswerResult; pos: number; inserted: boolean }[]>([])
   const [leech, setLeech] = useState<VocabEntry | null>(null)
   const [stats, setStats] = useState({ answered: 0, correct: 0, started: Date.now() })
+  const [deck, setDeck] = useState<string | undefined>()
   const shownAt = useRef(Date.now())
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Build the queue once per session.
+  // Build the queue once per session. Clearing the URL below changes `search`, which re-runs this effect
+  // before the queue is set — the guard keeps that second run from replacing a ?deck= / ?word= queue.
+  const building = useRef(false)
   useEffect(() => {
-    if (!words.length || queue) return
+    if (!words.length || queue || building.current) return
+    building.current = true
     void (async () => {
       const params = new URLSearchParams(search)
       if (search) navigate('/review?', { replace: true })
@@ -68,12 +73,21 @@ export function ReviewPage() {
         return
       }
       const newOnly = params.get('new') === '1'
+      const d = params.get('deck') || undefined
+      setDeck(d)
       const q = buildQueue(
-        { words, cards: all, todayLogs: todayLogs.filter((l) => !l.deleted), settings: newOnly ? { ...s, newPerDay: s.newPerDay + 5 } : s },
-        { includeNew: true },
+        {
+          words,
+          cards: all,
+          todayLogs: todayLogs.filter((l) => !l.deleted),
+          settings: newOnly ? { ...s, newPerDay: s.newPerDay + 5, deckNewPerDay: s.deckNewPerDay + 5 } : s,
+        },
+        { includeNew: true, deck: d },
       )
       setQueue(newOnly ? q.filter((i) => i.isNew) : q)
-    })()
+    })().finally(() => {
+      building.current = false
+    })
   }, [words, byId, queue, search, navigate])
 
   const item = queue?.[pos]
@@ -202,9 +216,10 @@ export function ReviewPage() {
     return () => window.removeEventListener('keydown', onKey)
   })
 
+  const title = deck ? deckLabel(deck) : t.study.flashcards
   if (!queue)
     return (
-      <FocusLayout title={t.study.flashcards}>
+      <FocusLayout title={title}>
         <div className="flex flex-1 items-center justify-center text-muted">…</div>
       </FocusLayout>
     )
@@ -213,7 +228,7 @@ export function ReviewPage() {
     const pct = stats.answered ? Math.round((stats.correct / stats.answered) * 100) : 0
     const mins = Math.max(1, Math.round((Date.now() - stats.started) / 60000))
     return (
-      <FocusLayout title={t.study.flashcards} onExit={() => navigate('/')}>
+      <FocusLayout title={title} onExit={() => navigate('/')}>
         {stats.answered === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-4 text-center">
             <p lang="ja" className="jp-serif text-[44px]">
@@ -224,7 +239,7 @@ export function ReviewPage() {
               <Button
                 variant="primary"
                 onClick={() => {
-                  navigate('/review?new=1')
+                  navigate(deck ? `/review?new=1&deck=${deck}` : '/review?new=1')
                   setQueue(null)
                 }}
               >
@@ -386,7 +401,7 @@ export function IntroCard({ word, onDone }: { word: VocabEntry; onDone: () => vo
         <p className="mt-3 text-[24px] leading-snug font-medium">{meaning(word, lang)}</p>
         {other && <p className="text-[15px] text-muted">{other}</p>}
         <p className="mt-2 text-[12px] text-faint">
-          {t.types[word.type]} · {t.common.lesson(word.genkiLesson)}
+          {t.types[word.type]} · {word.deck ? deckLabel(word.deck) : t.common.lesson(word.genkiLesson)}
         </p>
         {word.mnemonic && <p className="mt-3 rounded-2xl bg-warn/10 px-3.5 py-2 text-[14px] text-warn">💡 {word.mnemonic}</p>}
         {word.example && (
@@ -395,6 +410,7 @@ export function IntroCard({ word, onDone }: { word: VocabEntry; onDone: () => vo
               <div className="min-w-0 flex-1">
                 <SentenceJP markup={word.example.ja} highlight className="text-[19px] leading-[2]" />
                 <p className="mt-0.5 text-[14px] text-muted">{exampleTranslation(word.example, lang)}</p>
+                {word.example.ref && <p className="mt-1 text-[12px] text-faint">{word.example.ref}</p>}
               </div>
               <SpeakButton text={stripMarkup(word.example.ja)} size="sm" />
             </div>

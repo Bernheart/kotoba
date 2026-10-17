@@ -1,0 +1,36 @@
+# Names of characters, places and things in the show, so they don't count as words to learn.
+# One per line, as written in the Japanese subtitles. Lines starting with # are comments.
+# Arcane: people
+ヴァイ
+パウダー
+ジンクス
+ケイトリン
+ジェイス
+ヴィクター
+シルコ
+ヴァンダー
+エコー
+ミロ
+クラガー
+ベンゾー
+マーカス
+セヴィカ
+グレイソン
+ハイマーディンガー
+メル
+デッカード
+リトルマン
+リトル
+# Arcane: places, houses and in-world terms
+ピルトーヴァー
+ゾウン
+レーン
+タリス
+キラマン
+メダルダ
+フェロス
+ハウス
+ヘクステック
+ヘクスゲート
+アーケイン
+シマー

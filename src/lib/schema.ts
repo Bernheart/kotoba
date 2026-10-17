@@ -6,6 +6,7 @@ export const exampleSchema = z.object({
   kana: z.string().optional(),
   en: z.string().min(1),
   pl: z.string().min(1),
+  ref: z.string().optional(),
 })
 
 export const wordSchema = z.object({
@@ -24,6 +25,7 @@ export const wordSchema = z.object({
   example: exampleSchema.optional(),
   difficulty: z.union([z.literal(1), z.literal(2), z.literal(3)]).optional(),
   frequency: z.number().optional(),
+  deck: z.string().regex(/^[a-z0-9][a-z0-9-]*$/, 'deck must be lowercase slug').optional(),
   verify: z.string().optional(),
 })
 

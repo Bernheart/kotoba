@@ -108,6 +108,9 @@ export const en = {
     groupLesson: 'Lesson',
     groupType: 'Type',
     groupTag: 'Tag',
+    groupDeck: 'Deck',
+    decks: 'Decks',
+    mainTrack: 'Genki & my words',
     sortLesson: 'Lesson',
     sortKana: 'Gojūon (あいう)',
     sortType: 'Type',
@@ -197,6 +200,7 @@ export const en = {
     run: (n: number) => `Import ${n} ${enPlural(n, 'word', 'words')}`,
     done: (n: number, m: number) => `Imported ${n} new ${enPlural(n, 'word', 'words')}, merged ${m}.`,
     typeGuess: 'Word types are guessed — check verbs in the library.',
+    deckNote: (d: string) => `Deck: ${d}. It gets its own tile under Study and its own queue, separate from your Genki reviews.`,
   },
   review: {
     again: 'Again',
@@ -269,6 +273,8 @@ export const en = {
     time: 'Time',
     mistakes: 'Mistakes',
     notEnough: 'Not enough words with example sentences in this selection.',
+    decks: 'Decks',
+    deckDesc: (due: number, fresh: number) => `${due} due · ${fresh} new today`,
   },
   conj: {
     title: 'Conjugation trainer',
@@ -365,6 +371,8 @@ export const en = {
     currentLesson: 'Current Genki lesson',
     currentLessonHint: 'New cards only come from lessons up to this one.',
     newPerDay: 'New words per day',
+    deckNewPerDay: 'New words per day in decks',
+    deckNewPerDayHint: 'Each deck has its own limit and queue, separate from your Genki reviews.',
     dailyGoal: 'Daily goal (answers)',
     reviewStyle: 'Review style',
     reviewFlip: 'Flip & rate',
@@ -406,6 +414,9 @@ export const en = {
     install: 'Install on iPhone',
     installSteps: 'Open this site in Safari → Share → “Add to Home Screen”. Installed apps keep data more reliably and run full-screen.',
     standalone: 'Running as an installed app',
+    asbHint:
+      'For asbplayer: a .txt of the words you study, one per line. In asbplayer open Settings → Annotation → My word database → Import Words (Yomitan must be running).',
+    asbExport: (n: number) => `Known words for asbplayer (${n})`,
   },
   sync: {
     intro: 'Sign in with the same email and password on your Mac and iPhone. Progress syncs automatically when online.',

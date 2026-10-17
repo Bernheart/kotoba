@@ -3,6 +3,7 @@ import { IconFlame } from '../../components/icons'
 import { Page } from '../../components/Page'
 import { Card, SectionTitle } from '../../components/ui'
 import type { StudyMode } from '../../lib/db'
+import { deckLabel } from '../../lib/decks'
 import { useLang, useT } from '../../lib/i18n'
 import { useSettings } from '../../lib/settings'
 import { useDashboard, type Bucket } from '../../lib/stats'
@@ -68,7 +69,7 @@ export function StatsPage() {
           <SectionTitle>{t.stats.byLesson}</SectionTitle>
           <Card className="p-4">
             <Columns
-              values={d.byLesson.map((b) => ({ label: b.key === '0' ? '—' : `L${b.key}`, value: b.correct / b.n, n: b.n }))}
+              values={d.byLesson.map((b) => ({ label: b.key.startsWith('deck:') ? deckLabel(b.key.slice(5)) : b.key === '0' ? '—' : `L${b.key}`, value: b.correct / b.n, n: b.n }))}
               format={(v) => `${Math.round(v * 100)}%`}
               max={1}
               caption={t.stats.byLesson}

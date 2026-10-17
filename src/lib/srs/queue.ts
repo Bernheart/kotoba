@@ -1,6 +1,7 @@
 import { Rating, type Grade } from 'ts-fsrs'
 import { db, uuid, type CardRow, type ReviewLogRow, type StudyMode } from '../db'
-import type { Settings } from '../settings'
+import { byFrequency } from '../decks'
+import { DEFAULT_SETTINGS, type Settings } from '../settings'
 import { endOfStudyDay, studyDay } from '../time'
 import type { Direction, Word } from '../types'
 import { cardId, cardToRow, newCardRow, rowToCard, scheduler, State } from './fsrs'
@@ -30,12 +31,35 @@ export interface QueueInput {
   cards: CardRow[]
   /** Logs of the current study day (for the new-cards-per-day budget) */
   todayLogs: Pick<ReviewLogRow, 'state' | 'scheduled' | 'cardId'>[]
-  settings: Pick<Settings, 'newPerDay' | 'currentLesson' | 'recallCards'>
+  settings: Pick<Settings, 'newPerDay' | 'currentLesson' | 'recallCards'> & Partial<Pick<Settings, 'deckNewPerDay'>>
   now?: number
 }
 
-export function newIntroducedToday(todayLogs: QueueInput['todayLogs']): number {
-  return new Set(todayLogs.filter((l) => l.scheduled && l.state === State.New && l.cardId.endsWith(':recog')).map((l) => l.cardId)).size
+const wordOfCard = (id: string) => id.slice(0, id.lastIndexOf(':'))
+
+/** New words introduced today (optionally only among `wordIds`, so each track has its own budget). */
+export function newIntroducedToday(todayLogs: QueueInput['todayLogs'], wordIds?: Set<string>): number {
+  return new Set(
+    todayLogs
+      .filter((l) => l.scheduled && l.state === State.New && l.cardId.endsWith(':recog') && (!wordIds || wordIds.has(wordOfCard(l.cardId))))
+      .map((l) => l.cardId),
+  ).size
+}
+
+/** Words of one study track: the main track (`deck` undefined) or one custom deck. */
+export function trackWords<T extends Pick<Word, 'deck'>>(words: T[], deck?: string): T[] {
+  return words.filter((w) => (w.deck || undefined) === (deck || undefined))
+}
+
+/** Daily new-word limit of a track. */
+export function newPerDayOf(settings: QueueInput['settings'], deck?: string): number {
+  return deck ? (settings.deckNewPerDay ?? DEFAULT_SETTINGS.deckNewPerDay) : settings.newPerDay
+}
+
+/** Next new words of a track: main = lesson order gated by the current lesson; deck = frequency order, no gating. */
+export function trackCandidates(words: Word[], cards: Map<string, CardRow>, settings: Pick<Settings, 'currentLesson'>, deck?: string): Word[] {
+  const scoped = trackWords(words, deck)
+  return deck ? newCandidates(byFrequency(scoped), cards, Infinity) : newCandidates(scoped, cards, settings.currentLesson)
 }
 
 /** Words that may be introduced next, in lesson order (WaniKani-style gating by current lesson). */
@@ -47,9 +71,15 @@ export function newCandidates(words: Word[], cards: Map<string, CardRow>, curren
   })
 }
 
-/** Build today's review queue: due learning/review cards (one per word — siblings are buried), then new words. */
-export function buildQueue({ words, cards, todayLogs, settings, now = Date.now() }: QueueInput, opts: { includeNew?: boolean; maxNew?: number } = {}): QueueItem[] {
-  const wordIds = new Set(words.map((w) => w.id))
+/**
+ * Build today's review queue: due learning/review cards (one per word — siblings are buried), then new words.
+ * Only one track is queued: the main words, or with `deck` the words of that custom deck.
+ */
+export function buildQueue(
+  { words, cards, todayLogs, settings, now = Date.now() }: QueueInput,
+  opts: { includeNew?: boolean; maxNew?: number; deck?: string } = {},
+): QueueItem[] {
+  const wordIds = new Set(trackWords(words, opts.deck).map((w) => w.id))
   const byId = new Map(cards.map((c) => [c.id, c]))
   const due = cards
     .filter((c) => wordIds.has(c.wordId) && isDue(c, now) && (settings.recallCards || c.dir === 'recog'))
@@ -67,8 +97,8 @@ export function buildQueue({ words, cards, todayLogs, settings, now = Date.now()
   shuffle(reviews)
   const queue = [...learning, ...reviews]
   if (opts.includeNew ?? true) {
-    const budget = Math.max(0, Math.min(opts.maxNew ?? Infinity, settings.newPerDay - newIntroducedToday(todayLogs)))
-    const fresh = newCandidates(words, byId, settings.currentLesson)
+    const budget = Math.max(0, Math.min(opts.maxNew ?? Infinity, newPerDayOf(settings, opts.deck) - newIntroducedToday(todayLogs, wordIds)))
+    const fresh = trackCandidates(words, byId, settings, opts.deck)
       .filter((w) => !perWord.has(w.id))
       .slice(0, budget)
     // Intersperse new words: one every 4 reviews

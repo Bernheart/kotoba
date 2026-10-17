@@ -101,6 +101,22 @@ Go to **Settings → Data & backup → Export backup**.
 
   `npm run check` validates the files.
 
+## Custom decks (e.g. words from a show)
+
+A JSON import whose words carry `"deck": "<id>"` creates a **separate deck**:
+- its own tile under *Study* and *Today*, opening `#/review?deck=<id>`;
+- new words in `frequency` order (rank 1 first), with no lesson gating;
+- its own *New words per day in decks* limit (default 10);
+- same FSRS cards, leech handling and sync as everything else, but never mixed into the main reviews, due counts or the 5-minute session;
+- the *Words* filter and every practice mode get a chip for the deck;
+- example sentences can carry a `ref` (e.g. `S1E3 · 12:34`), shown under the sentence.
+
+Deck words are stored as your own words, so they live only in your browser and your sync, never in this repo.
+
+[`tools/arcane`](tools/arcane/README.md) mines such a deck from your own subtitle files: frequency ranking, a coverage report, one unique line per word. Subtitles and the generated deck stay outside the repo.
+
+**asbplayer:** *Settings → Data & backup → Known words for asbplayer* saves the words you study as a `.txt`, one word per line. Import it in asbplayer under *Settings → Annotation → My word database → Import Words* (Yomitan must be running). asbplayer then colours unknown words in subtitles and shows how much of an episode you know.
+
 ## Single-file version (offline on the Mac)
 
 ```bash

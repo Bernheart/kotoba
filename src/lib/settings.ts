@@ -10,6 +10,8 @@ export interface Settings {
   /** Highest Genki lesson whose words may be introduced as new cards */
   currentLesson: number
   newPerDay: number
+  /** New words per day in each custom deck (separate from the main limit) */
+  deckNewPerDay: number
   /** Daily goal in answered cards */
   dailyGoal: number
   reviewStyle: 'flip' | 'type'
@@ -31,6 +33,7 @@ export const DEFAULT_SETTINGS: Settings = {
   theme: 'dark',
   currentLesson: 10,
   newPerDay: 10,
+  deckNewPerDay: 10,
   dailyGoal: 30,
   reviewStyle: 'flip',
   recallCards: true,

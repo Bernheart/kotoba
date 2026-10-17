@@ -43,15 +43,36 @@ export async function applyImport(
           en: row.en,
           pl: row.pl,
           type: row.type,
-          genkiLesson: row.lesson ?? opts.defaultLesson,
+          genkiLesson: row.deck ? 0 : (row.lesson ?? opts.defaultLesson),
           tags: row.tags,
           ...(row.example ? { example: row.example } : {}),
+          ...(row.deck ? { deck: row.deck } : {}),
+          ...(row.frequency ? { frequency: row.frequency } : {}),
           ...(row.typeGuessed ? { verify: 'Word type was guessed during import.' } : {}),
         }
         puts.push({ id, kind: 'custom', word, createdAt: now, updatedAt: now, dirty: 1 })
         added++
       } else if (action === 'merge' && target) {
         const prev = await db.userWords.get(target.id)
+        // Re-importing a deck refreshes its words in place (same id, so progress is kept).
+        if (row.deck && target.source === 'user' && target.deck === row.deck) {
+          const base = (prev?.word ?? target) as Word
+          const word: Word = {
+            ...base,
+            japanese: row.japanese,
+            kana: row.kana,
+            en: row.en || base.en,
+            pl: row.pl || base.pl,
+            ...(row.typeGuessed ? {} : { type: row.type, verify: undefined }),
+            // the deck's own rank tags (`arcane-1` …) are replaced, your other tags stay
+            tags: [...new Set([...base.tags.filter((t) => !t.startsWith(`${row.deck}-`)), ...row.tags])],
+            ...(row.example ? { example: row.example } : {}),
+            ...(row.frequency ? { frequency: row.frequency } : {}),
+          }
+          puts.push({ id: target.id, kind: 'custom', word, mnemonic: prev?.mnemonic, createdAt: prev?.createdAt ?? now, updatedAt: now, dirty: 1 })
+          merged++
+          continue
+        }
         const tags = [...new Set([...target.tags, ...row.tags])]
         const lesson = opts.updateLessons && row.lesson ? row.lesson : target.genkiLesson
         if (target.source === 'user') {

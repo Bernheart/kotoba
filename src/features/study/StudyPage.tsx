@@ -4,6 +4,7 @@ import { SectionTitle } from '../../components/ui'
 import { useT } from '../../lib/i18n'
 import { useTodayStats } from '../../lib/stats'
 import { useVocab } from '../../lib/vocab-context'
+import { DeckTiles } from './DeckTiles'
 
 function Tile({ href, glyph, title, desc, badge, wide }: { href: string; glyph: string; title: string; desc: string; badge?: string | number; wide?: boolean }) {
   return (
@@ -27,7 +28,7 @@ function Tile({ href, glyph, title, desc, badge, wide }: { href: string; glyph: 
 
 export function StudyPage() {
   const t = useT()
-  const { words } = useVocab()
+  const { words, decks } = useVocab()
   const stats = useTodayStats(words)
   return (
     <Page title={t.study.title}>
@@ -49,6 +50,13 @@ export function StudyPage() {
         <Tile href="/review?" glyph="復" title={t.study.flashcards} desc={t.study.flashcardsDesc} badge={stats?.due} />
         <Tile href="/review?new=1" glyph="新" title={t.review.learnMore} desc={t.today.newToday(stats?.newAvailable ?? 0)} badge={stats?.newAvailable} />
       </div>
+
+      {decks.length > 0 && (
+        <>
+          <SectionTitle>{t.study.decks}</SectionTitle>
+          <DeckTiles className="mb-7" />
+        </>
+      )}
 
       <SectionTitle>{t.study.practice}</SectionTitle>
       <p className="-mt-1 mb-3 px-1 text-[12px] text-faint">{t.study.practiceNote}</p>

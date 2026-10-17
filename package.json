@@ -12,7 +12,8 @@
     "check": "npm run typecheck && npm run test",
     "e2e": "playwright test",
     "build:single": "vite build --mode single",
-    "icons": "node scripts/gen-icons.mjs"
+    "icons": "node scripts/gen-icons.mjs",
+    "arcane": "jiti tools/arcane/cli.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",
@@ -38,6 +39,8 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
     "fake-indexeddb": "^6.2.5",
+    "jiti": "^2.7.0",
+    "kuromoji": "^0.1.2",
     "sharp": "^0.35.5",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
