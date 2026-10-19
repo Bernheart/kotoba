@@ -8,7 +8,8 @@ import { Page } from './components/Page'
 import { PwaUpdater } from './components/PwaUpdater'
 import { ToastProvider } from './components/ui'
 import { requestPersistence, storageWorks } from './lib/db'
-import { startSync } from './lib/sync/engine'
+import { firstSyncDone, startSync } from './lib/sync/engine'
+import { applyScheduler } from './lib/srs/schedule'
 import { useT } from './lib/i18n'
 import { LibraryPage } from './features/library/LibraryPage'
 import { ReviewPage } from './features/review/ReviewPage'
@@ -58,6 +59,8 @@ function Shell() {
   useEffect(() => {
     void requestPersistence()
     startSync()
+    // Re-schedule cards with the selected algorithm once the other device's answers have been pulled in.
+    void Promise.race([firstSyncDone, new Promise((r) => setTimeout(r, 8000))]).then(() => applyScheduler())
   }, [])
   const [loc] = useLocation()
   const focus = FOCUS_ROUTES.some((r) => loc.startsWith(r))

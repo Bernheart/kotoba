@@ -36,6 +36,8 @@ export interface CardRow extends Syncable {
   suspended: 0 | 1
   /** Hidden until this time (sibling burying) */
   buriedUntil?: number
+  /** Ease factor of Anki's SM-2 scheduler (2.5 = 250%); unused by FSRS */
+  ease?: number
 }
 
 export type StudyMode =

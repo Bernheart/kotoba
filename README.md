@@ -2,7 +2,7 @@
 
 A personal Japanese vocabulary trainer that follows **Genki (3rd ed.) lessons 1–10**. It is dark-mode first, phone-first and works offline. Progress syncs between Mac and iPhone.
 
-- **Spaced repetition with FSRS.** The same scheduler Anki now uses. It includes sibling burying, leech rescue with mnemonics, and new words gated by your current Genki lesson.
+- **Spaced repetition like Anki.** Anki's classic scheduler (SM-2 with Anki's default options: steps 1m → 10m, graduating at 1 day, then intervals grow by the card's ease), with Anki-style session order (a "10m" card really waits 10 minutes). FSRS is available in Settings. Also sibling burying, leech rescue with mnemonics, and new words gated by your current Genki lesson.
 - **Practice modes.** Multiple choice, typing (romaji→kana as you type), listening, shadowing with record and compare, cloze, sentence builder, a matching game, a kana trainer, a conjugation trainer, a weak-words deck and a 5-minute session.
 - **Word library.** Search kanji, kana, romaji, English or Polish. Filter, group, and sort (gojūon order, weakest first, and more). Furigana can be toggled, and every word and example sentence has audio.
 - **EN / PL** interface and meanings.
@@ -16,7 +16,7 @@ A personal Japanese vocabulary trainer that follows **Genki (3rd ed.) lessons 1�
 ```bash
 npm install
 npm run dev          # http://localhost:5173 (also reachable from your phone on the same Wi-Fi via the printed network URL)
-npm run check        # type check + unit tests (FSRS, sync merge, importer, conjugations, vocabulary validator)
+npm run check        # type check + unit tests (Anki SM-2 + FSRS scheduling, session order, sync merge, importer, conjugations, vocabulary validator)
 npm run e2e          # Playwright: iPhone-size WebKit + desktop Chromium, screenshots in e2e/screenshots/
 npm run build        # production PWA in dist/
 ```
@@ -107,7 +107,7 @@ A JSON import whose words carry `"deck": "<id>"` creates a **separate deck**:
 - its own tile under *Study* and *Today*, opening `#/review?deck=<id>`;
 - new words in `frequency` order (rank 1 first), with no lesson gating;
 - its own *New words per day in decks* limit (default 10);
-- same FSRS cards, leech handling and sync as everything else, but never mixed into the main reviews, due counts or the 5-minute session;
+- same scheduler, leech handling and sync as everything else, but never mixed into the main reviews, due counts or the 5-minute session;
 - the *Words* filter and every practice mode get a chip for the deck;
 - example sentences can carry a `ref` (e.g. `S1E3 · 12:34`), shown under the sentence.
 
@@ -157,7 +157,7 @@ The site is public, so anyone with the link can use it. Each person's progress l
 ## How it's built
 
 - Vite, React 19, TypeScript, Tailwind CSS 4 and Motion.
-- Dexie (IndexedDB) for local storage, ts-fsrs (FSRS-6) for scheduling, WanaKana for romaji→kana input.
+- Dexie (IndexedDB) for local storage, Anki's SM-2 (own implementation, `src/lib/srs/sm2.ts`) or ts-fsrs (FSRS-6) for scheduling, WanaKana for romaji→kana input.
 - vite-plugin-pwa (Workbox) for the PWA, and Supabase (lazy-loaded) for sync.
 
 Data model and decisions: see `src/lib/types.ts`, `src/lib/db.ts`, `src/lib/srs/`, `src/lib/sync/` and `supabase/schema.sql`.

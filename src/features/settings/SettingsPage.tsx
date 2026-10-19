@@ -5,6 +5,7 @@ import { requestPersistence } from '../../lib/db'
 import { useT } from '../../lib/i18n'
 import { setSetting, useSettings } from '../../lib/settings'
 import { useSpeak } from '../../components/SpeakButton'
+import { applyScheduler } from '../../lib/srs/schedule'
 import { ttsSupported, useJapaneseVoices } from '../../lib/tts'
 import { useVocab } from '../../lib/vocab-context'
 import { BackupSection } from './BackupSection'
@@ -127,9 +128,21 @@ export function SettingsPage() {
         <Row label={t.settings.recallCards}>
           <Toggle checked={s.recallCards} onChange={(v) => setSetting('recallCards', v)} label={t.settings.recallCards} />
         </Row>
+        <Row label={t.settings.scheduler} hint={t.settings.schedulerHint}>
+          <Segmented
+            value={s.scheduler}
+            onChange={(v) => void setSetting('scheduler', v).then(() => applyScheduler(true))}
+            options={[
+              { value: 'anki', label: t.settings.schedulerAnki },
+              { value: 'fsrs', label: t.settings.schedulerFsrs },
+            ]}
+          />
+        </Row>
+        {s.scheduler === 'fsrs' && (
         <Row label={t.settings.retention} hint={t.settings.retentionHint}>
           <Stepper value={s.retention} min={0.8} max={0.97} step={0.01} onChange={(v) => setSetting('retention', v)} format={(v) => `${Math.round(v * 100)}%`} />
         </Row>
+        )}
         <Row label={t.settings.leech}>
           <Stepper value={s.leechThreshold} min={3} max={16} onChange={(v) => setSetting('leechThreshold', v)} />
         </Row>
