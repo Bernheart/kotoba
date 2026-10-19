@@ -328,6 +328,53 @@ export function coverage(lines: Line[], cls: (t: Tok) => TokClass, knownContent:
   return { tokens, known, content, contentKnown, gains }
 }
 
+/* ---------- Episode prep ---------- */
+
+/** `S1E2` → `s1e02` (a tag that sorts in episode order) */
+export function episodeTag(ep: string): string {
+  const m = /S(\d+)E(\d+)/i.exec(ep)
+  return m ? `s${Number(m[1])}e${m[2]!.padStart(2, '0')}` : ep.toLowerCase()
+}
+
+/**
+ * Prep lists: per episode, the deck words most characteristic of it — said at least `minCount` times in
+ * that episode, scored by count × log(episodes / episodes the word appears in), so words spoken in every
+ * episode (learned first anyway) don't fill every list. Returns word → the episodes whose list it is in.
+ */
+export function episodePrep(
+  lines: Pick<Line, 'ep' | 'toks'>[],
+  keyOf: (t: Tok) => string | null,
+  deckKeys: string[],
+  opts: { perEpisode?: number; minCount?: number } = {},
+): Map<string, string[]> {
+  const perEpisode = opts.perEpisode ?? 20
+  const minCount = opts.minCount ?? 2
+  const rank = new Map(deckKeys.map((k, i) => [k, i]))
+  const counts = new Map<string, Map<string, number>>()
+  for (const l of lines)
+    for (const t of l.toks) {
+      const k = keyOf(t)
+      if (k === null || !rank.has(k)) continue
+      const m = counts.get(l.ep) ?? new Map<string, number>()
+      m.set(k, (m.get(k) ?? 0) + 1)
+      counts.set(l.ep, m)
+    }
+  const eps = counts.size
+  const spread = new Map<string, number>()
+  for (const m of counts.values()) for (const k of m.keys()) spread.set(k, (spread.get(k) ?? 0) + 1)
+  const out = new Map<string, string[]>()
+  for (const ep of [...counts.keys()].sort((a, b) => episodeTag(a).localeCompare(episodeTag(b)))) {
+    const scored = [...counts.get(ep)!]
+      .filter(([, n]) => n >= minCount)
+      .map(([k, n]) => ({ k, score: n * Math.log(eps / spread.get(k)!) }))
+      .filter((x) => x.score > 0)
+      .sort((a, b) => b.score - a.score || rank.get(a.k)! - rank.get(b.k)!)
+      .slice(0, perEpisode)
+    for (const { k } of scored) out.set(k, [...(out.get(k) ?? []), ep])
+  }
+  return out
+}
+
 /* ---------- Example lines ---------- */
 
 export interface Assignment {

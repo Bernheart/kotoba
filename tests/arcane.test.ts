@@ -6,6 +6,8 @@ import {
   assignExamples,
   classify,
   coverage,
+  episodePrep,
+  episodeTag,
   fixSlangVerbs,
   fromKuromoji,
   guessBaseReading,
@@ -22,7 +24,8 @@ import {
   type Line,
   type Tok,
 } from '../tools/arcane/mine'
-import { cueLanguage, episodeOf, isDialogue, languageOf, mergeContinuations, parseSubtitles, refOf } from '../tools/arcane/subs'
+import { retime, splitTracks, toSrt } from '../tools/arcane/align'
+import { cueLanguage, translationLanguage, episodeOf, isDialogue, languageOf, mergeContinuations, parseSubtitles, refOf } from '../tools/arcane/subs'
 import { wordProblems } from '../tools/arcane/validate'
 
 // All subtitle text below is made up for the tests.
@@ -283,5 +286,89 @@ describe('markup from tokens (real tokenizer, made-up lines)', () => {
     expect(wordProblems({ japanese: '扉', kana: 'tobira', en: 'door', pl: 'drzwi', type: 'noun', genkiLesson: 0, tags: [], example: { ja: '扉だ', en: 'x', pl: 'x' } })).toEqual(
       expect.arrayContaining(['kana "tobira" is not kana', 'example has no *target*', 'kanji without furigana in "扉だ"']),
     )
+  })
+})
+
+describe('synced translation tracks', () => {
+  // Made-up three-language export: Japanese, English and Polish cues interleaved, each with its own timing.
+  const MULTI = `1
+00:00:01,000 --> 00:00:04,000
+扉を開けて
+早く
+
+2
+00:00:01,100 --> 00:00:02,500
+Open the door.
+
+3
+00:00:01,200 --> 00:00:03,000
+Otwórz drzwi.
+
+4
+00:00:05,000 --> 00:00:06,000
+ヴァイ？
+
+5
+00:00:05,100 --> 00:00:05,600
+Vi?
+
+6
+00:00:05,100 --> 00:00:05,600
+Vi?
+
+7
+00:00:07,000 --> 00:00:08,000
+[explosion]
+`
+
+  it('tells English from Polish, and leaves names-only lines undecided', () => {
+    expect(translationLanguage('Open the door.')).toBe('en')
+    expect(translationLanguage('Nie teraz, dobra?')).toBe('pl')
+    expect(translationLanguage('Otwórz drzwi.')).toBe('pl')
+    expect(translationLanguage('Let me go to the lab')).toBe('en') // "go" and "to" are Polish words too
+    expect(translationLanguage('Vi?')).toBeUndefined()
+  })
+
+  it('splits a multi-track file and keeps line breaks', () => {
+    const t = splitTracks(parseSubtitles(MULTI, 'S1E1', 'x.srt', { keepLines: true }))
+    expect(t.ja.map((c) => c.text)).toEqual(['扉を開けて\n早く', 'ヴァイ？'])
+    expect(t.en.map((c) => c.text)).toEqual(['Open the door.', 'Vi?', 'Vi?'])
+    expect(t.pl.map((c) => c.text)).toEqual(['Otwórz drzwi.', 'Vi?', 'Vi?'])
+  })
+
+  it('gives each translation line the timing of its Japanese line', () => {
+    const t = splitTracks(parseSubtitles(MULTI, 'S1E1', 'x.srt', { keepLines: true }))
+    const en = retime(t.ja, t.en)
+    expect(en).toEqual([
+      { ep: 'S1E1', start: 1, end: 4, text: 'Open the door.' },
+      { ep: 'S1E1', start: 5, end: 6, text: 'Vi?' },
+    ])
+    expect(toSrt(en)).toBe('1\n00:00:01,000 --> 00:00:04,000\nOpen the door.\n\n2\n00:00:05,000 --> 00:00:06,000\nVi?\n')
+  })
+
+  it('uses a translation line just outside the Japanese one when nothing overlaps', () => {
+    const ja = [{ ep: 'S1E1', start: 10, end: 11, text: 'まだだ' }]
+    const en = [{ ep: 'S1E1', start: 11.2, end: 12, text: 'Not yet.' }]
+    expect(retime(ja, en).map((c) => c.text)).toEqual(['Not yet.'])
+    expect(retime(ja, [{ ep: 'S1E1', start: 20, end: 21, text: 'Later.' }])).toEqual([])
+  })
+})
+
+describe('episode prep lists', () => {
+  const line = (ep: string, words: string[]): Line => ({ id: 0, ep, start: 0, text: '', ref: '', toks: words.map((w) => tok(w, '名詞', '一般', w, 'ア')) })
+
+  it('picks the words most characteristic of each episode', () => {
+    const lines = [
+      line('S1E1', ['扉', '扉', '鍵', '犬']),
+      line('S1E2', ['扉', '鍵', '鍵', '鍵', '猫', '猫']),
+      line('S1E3', ['扉', '猫']),
+    ]
+    // 扉 is in every episode, so it is never prep; 犬 is said only once
+    const prep = episodePrep(lines, (t) => t.base, ['扉', '鍵', '猫', '犬'], { perEpisode: 1 })
+    expect(Object.fromEntries(prep)).toEqual({ 鍵: ['S1E2'] })
+    const two = episodePrep(lines, (t) => t.base, ['扉', '鍵', '猫', '犬'], { perEpisode: 2 })
+    expect(Object.fromEntries(two)).toEqual({ 鍵: ['S1E2'], 猫: ['S1E2'] })
+    expect(episodeTag('S1E2')).toBe('s1e02')
+    expect(episodeTag('S2E10')).toBe('s2e10')
   })
 })

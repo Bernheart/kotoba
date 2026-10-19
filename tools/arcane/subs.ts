@@ -29,8 +29,8 @@ export function languageOf(fileName: string): 'ja' | 'en' | undefined {
 const SPEAKER = /^[（(][^）)]{1,12}[）)]\s*/u
 const SOUND = /[［\[][^］\]]*[］\]]|[（(][^）)]*音[^）)]*[）)]/gu
 
-/** One cue's text: no tags, no speaker label, no sound description; lines joined with a space. */
-export function cleanText(raw: string): string {
+/** One cue's text: no tags, no speaker label, no sound description; lines joined with a space (or kept, `\n`). */
+export function cleanText(raw: string, joiner = ' '): string {
   const lines = raw
     .replace(/\{\\[^}]*\}/g, '') // ASS override tags
     .replace(/\\N/gi, '\n')
@@ -50,7 +50,10 @@ export function cleanText(raw: string): string {
         .trim(),
     )
     .filter(Boolean)
-  return lines.join(' ').replace(/\s+/g, ' ').trim()
+  return lines
+    .map((l) => l.replace(/\s+/g, ' '))
+    .join(joiner)
+    .trim()
 }
 
 function seconds(ts: string): number {
@@ -60,7 +63,7 @@ function seconds(ts: string): number {
 }
 
 /** SRT and WebVTT: blocks separated by blank lines, a `-->` timing line, then text. */
-function parseTimed(text: string, ep: string): Cue[] {
+function parseTimed(text: string, ep: string, joiner: string): Cue[] {
   const cues: Cue[] = []
   for (const block of text.replace(/\r/g, '').split(/\n{2,}/)) {
     const lines = block.split('\n')
@@ -69,20 +72,20 @@ function parseTimed(text: string, ep: string): Cue[] {
     const [a, b] = lines[ti]!.split('-->')
     const start = seconds(a ?? '')
     const end = seconds(b ?? '')
-    const body = cleanText(lines.slice(ti + 1).join('\n'))
+    const body = cleanText(lines.slice(ti + 1).join('\n'), joiner)
     if (body && Number.isFinite(start)) cues.push({ ep, start, end: Number.isFinite(end) ? end : start, text: body })
   }
   return cues
 }
 
 /** ASS: `Dialogue: layer,start,end,style,name,marginL,marginR,marginV,effect,text` lines. */
-function parseAss(text: string, ep: string): Cue[] {
+function parseAss(text: string, ep: string, joiner: string): Cue[] {
   const cues: Cue[] = []
   for (const line of text.split(/\r?\n/)) {
     if (!line.startsWith('Dialogue:')) continue
     const parts = line.slice(9).split(',')
     if (parts.length < 10) continue
-    const body = cleanText(parts.slice(9).join(','))
+    const body = cleanText(parts.slice(9).join(','), joiner)
     const start = seconds(`${parts[1]!.trim()}0`)
     const end = seconds(`${parts[2]!.trim()}0`)
     if (body && Number.isFinite(start)) cues.push({ ep, start, end, text: body })
@@ -90,9 +93,11 @@ function parseAss(text: string, ep: string): Cue[] {
   return cues
 }
 
-export function parseSubtitles(text: string, ep: string, fileName = ''): Cue[] {
-  const t = text.replace(/^﻿/, '')
-  const cues = /\.ass$|\.ssa$/i.test(fileName) || /^\[Script Info\]/m.test(t) ? parseAss(t, ep) : parseTimed(t, ep)
+/** `keepLines` keeps a cue's line breaks (for writing subtitle files back out). */
+export function parseSubtitles(text: string, ep: string, fileName = '', opts: { keepLines?: boolean } = {}): Cue[] {
+  const t = text.replace(/^\uFEFF/, '')
+  const joiner = opts.keepLines ? '\n' : ' '
+  const cues = /\.ass$|\.ssa$/i.test(fileName) || /^\[Script Info\]/m.test(t) ? parseAss(t, ep, joiner) : parseTimed(t, ep, joiner)
   return cues.sort((x, y) => x.start - y.start)
 }
 
@@ -113,18 +118,38 @@ export function mergeContinuations(cues: Cue[], gap = 1.5): Cue[] {
   return out
 }
 
-const PL_WORDS = /\b(nie|się|jest|już|tak|czy|jak|ale|mnie|tylko|teraz|tu|tam|co|to|ty|ja|go|jej|mi|mam|masz|był|była|było|żeby|może|wiem|chcesz|dobra|chodź|proszę|dlaczego|kurwa)\b/iu
+// Words only one of the two languages uses (to, go, no, a, i, on, do… exist in both and decide nothing).
+const PL_WORDS = new Set(
+  'nie jest jestem jesteś są tak czy jak ale mnie mną tylko teraz tam co ty ja jej mi mam masz ma był była było były żeby może wiem chcesz dobra chodź proszę dlaczego czemu kurwa nas wam gdzie kto dla że się już wszystko coś nic mój moja twój twoja jego będzie trzeba musisz musimy możesz zrobić robisz tego tej tym ta te jeszcze bardzo przez dziecko'.split(' '),
+)
+const EN_WORDS = new Set(
+  "the you your you're it's it is are and of what that this we me my not don't can't in for with be have he she they just know get here there all about why how who where when now out up right yeah okay come let's did will can but if our us him her his them been got gonna want need see look think never ever one would could should".split(' '),
+)
+
+/**
+ * Language of a Latin-script cue: `pl` / `en` by Polish letters and words found only in one language, or
+ * undefined when it can't tell (short lines like "Vi?" or "Jinx!", which read the same in both).
+ */
+export function translationLanguage(text: string): 'en' | 'pl' | undefined {
+  if (/[ąćęłńóśźż]/iu.test(text)) return 'pl'
+  let pl = 0
+  let en = 0
+  for (const w of text.toLowerCase().match(/[\p{L}']+/gu) ?? []) {
+    if (PL_WORDS.has(w)) pl++
+    if (EN_WORDS.has(w)) en++
+  }
+  return pl > en ? 'pl' : en > pl ? 'en' : undefined
+}
 
 /**
  * Language of one cue. asbplayer can export several loaded tracks into one file (Japanese, English and
- * Polish cues interleaved), so each cue is sorted on its own: Japanese script → ja, Polish letters or
- * common Polish words → pl, other Latin text → en.
+ * Polish cues interleaved), so each cue is sorted on its own: Japanese script → ja, then Polish or
+ * English (undecided Latin text counts as English here).
  */
 export function cueLanguage(text: string): 'ja' | 'en' | 'pl' | undefined {
   if (/[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]/u.test(text)) return 'ja'
   if (!/\p{L}/u.test(text)) return undefined
-  if (/[ąćęłńóśźż]/iu.test(text) || PL_WORDS.test(text)) return 'pl'
-  return 'en'
+  return translationLanguage(text) ?? 'en'
 }
 
 /** Drop channel idents and on-screen titles that aren't dialogue. */

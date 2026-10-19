@@ -39,6 +39,8 @@ The script:
    - `arcane-known-draft.json`: words you **already know** (Genki + your own), each with a line from the show, for practice in real use. Words seen at least twice (`--min-known`). Their meanings come from your word list.
 
    A line is never used twice, across all three decks. New words choose first, then names, then known words.
+7. **Writes synced subtitles** to `<subs>/synced/`: per episode `Arcane S1E01 - 1 ja.srt`, `- 2 en.srt` and `- 3 pl.srt`. Each English / Polish line gets the timing of the Japanese line it overlaps, so the translation stays on screen exactly as long as the Japanese (on its own track it often disappears first). Load one in asbplayer's Ctrl+Shift+F dialog: *Subtitle track 2 → Open Files*.
+8. **Tags episode prep lists:** for each episode, the 20 deck words most characteristic of it get a tag like `arcane-s1e02`. They are scored by count in that episode × log(episodes ÷ episodes the word appears in), so words said everywhere don't fill every list. In Kotoba's Words, search `s1e02` before watching that episode.
 
 ## 3. Meanings → deck
 

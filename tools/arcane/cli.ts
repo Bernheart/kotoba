@@ -12,7 +12,7 @@
  * Everything stays next to your subtitles — never in this repo.
  */
 import kuromoji, { type Tokenizer } from 'kuromoji'
-import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { hasKanji, isKanaOnly, kataToHira } from '../../src/lib/jp/chars'
@@ -21,6 +21,8 @@ import {
   assignExamples,
   classify,
   coverage,
+  episodePrep,
+  episodeTag,
   fixSlangVerbs,
   fromKuromoji,
   guessBaseReading,
@@ -39,6 +41,7 @@ import {
   type Tok,
   type WordStat,
 } from './mine'
+import { retime, splitTracks, toSrt } from './align'
 import { cueLanguage, episodeOf, isDialogue, languageOf, mergeContinuations, parseSubtitles, refOf, type Cue } from './subs'
 import { wordProblems, type DeckWord } from './validate'
 
@@ -114,6 +117,39 @@ function readCues(dir: string) {
   return { ja, en, pl, eps: [...eps].sort(epOrder) }
 }
 
+/**
+ * Subtitle files to watch with: per episode the Japanese track, and English / Polish lines re-timed to the
+ * Japanese ones, as <subs>/synced/<show> S1E01 - 1 ja.srt, - 2 en.srt, - 3 pl.srt.
+ */
+function writeSynced(dir: string) {
+  const outDir = join(dir, 'synced')
+  mkdirSync(outDir, { recursive: true })
+  let n = 0
+  const stats = { ja: 0, en: 0, pl: 0 }
+  for (const f of readdirSync(dir).filter((x) => /\.(srt|vtt|ass|ssa)$/i.test(x)).sort()) {
+    const ep = episodeOf(f)
+    if (!ep || languageOf(f) === 'en') continue
+    const tracks = splitTracks(parseSubtitles(readFileSync(join(dir, f), 'utf8'), ep, f, { keepLines: true }))
+    if (!tracks.ja.length) continue
+    const show = f.slice(0, /s\d{1,2}\s*e\d{1,2}/i.exec(f)!.index).trim() || 'Episode'
+    const label = episodeTag(ep).toUpperCase().replace(/^S(\d+)E/, 'S$1E')
+    const name = (k: string, i: number) => join(outDir, `${show} ${label} - ${i} ${k}.srt`)
+    writeFileSync(name('ja', 1), toSrt(tracks.ja))
+    const en = retime(tracks.ja, tracks.en)
+    const pl = retime(tracks.ja, tracks.pl)
+    if (en.length) writeFileSync(name('en', 2), toSrt(en))
+    if (pl.length) writeFileSync(name('pl', 3), toSrt(pl))
+    stats.ja += tracks.ja.length
+    stats.en += en.length
+    stats.pl += pl.length
+    n++
+  }
+  if (n)
+    console.log(
+      `  Synced subtitles: ${outDir} (${n} episodes; ${stats.ja} Japanese lines, ${Math.round((stats.en / stats.ja) * 100)}% with English, ${Math.round((stats.pl / stats.ja) * 100)}% with Polish)`,
+    )
+}
+
 function epOrder(a: string, b: string) {
   const n = (s: string) => s.match(/\d+/g)!.map(Number)
   const [sa, ea] = n(a)
@@ -164,6 +200,7 @@ async function main() {
   const { ja, en, pl, eps } = readCues(o.subs)
   if (!ja.length) throw new Error('No Japanese subtitle files found (names need SxxEyy).')
   console.log(`  ${eps.length} episodes (${eps.join(' ')}), ${ja.length} lines${en.length + pl.length ? `, ${en.length} English + ${pl.length} Polish cues as translation hints` : ''}`)
+  writeSynced(o.subs)
 
   const tokenizer = await buildTokenizer()
   const tokenize = (text: string) => joinNames(fixSlangVerbs(mergeCompounds(tokenizer.tokenize(text).map(fromKuromoji))), names)
@@ -328,9 +365,11 @@ async function main() {
     console.log(`  Deck: ${deckPath} (${deck.length} words, all valid). Import it in Kotoba: Words → Import → Choose file.`)
   }
 
-  // 1. New words: the top N
-  buildDeck(o.deck, ranked.slice(0, o.top), (t) => lemma(t)?.key ?? null, {
-    tags: (r) => [`${o.deck}-${Math.min(3, Math.ceil(r / 100))}`],
+  // 1. New words: the top N, tagged with the episodes they're most characteristic of (prep before watching)
+  const deckWords = ranked.slice(0, o.top)
+  const prep = episodePrep(lines, (t) => lemma(t)?.key ?? null, deckWords.map((w) => w.key))
+  buildDeck(o.deck, deckWords, (t) => lemma(t)?.key ?? null, {
+    tags: (r, e) => [`${o.deck}-${Math.min(3, Math.ceil(r / 100))}`, ...(prep.get(e.key) ?? []).map((ep) => `${o.deck}-${episodeTag(ep)}`)],
     // the next new words after the deck, for reviewing names and choosing replacements
     more: ranked.slice(o.top, o.top + 300).map((w) => `${w.japanese}[${w.kana}] ${w.count}/${w.episodes.length}`),
     report: { coverage: cov },
