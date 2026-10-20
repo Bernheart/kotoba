@@ -23,6 +23,7 @@ import {
   coverage,
   episodePrep,
   episodeTag,
+  fixReadings,
   fixSlangVerbs,
   fromKuromoji,
   guessBaseReading,
@@ -35,6 +36,7 @@ import {
   lineMarkup,
   mergeCompounds,
   normalizeSlang,
+  rangeMarkup,
   rankWords,
   type Lemma,
   type Line,
@@ -42,6 +44,7 @@ import {
   type WordStat,
 } from './mine'
 import { retime, splitTracks, toSrt } from './align'
+import { findGrammar, GRAMMAR } from './grammar'
 import { cueLanguage, episodeOf, isDialogue, languageOf, mergeContinuations, parseSubtitles, refOf, type Cue } from './subs'
 import { wordProblems, type DeckWord } from './validate'
 
@@ -63,6 +66,7 @@ function args() {
     /** Minimum occurrences for a name / known word to get a card */
     minNames: Number(get('min-names', '2')),
     minKnown: Number(get('min-known', '2')),
+    minGrammar: Number(get('min-grammar', '7')),
     names: home(get('names', join(ROOT, 'tools/arcane/names.txt'))!),
   }
 }
@@ -203,7 +207,7 @@ async function main() {
   writeSynced(o.subs)
 
   const tokenizer = await buildTokenizer()
-  const tokenize = (text: string) => joinNames(fixSlangVerbs(mergeCompounds(tokenizer.tokenize(text).map(fromKuromoji))), names)
+  const tokenize = (text: string) => joinNames(fixReadings(fixSlangVerbs(mergeCompounds(tokenizer.tokenize(text).map(fromKuromoji)))), names)
   const lines: Line[] = ja.map((c, id) => {
     const text = normalizeSlang(c.text)
     return { id, ep: c.ep, start: c.start, text, ref: refOf(c), toks: tokenize(text) }
@@ -278,12 +282,20 @@ async function main() {
     id: string,
     entries: Entry[],
     keyOf: (t: Tok) => string | null,
-    opts: { tags: (rank: number, e: Entry) => string[]; needsExample?: boolean; more?: string[]; report?: object },
+    opts: {
+      tags: (rank: number, e: Entry) => string[]
+      needsExample?: boolean
+      more?: string[]
+      report?: object
+      /** Keys a line holds, when they aren't per token (grammar points) — default: keyOf / lemma of each token */
+      lineKeysOf?: (l: Line) => Set<string>
+      /** Example markup for a line and key — default: the first token with that key as the target */
+      markupOf?: (l: Line, key: string) => string | undefined
+    },
   ) => {
     const rank = new Map(entries.map((e, i) => [e.key, i]))
-    const lineKeys = lines
-      .filter((l) => usable.has(l.id) && !used.has(l.id))
-      .map((l) => ({ id: l.id, text: l.text, keys: new Set(l.toks.flatMap((t) => [keyOf(t) ?? lemma(t)?.key ?? []].flat())) }))
+    const keysOf = opts.lineKeysOf ?? ((l: Line) => new Set(l.toks.flatMap((t) => [keyOf(t) ?? lemma(t)?.key ?? []].flat())))
+    const lineKeys = lines.filter((l) => usable.has(l.id) && !used.has(l.id)).map((l) => ({ id: l.id, text: l.text, keys: keysOf(l) }))
     // other words in a line count as new when they're unknown, or this deck's words that come later
     const assigned = assignExamples(
       entries.map((e) => e.key),
@@ -294,7 +306,7 @@ async function main() {
       const a = assigned[i]!
       const line = a.lineId !== undefined ? lines[a.lineId]! : undefined
       if (line) used.add(line.id)
-      const markup = line ? lineMarkup(line.toks, (t) => keyOf(t) === w.key) : undefined
+      const markup = line ? (opts.markupOf ? opts.markupOf(line, w.key) : lineMarkup(line.toks, (t) => keyOf(t) === w.key)) : undefined
       return {
         rank: i + 1,
         japanese: w.japanese,
@@ -407,6 +419,32 @@ async function main() {
   buildDeck(`${o.deck}-known`, knownStats, knownKey, {
     tags: (_r, e) => [o.deck, ...(e.base?.genkiLesson ? [`genki-${e.base.genkiLesson}`] : [])],
     needsExample: true,
+  })
+
+  // 4. Grammar: sentence endings and patterns beyond Genki 1–10 (built last, so its lines are new too)
+  const grammarHits = new Map(lines.map((l) => [l.id, findGrammar(l.toks)]))
+  const point = new Map(GRAMMAR.map((g) => [g.japanese, g]))
+  const grammarStats: Entry[] = GRAMMAR.map((g) => {
+    const eps = new Set<string>()
+    let count = 0
+    for (const l of lines)
+      if (grammarHits.get(l.id)!.has(g.japanese)) {
+        count++
+        eps.add(l.ep)
+      }
+    return { key: g.japanese, japanese: g.japanese, kana: g.kana, type: g.type, count, episodes: [...eps], score: count * eps.size }
+  })
+    .filter((s) => s.count >= o.minGrammar)
+    .sort((a, b) => b.score - a.score || b.count - a.count)
+  buildDeck(`${o.deck}-grammar`, grammarStats, () => null, {
+    tags: (_r, e) => {
+      const g = point.get(e.key)!
+      return ['grammar', g.kind, g.genki ? `genki-${g.genki}` : 'beyond-genki']
+    },
+    needsExample: true,
+    // a line holds its grammar points plus its unknown words (fewer unknown words = easier example)
+    lineKeysOf: (l) => new Set([...grammarHits.get(l.id)!.keys(), ...l.toks.flatMap((t) => (lemma(t) ? [lemma(t)!.key] : []))]),
+    markupOf: (l, key) => rangeMarkup(l.toks, grammarHits.get(l.id)!.get(key)![0]!),
   })
 }
 

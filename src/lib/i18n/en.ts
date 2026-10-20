@@ -415,8 +415,8 @@ export const en = {
     installSteps: 'Open this site in Safari → Share → “Add to Home Screen”. Installed apps keep data more reliably and run full-screen.',
     standalone: 'Running as an installed app',
     asbHint:
-      'For asbplayer: a .txt of the words you study, one per line (names are left out: mark them with Q+I while watching). In asbplayer open Settings → Annotation → My word database → Import Words (Yomitan must be running).',
-    asbExport: (n: number) => `Known words for asbplayer (${n})`,
+      'For asbplayer: all your words with a status. Arcane words: Unknown until trained, then Learning. Lesson words, your own words and Arcane known: Graduated, trained → Young. Held 21+ days → Mature. Names are ignored. In asbplayer: Settings → Annotation → Word Browser, delete the old list first; then Import Words → Import From File (Yomitan must be running).',
+    asbExport: (n: number) => `Words for asbplayer (${n})`,
   },
   sync: {
     intro: 'Sign in with the same email and password on your Mac and iPhone. Progress syncs automatically when online.',

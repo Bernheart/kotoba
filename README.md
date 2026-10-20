@@ -115,7 +115,13 @@ Deck words are stored as your own words, so they live only in your browser and y
 
 [`tools/arcane`](tools/arcane/README.md) mines such a deck from your own subtitle files: frequency ranking, a coverage report, one unique line per word. Subtitles and the generated deck stay outside the repo.
 
-**asbplayer:** *Settings → Data & backup → Known words for asbplayer* saves the words you study as a `.txt`, one word per line. Import it in asbplayer under *Settings → Annotation → My word database → Import Words* (Yomitan must be running). asbplayer then colours unknown words in subtitles and shows how much of an episode you know.
+**asbplayer:** *Settings → Data & backup → Words for asbplayer* saves all your words as asbplayer's word-list JSON, each with a status:
+- **Unknown / Learning:** show-deck words (e.g. Arcane's top 300), not trained / trained.
+- **Graduated / Young:** lesson words, your own words and `-known` decks, not trained / trained.
+- **Mature:** anything Kotoba counts as known (held 21+ days).
+- **Ignored:** names decks and NETFLIX. Grammar decks are left out.
+
+In asbplayer, clear *Settings → Annotation → Word Browser* once, then use *Import Words → Import From File* (Yomitan must be running). asbplayer colours the subtitles by these statuses and shows how much of an episode you know. Re-import every week or two; statuses only move up.
 
 ## Single-file version (offline on the Mac)
 

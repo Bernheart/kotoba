@@ -15,6 +15,8 @@ export interface Tok {
   pos2: string
   /** 活用型, e.g. 五段・カ行促音便 / 一段 / サ変・スル */
   ctype: string
+  /** 活用形, e.g. 基本形 / 連用形 / 仮定形 (grammar matching) */
+  cform?: string
   /** Dictionary form (falls back to the surface) */
   base: string
   /** Reading of the surface in katakana ('' when unknown) */
@@ -27,6 +29,7 @@ export interface KuromojiToken {
   pos_detail_1: string
   pos_detail_2: string
   conjugated_type: string
+  conjugated_form?: string
   basic_form: string
   reading?: string
 }
@@ -47,6 +50,7 @@ export function fromKuromoji(t: KuromojiToken): Tok {
     pos1: t.pos_detail_1,
     pos2: t.pos_detail_2,
     ctype: t.conjugated_type,
+    ...(t.conjugated_form && t.conjugated_form !== '*' ? { cform: t.conjugated_form } : {}),
     base: t.basic_form && t.basic_form !== '*' ? t.basic_form : t.surface_form,
     reading: t.reading && t.reading !== '*' ? t.reading : '',
   }
@@ -104,6 +108,15 @@ export function fixSlangVerbs(toks: Tok[]): Tok[] {
     } else out.push(t)
   }
   return out
+}
+
+/** Readings IPADIC gets wrong in context: 間 after a verb or adjective (寝ている間に, 長い間) is あいだ, not ま. */
+export function fixReadings(toks: Tok[]): Tok[] {
+  return toks.map((t, i) => {
+    const prev = toks[i - 1]
+    if (t.surface === '間' && t.reading === 'マ' && prev && /^(動詞|形容詞|助動詞)$/.test(prev.pos)) return { ...t, reading: 'アイダ' }
+    return t
+  })
 }
 
 /** Names the tokenizer splits (マイ+ロ) are joined back when the pieces spell a name from the list. */
@@ -491,5 +504,23 @@ export function lineMarkup(toks: Tok[], isTarget: (t: Tok) => boolean): string |
     out += tokenMarkup(t)
   }
   if (inTarget) out += '*'
+  return out.trim()
+}
+
+/**
+ * Like `lineMarkup`, but the target is a token range `[start, end)` — a grammar point that can span tokens
+ * (ため+に, かも+しれ+ない) or sit inside a tile ({食べ|たべ}*たい*).
+ */
+export function rangeMarkup(toks: Tok[], [start, end]: [number, number]): string | undefined {
+  let out = ''
+  for (let i = 0; i < toks.length; i++) {
+    const t = toks[i]!
+    if (hasKanji(t.surface) && !t.reading) return undefined
+    if (i === end) out += '*'
+    if (i > 0 && startsTile(t, toks[i - 1])) out += ' '
+    if (i === start) out += '*'
+    out += tokenMarkup(t)
+  }
+  if (end >= toks.length) out += '*'
   return out.trim()
 }

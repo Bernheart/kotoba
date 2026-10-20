@@ -38,13 +38,15 @@ The script:
    - `arcane-names-draft.json`: **names** of characters, places and things (from `names.txt` and the tokenizer's proper nouns), as spelled in the show. Names seen at least twice (`--min-names`).
    - `arcane-known-draft.json`: words you **already know** (Genki + your own), each with a line from the show, for practice in real use. Words seen at least twice (`--min-known`). Their meanings come from your word list.
 
-   A line is never used twice, across all three decks. New words choose first, then names, then known words.
+   - `arcane-grammar-draft.json`: **grammar** — sentence endings (〜ぞ, 〜わ, 〜んだ…) and patterns beyond Genki 1–10 (〜たい, 〜べき, 〜ため, 〜ば, passive / causative…) from [`grammar.ts`](grammar.ts), each found by its own rule over the tokens, kept when it occurs at least 7 times (`--min-grammar`). The grammar itself is the cloze target.
+
+   A line is never used twice, across all four decks. New words choose first, then names, then known words, then grammar.
 7. **Writes synced subtitles** to `<subs>/synced/`: per episode `Arcane S1E01 - 1 ja.srt`, `- 2 en.srt` and `- 3 pl.srt`. Each English / Polish line gets the timing of the Japanese line it overlaps, so the translation stays on screen exactly as long as the Japanese (on its own track it often disappears first). Load one in asbplayer's Ctrl+Shift+F dialog: *Subtitle track 2 → Open Files*.
 8. **Tags episode prep lists:** for each episode, the 20 deck words most characteristic of it get a tag like `arcane-s1e02`. They are scored by count in that episode × log(episodes ÷ episodes the word appears in), so words said everywhere don't fill every list. In Kotoba's Words, search `s1e02` before watching that episode.
 
 ## 3. Meanings → deck
 
-For each draft, write the matching `-meanings.json` (`arcane-meanings.json`, `arcane-names-meanings.json`, `arcane-known-meanings.json`), keyed by the word's written form. For known words, `en`/`pl` can be left out: your word's meanings are used.
+For each draft, write the matching `-meanings.json` (`arcane-meanings.json`, `arcane-names-meanings.json`, `arcane-known-meanings.json`, `arcane-grammar-meanings.json`), keyed by the word's written form (for grammar, the pattern: `〜べき`). For known words, `en`/`pl` can be left out: your word's meanings are used.
 
 ```json
 {
@@ -65,10 +67,11 @@ Run the same command again. It merges the meanings and validates every word with
 - `arcane-deck.json`: deck `arcane`, `frequency` = rank, tags `arcane-1/2/3` for ranks 1–100 / 101–200 / 201–300.
 - `arcane-names-deck.json`: deck `arcane-names`.
 - `arcane-known-deck.json`: deck `arcane-known`, tagged with the word's Genki lesson (`genki-5`).
+- `arcane-grammar-deck.json`: deck `arcane-grammar`, tagged `grammar`, `ending` / `pattern`, and `genki-N` (the Genki lesson that teaches it) or `beyond-genki`.
 
 ## 4. Import
 
-In Kotoba, open **Words → Import → Choose file** and pick each deck file. The words become your own words in decks **Arcane**, **Arcane names** and **Arcane known**. A deck only merges with words of the same deck, so known words become separate cards next to your Genki ones. Each deck gets:
+In Kotoba, open **Words → Import → Choose file** and pick each deck file. The words become your own words in decks **Arcane**, **Arcane names**, **Arcane known** and **Arcane grammar**. A deck only merges with words of the same deck, so known words become separate cards next to your Genki ones. Each deck gets:
 - a tile under **Study** (and **Today**) with its own queue;
 - new words in rank order, at *Settings → New words per day in decks* (default 10);
 - never mixed into your Genki reviews;

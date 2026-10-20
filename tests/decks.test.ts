@@ -1,6 +1,6 @@
 import 'fake-indexeddb/auto'
 import { beforeEach, describe, expect, it } from 'vitest'
-import { asbplayerWords } from '../src/lib/asbplayer'
+import { asbplayerRecords } from '../src/lib/asbplayer'
 import { db, type ReviewLogRow } from '../src/lib/db'
 import { deckLabel, inScope } from '../src/lib/decks'
 import { applyImport, planImport } from '../src/lib/import/apply'
@@ -199,25 +199,39 @@ describe('custom decks: library and practice scope', () => {
 })
 
 describe('asbplayer export', () => {
-  it('lists studied words once, one written form per line', () => {
-    const p = (status: WordProgress['status']) => ({ status }) as WordProgress
-    const progress = new Map([
-      ['a', p('known')],
-      ['b', p('learning')],
-      ['c', p('new')],
-      ['d', p('known')],
-    ])
-    const words = [
-      { id: 'a', japanese: '食べる' },
-      { id: 'b', japanese: '～年生' },
-      { id: 'c', japanese: '飲む' },
-      { id: 'd', japanese: '食べる' },
-    ]
-    expect(asbplayerWords(words, progress)).toEqual(['食べる', '年生'])
+  const p = (status: WordProgress['status']) => ({ status }) as WordProgress
+  const words = [
+    { id: 'g1', japanese: '食べる' }, // lesson word, not trained
+    { id: 'g2', japanese: '飲む' }, // lesson word, trained
+    { id: 'g3', japanese: '～年生' }, // lesson word, known
+    { id: 'a1', japanese: '扉', deck: 'demo' }, // show deck, not trained
+    { id: 'a2', japanese: '鍵', deck: 'demo' }, // show deck, trained
+    { id: 'k1', japanese: '飲む', deck: 'demo-known' }, // same word in a known deck, not trained
+    { id: 'n1', japanese: 'ジンクス', deck: 'demo-names' },
+    { id: 'x1', japanese: '〜べき', deck: 'demo-grammar' },
+  ]
+  const progress = new Map([
+    ['g2', p('learning')],
+    ['g3', p('known')],
+    ['a2', p('learning')],
+  ])
+  const byToken = (recs: ReturnType<typeof asbplayerRecords>) => Object.fromEntries(recs.map((r) => [r.token, r]))
+
+  it('gives each word the status of the scheme', () => {
+    const r = byToken(asbplayerRecords(words, progress))
+    expect(r['食べる']!.status).toBe(3) // Graduated
+    expect(r['飲む']!.status).toBe(4) // Young: trained wins over the untrained known-deck copy
+    expect(r['年生']!.status).toBe(5) // Mature, ～ stripped
+    expect(r['扉']!.status).toBe(1) // Unknown
+    expect(r['鍵']!.status).toBe(2) // Learning
+    expect(r['ジンクス']).toMatchObject({ status: 0, states: [0] }) // ignored
+    expect(r['NETFLIX']).toMatchObject({ status: 0, states: [0] })
+    expect(r['べき']).toBeUndefined() // grammar left out
   })
 
-  it('leaves out names, which Yomitan would split into pieces', () => {
-    const progress = new Map([['n', { status: 'learning' } as WordProgress]])
-    expect(asbplayerWords([{ id: 'n', japanese: 'ジンクス', deck: 'demo-names' }], progress)).toEqual([])
+  it("writes asbplayer's import format: profile, token, status, one record per token", () => {
+    const recs = asbplayerRecords(words, progress)
+    expect(recs.every((x) => x.profile === 'Default' && x.token && typeof x.status === 'number')).toBe(true)
+    expect(new Set(recs.map((x) => x.token)).size).toBe(recs.length)
   })
 })

@@ -8,6 +8,7 @@ import {
   coverage,
   episodePrep,
   episodeTag,
+  fixReadings,
   fixSlangVerbs,
   fromKuromoji,
   guessBaseReading,
@@ -19,12 +20,14 @@ import {
   lineMarkup,
   mergeCompounds,
   normalizeSlang,
+  rangeMarkup,
   rankWords,
   typeOf,
   type Line,
   type Tok,
 } from '../tools/arcane/mine'
 import { retime, splitTracks, toSrt } from '../tools/arcane/align'
+import { findGrammar } from '../tools/arcane/grammar'
 import { cueLanguage, translationLanguage, episodeOf, isDialogue, languageOf, mergeContinuations, parseSubtitles, refOf } from '../tools/arcane/subs'
 import { wordProblems } from '../tools/arcane/validate'
 
@@ -266,6 +269,24 @@ describe('markup from tokens (real tokenizer, made-up lines)', () => {
     expect(toks.map((t) => t.base)).toEqual(['評議会', 'の', '科学者', 'たち'])
     expect(toks[0]!.reading).toBe('ヒョウギカイ')
     expect(normalizeSlang('ヤバいな マズかった ヤバ イカれてる')).toBe('やばいな まずかった ヤバ いかれてる')
+  })
+
+  it('finds grammar points and marks them as the target (made-up lines)', () => {
+    const grammar = (text: string) => {
+      const toks = fixReadings(tokenizer.tokenize(text).map(fromKuromoji))
+      return Object.fromEntries([...findGrammar(toks)].map(([k, r]) => [k, rangeMarkup(toks, r[0]!)]))
+    }
+    expect(grammar('行くべきだ')).toMatchObject({ '〜べき': '{行く|いく}*べき*だ' })
+    expect(grammar('勝つために来た')).toMatchObject({ '〜ため': '{勝つ|かつ}*ために* {来|き}た' })
+    expect(grammar('食べたい')).toMatchObject({ '〜たい': '{食べ|たべ}*たい*' })
+    expect(grammar('さあ行こう')).toMatchObject({ '〜よう・〜おう': 'さあ *{行こ|いこ}う*' })
+    expect(grammar('動くな')).toEqual({ '〜るな': '*{動く|うごく}な*' })
+    expect(grammar('綺麗だな')).toEqual({ '〜な': '{綺麗|きれい}だ*な*' })
+    expect(grammar('寝ている間に')).toMatchObject({ '〜間に': '{寝|ね}ている *{間|あいだ}に*' })
+    expect(grammar('殺された')).toMatchObject({ '〜られる・〜れる': '{殺さ|ころさ}*れ*た' })
+    expect(grammar('守らねばならない')).toMatchObject({ '〜ねば': '{守ら|まもら}*ねば*ならない' })
+    const ja = grammar('できるかもしれない')['〜かもしれない']!
+    expect(parseMarkup(ja).chunks.filter((c) => c.target).map((c) => c.text)).toEqual(['できるかも', 'しれない'])
   })
 
   it('produces words that pass the vocabulary rules', () => {

@@ -418,8 +418,8 @@ export const pl: Dict = {
       'Otwórz tę stronę w Safari → Udostępnij → „Do ekranu początkowego”. Zainstalowana aplikacja pewniej przechowuje dane i działa na pełnym ekranie.',
     standalone: 'Działa jako zainstalowana aplikacja',
     asbHint:
-      'Dla asbplayera: plik .txt ze słowami, których się uczysz, po jednym w linii (bez imion: oznaczaj je Q+I podczas oglądania). W asbplayerze otwórz Settings → Annotation → My word database → Import Words (Yomitan musi być uruchomiony).',
-    asbExport: (n: number) => `Znane słowa dla asbplayera (${n})`,
+      'Dla asbplayera: wszystkie twoje słowa ze statusem. Słowa z Arcane: Unknown, dopóki ich nie ćwiczysz, potem Learning. Słowa z lekcji, twoje i Arcane known: Graduated, po ćwiczeniu Young. Utrwalone 21+ dni → Mature. Imiona są ignorowane. W asbplayerze: Settings → Annotation → Word Browser, najpierw usuń starą listę; potem Import Words → Import From File (Yomitan musi być uruchomiony).',
+    asbExport: (n: number) => `Słowa dla asbplayera (${n})`,
   },
   sync: {
     intro: 'Zaloguj się tym samym e-mailem i hasłem na Macu i iPhonie. Postępy synchronizują się same, gdy jest internet.',

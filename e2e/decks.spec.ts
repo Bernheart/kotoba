@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { expect, test, type Page } from '@playwright/test'
 
 // A small made-up deck (no real show content): same JSON shape as tools/arcane's output.
@@ -111,4 +112,23 @@ test('practice can be limited to a deck', async ({ page }) => {
   await page.getByRole('button', { name: 'Demo', exact: true }).click()
   await page.getByRole('button', { name: 'Begin' }).click()
   await expect(page.getByText(/試作|歯車|煙突|prototype|gear; cog|chimney/).first()).toBeVisible()
+})
+
+test('words for asbplayer: statuses by deck and training', async ({ page }, info) => {
+  test.skip(info.project.name === 'iphone', 'iPhone opens the share sheet instead of downloading; asbplayer is desktop-only')
+  await page.goto('/#/import')
+  await page.locator('textarea').fill(JSON.stringify(DECK))
+  await page.getByRole('button', { name: /Import 3 words/ }).click()
+  await expect(page.getByRole('searchbox')).toBeVisible()
+
+  await page.goto('/#/settings')
+  const button = page.getByRole('button', { name: /Words for asbplayer/ })
+  await expect(button).toBeEnabled()
+  const [download] = await Promise.all([page.waitForEvent('download'), button.click()])
+  expect(download.suggestedFilename()).toMatch(/^kotoba-asbplayer-words-\d{4}-\d\d-\d\d\.json$/)
+  const records = JSON.parse(readFileSync(await download.path(), 'utf8')) as { profile: string; token: string; status: number; states?: number[] }[]
+  const by = Object.fromEntries(records.map((r) => [r.token, r]))
+  expect(by['試作']).toMatchObject({ profile: 'Default', status: 1 }) // show-deck word, not trained: Unknown
+  expect(by['大学']).toMatchObject({ status: 3 }) // lesson word, not trained: Graduated
+  expect(by['NETFLIX']).toMatchObject({ status: 0, states: [0] }) // ignored
 })

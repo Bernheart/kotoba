@@ -39,12 +39,13 @@ export function backupFile(b: Backup): File {
  * iPhone: opens the share sheet ("Save to Files" → iCloud Drive). Must run inside the tap handler,
  * so the file is prepared beforehand. Mac/desktop: downloads the file.
  */
-export async function shareOrDownload(file: File): Promise<'shared' | 'downloaded' | 'cancelled'> {
+export async function shareOrDownload(file: File, opts: { isBackup?: boolean } = {}): Promise<'shared' | 'downloaded' | 'cancelled'> {
+  const isBackup = opts.isBackup ?? true
   const nav = navigator as Navigator & { canShare?: (d: ShareData) => boolean }
   if (nav.canShare?.({ files: [file] }) && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
     try {
       await navigator.share({ files: [file], title: file.name })
-      await setMeta('lastBackupAt', Date.now())
+      if (isBackup) await setMeta('lastBackupAt', Date.now())
       return 'shared'
     } catch (e) {
       if ((e as Error).name === 'AbortError') return 'cancelled'
@@ -58,7 +59,7 @@ export async function shareOrDownload(file: File): Promise<'shared' | 'downloade
   a.click()
   a.remove()
   setTimeout(() => URL.revokeObjectURL(url), 2000)
-  await setMeta('lastBackupAt', Date.now())
+  if (isBackup) await setMeta('lastBackupAt', Date.now())
   return 'downloaded'
 }
 
