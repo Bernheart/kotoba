@@ -52,7 +52,9 @@ describe('answering', () => {
     expect(r.card.state).toBe(State.Review)
     const recall = await db.cards.get('a:recall')
     expect(recall?.state).toBe(State.New)
-    expect(isDue(recall!, now + 12 * 60000)).toBe(true)
+    // unlocked for tomorrow — never the same day it graduated
+    expect(isDue(recall!, now + 12 * 60000)).toBe(false)
+    expect(isDue(recall!, endOfStudyDay(now + 12 * 60000) + 3600000)).toBe(true)
     expect(await db.reviewLogs.count()).toBe(2)
   })
 

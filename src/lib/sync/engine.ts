@@ -181,6 +181,10 @@ export function scheduleSync(ms = 5000) {
   timer = setTimeout(() => void syncNow(), ms)
 }
 
+let resolveFirstSync: () => void = () => {}
+/** Resolves after the first sync attempt of this app start (or right away when sync is off / signed out). */
+export const firstSyncDone = new Promise<void>((r) => (resolveFirstSync = r))
+
 let started = false
 /** Wire up triggers: launch, back online, back to foreground, and after local writes. */
 export function startSync() {
@@ -199,5 +203,5 @@ export function startSync() {
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) void syncNow()
   })
-  void refreshAuth().then(() => setTimeout(() => void syncNow(), 1500))
+  void refreshAuth().then(() => setTimeout(() => void syncNow().finally(() => resolveFirstSync()), 1500))
 }

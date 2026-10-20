@@ -15,6 +15,8 @@ export interface Settings {
   /** Daily goal in answered cards */
   dailyGoal: number
   reviewStyle: 'flip' | 'type'
+  /** Spaced-repetition algorithm: Anki's classic SM-2 (default) or FSRS */
+  scheduler: 'anki' | 'fsrs'
   /** Which directions get cards: recognition (JP→meaning) and recall (meaning→JP) */
   recallCards: boolean
   retention: number
@@ -36,6 +38,7 @@ export const DEFAULT_SETTINGS: Settings = {
   deckNewPerDay: 10,
   dailyGoal: 30,
   reviewStyle: 'flip',
+  scheduler: 'anki',
   recallCards: true,
   retention: 0.9,
   leechThreshold: 8,

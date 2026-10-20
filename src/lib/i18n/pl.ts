@@ -230,6 +230,9 @@ export const pl: Dict = {
     leechSave: 'Zapisz i zacznij od nowa',
     remaining: (n: number) => `zostało ${n}`,
     undo: 'Cofnij',
+    comeBack: (n: number, m: number) =>
+      `Na razie koniec. ${n} ${plPlural(n, 'karta wróci', 'karty wrócą', 'kart wróci')} za ${m} min — kroki nauki działają najlepiej, gdy poczekasz.`,
+    showNow: 'Pokaż je teraz',
     exit: 'Zakończ sesję',
   },
   study: {
@@ -380,6 +383,11 @@ export const pl: Dict = {
     reviewFlip: 'Odwróć i oceń',
     reviewType: 'Wpisz odpowiedź',
     recallCards: 'Ćwicz też znaczenie → japoński',
+    scheduler: 'Algorytm powtórek',
+    schedulerAnki: 'Anki (SM-2)',
+    schedulerFsrs: 'FSRS',
+    schedulerHint:
+      'Klasyczny algorytm Anki: kroki 1 min → 10 min, potem 1 dzień, a dalej każdy odstęp rośnie o „łatwość” karty (250%, obniżaną przez Trudne/Znowu, podnoszoną przez Łatwe). Zmiana algorytmu przelicza twoje dotychczasowe odpowiedzi.',
     retention: 'Docelowa pamięć',
     retentionHint: 'Wyżej = więcej powtórek i lepsza pamięć. 90% to złoty środek.',
     leech: 'Próg pijawki (pomyłki)',

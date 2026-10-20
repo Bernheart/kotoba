@@ -34,3 +34,10 @@ export function dayDiff(a: string, b: string): number {
   const pb = b.split('-').map(Number) as [number, number, number]
   return Math.round((Date.UTC(pb[0], pb[1] - 1, pb[2]) - Date.UTC(pa[0], pa[1] - 1, pa[2])) / DAY_MS)
 }
+
+/** Epoch ms at which the study day `days` after today begins (04:00). days=1 → tomorrow's start. */
+export function startOfStudyDayIn(at: number, days: number, rollover = ROLLOVER_HOUR): number {
+  const d = new Date(endOfStudyDay(at, rollover))
+  d.setDate(d.getDate() + days - 1)
+  return d.getTime()
+}

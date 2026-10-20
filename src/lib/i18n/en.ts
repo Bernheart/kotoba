@@ -228,6 +228,8 @@ export const en = {
     leechSave: 'Save & restart card',
     remaining: (n: number) => `${n} left`,
     undo: 'Undo',
+    comeBack: (n: number, m: number) => `Done for now. ${n} ${enPlural(n, 'card comes', 'cards come')} back in ${m} min — learning steps work best when you wait.`,
+    showNow: 'Show them now',
     exit: 'End session',
   },
   study: {
@@ -378,6 +380,11 @@ export const en = {
     reviewFlip: 'Flip & rate',
     reviewType: 'Type the answer',
     recallCards: 'Also practise meaning → Japanese',
+    scheduler: 'Scheduler',
+    schedulerAnki: 'Anki (SM-2)',
+    schedulerFsrs: 'FSRS',
+    schedulerHint:
+      'Anki’s classic algorithm: steps 1m → 10m, then 1 day, then each interval grows by the card’s ease (250%, lowered by Hard/Again, raised by Easy). Switching replays your past answers.',
     retention: 'Target retention',
     retentionHint: 'Higher = more reviews, better recall. 90% is the sweet spot.',
     leech: 'Leech threshold (lapses)',

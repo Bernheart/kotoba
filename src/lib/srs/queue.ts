@@ -4,9 +4,11 @@ import { byFrequency } from '../decks'
 import { DEFAULT_SETTINGS, type Settings } from '../settings'
 import { endOfStudyDay, studyDay } from '../time'
 import type { Direction, Word } from '../types'
-import { cardId, cardToRow, newCardRow, rowToCard, scheduler, State } from './fsrs'
+import { cardId, newCardRow, State } from './fsrs'
+import { isLearningState, nextRow, previewMs, type ScheduleSettings } from './schedule'
+import { LEARN_AHEAD_MS } from './session'
 
-export const LEARN_AHEAD_MS = 20 * 60_000
+export { LEARN_AHEAD_MS }
 
 export interface QueueItem {
   cardId: string
@@ -15,15 +17,19 @@ export interface QueueItem {
   /** intro = show a new word before its first quiz */
   kind: 'intro' | 'card'
   isNew: boolean
+  /** Card is in learning steps; `due` says when its step is up */
+  learning?: boolean
+  due?: number
 }
 
 export function isDue(c: CardRow, now = Date.now()): boolean {
   if (c.deleted || c.suspended) return false
   if (c.buriedUntil && c.buriedUntil > now) return false
-  // A new recall card unlocks once recognition graduates; it needs no intro.
-  if (c.state === State.New) return c.dir === 'recall' && c.due <= endOfStudyDay(now)
+  // A new recall card unlocks the day after recognition graduates; it needs no intro.
+  if (c.state === State.New) return c.dir === 'recall' && c.due < endOfStudyDay(now)
   if (c.state === State.Learning || c.state === State.Relearning) return c.due <= now + LEARN_AHEAD_MS
-  return c.due <= endOfStudyDay(now)
+  // Review cards are due for the whole study day they fall on (due at 04:00 of that day = due that day).
+  return c.due < endOfStudyDay(now)
 }
 
 export interface QueueInput {
@@ -92,7 +98,8 @@ export function buildQueue(
     // learning cards are never buried; review siblings are (one card per word per day)
     if (!isLearning && perWord.has(c.wordId)) continue
     perWord.add(c.wordId)
-    ;(isLearning ? learning : reviews).push({ cardId: c.id, wordId: c.wordId, dir: c.dir, kind: 'card', isNew: false })
+    if (isLearning) learning.push({ cardId: c.id, wordId: c.wordId, dir: c.dir, kind: 'card', isNew: false, learning: true, due: c.due })
+    else reviews.push({ cardId: c.id, wordId: c.wordId, dir: c.dir, kind: 'card', isNew: false })
   }
   shuffle(reviews)
   const queue = [...learning, ...reviews]
@@ -119,6 +126,8 @@ export function shuffle<T>(arr: T[]): T[] {
   return arr
 }
 
+export { isLearningState }
+
 export interface AnswerResult {
   card: CardRow
   log: ReviewLogRow
@@ -126,16 +135,9 @@ export interface AnswerResult {
   prev?: CardRow
 }
 
-/** Preview the next due time for each rating (for the button labels). */
-export function previewIntervals(row: CardRow | undefined, wordId: string, dir: Direction, retention: number, now = Date.now()): Record<Grade, number> {
-  const base = row ?? newCardRow(wordId, dir, now)
-  const p = scheduler(retention).repeat(rowToCard(base), new Date(now))
-  return {
-    [Rating.Again]: p[Rating.Again].card.due.getTime() - now,
-    [Rating.Hard]: p[Rating.Hard].card.due.getTime() - now,
-    [Rating.Good]: p[Rating.Good].card.due.getTime() - now,
-    [Rating.Easy]: p[Rating.Easy].card.due.getTime() - now,
-  } as Record<Grade, number>
+/** What each rating button would schedule (for the labels) — the same computation the answer uses. */
+export function previewIntervals(row: CardRow | undefined, wordId: string, dir: Direction, s: ScheduleSettings, now = Date.now()): Record<Grade, number> {
+  return previewMs(row && !row.deleted ? row : newCardRow(wordId, dir, now), now, s)
 }
 
 /**
@@ -145,15 +147,20 @@ export async function answerCard(
   wordId: string,
   dir: Direction,
   rating: Grade,
-  opts: { ms: number; mode: StudyMode; correct: boolean; settings: Pick<Settings, 'retention' | 'leechThreshold' | 'recallCards'>; now?: number },
+  opts: {
+    ms: number
+    mode: StudyMode
+    correct: boolean
+    settings: Pick<Settings, 'retention' | 'leechThreshold' | 'recallCards'> & ScheduleSettings
+    now?: number
+  },
 ): Promise<AnswerResult> {
   const now = opts.now ?? Date.now()
   const id = cardId(wordId, dir)
   return db.transaction('rw', db.cards, db.reviewLogs, async () => {
     const prev = await db.cards.get(id)
     const base = prev && !prev.deleted ? prev : newCardRow(wordId, dir, now)
-    const next = scheduler(opts.settings.retention).next(rowToCard(base), new Date(now), rating)
-    const row = cardToRow(next.card, { id, wordId, dir, leech: base.leech, suspended: base.suspended }, now)
+    const row: CardRow = { ...nextRow(base, rating, now, opts.settings), id, wordId, dir, leech: base.leech, suspended: base.suspended, deleted: 0 }
     // Leech: lapses crossed the threshold (and again every half-threshold after that, like Anki)
     let becameLeech = false
     const t = opts.settings.leechThreshold
@@ -184,10 +191,10 @@ export async function answerCard(
     // Bury the sibling for the rest of the day (unless it is mid-learning).
     const sibId = cardId(wordId, dir === 'recog' ? 'recall' : 'recog')
     const sib = await db.cards.get(sibId)
-    if (sib && !sib.deleted && sib.state === State.Review && sib.due <= endOfStudyDay(now)) {
+    if (sib && !sib.deleted && sib.state === State.Review && sib.due < endOfStudyDay(now)) {
       await db.cards.put({ ...sib, buriedUntil: endOfStudyDay(now), updatedAt: now, dirty: 1 })
     }
-    // Unlock the production card once recognition graduates.
+    // Unlock the production card once recognition graduates — from tomorrow, never the same day.
     if (opts.settings.recallCards && dir === 'recog' && row.state === State.Review && !sib) {
       await db.cards.put({ ...newCardRow(wordId, 'recall', now), due: endOfStudyDay(now) })
     }

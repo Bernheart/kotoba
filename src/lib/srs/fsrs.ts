@@ -4,7 +4,7 @@ import type { Direction } from '../types'
 
 let cache: { key: string; f: FSRS } | null = null
 
-/** FSRS-6 scheduler (ts-fsrs) with short-term learning steps and fuzzed intervals. */
+/** FSRS-6 scheduler (ts-fsrs) with short-term learning steps. No fuzz: the interval on a button must be the one you get. */
 export function scheduler(retention = 0.9): FSRS {
   const key = String(retention)
   if (cache?.key === key) return cache.f
@@ -12,7 +12,7 @@ export function scheduler(retention = 0.9): FSRS {
     generatorParameters({
       request_retention: retention,
       maximum_interval: 3650,
-      enable_fuzz: true,
+      enable_fuzz: false,
       enable_short_term: true,
       learning_steps: ['1m', '10m'],
       relearning_steps: ['10m'],
