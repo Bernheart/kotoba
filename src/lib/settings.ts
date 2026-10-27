@@ -42,7 +42,7 @@ export const DEFAULT_SETTINGS: Settings = {
   reviewStyle: 'flip',
   scheduler: 'anki',
   recallCards: true,
-  recallAfterDays: 7,
+  recallAfterDays: 0,
   retention: 0.9,
   leechThreshold: 8,
   ttsRate: 0.9,

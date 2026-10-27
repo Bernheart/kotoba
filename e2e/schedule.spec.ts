@@ -14,7 +14,7 @@ test('word details show both cards’ schedule and the answer history', async ({
   const dialog = page.getByRole('dialog')
   await expect(dialog.getByText('Schedule')).toBeVisible()
   await expect(dialog.getByText(/every 4 days/)).toBeVisible()
-  await expect(dialog.getByText(/starts when JP → meaning reaches 7 days/)).toBeVisible()
+  await expect(dialog.getByText('meaning → JP', { exact: true })).toBeVisible()
   await expect(dialog.getByText('→ 4 days')).toBeVisible()
   await dialog.getByText('Schedule').scrollIntoViewIfNeeded()
   await page.waitForTimeout(400)
