@@ -37,7 +37,7 @@ export interface QueueInput {
   cards: CardRow[]
   /** Logs of the current study day (for the new-cards-per-day budget) */
   todayLogs: Pick<ReviewLogRow, 'state' | 'scheduled' | 'cardId'>[]
-  settings: Pick<Settings, 'newPerDay' | 'currentLesson' | 'recallCards'> & Partial<Pick<Settings, 'deckNewPerDay'>>
+  settings: Pick<Settings, 'newPerDay' | 'currentLesson' | 'recallCards'> & Partial<Pick<Settings, 'deckNewPerDay' | 'recallAfterDays'>>
   now?: number
 }
 
@@ -87,8 +87,16 @@ export function buildQueue(
 ): QueueItem[] {
   const wordIds = new Set(trackWords(words, opts.deck).map((w) => w.id))
   const byId = new Map(cards.map((c) => [c.id, c]))
+  const recallAfter = settings.recallAfterDays ?? DEFAULT_SETTINGS.recallAfterDays
+  const today = studyDay(now)
+  /** A new meaning → Japanese card waits until recognising the word holds (and never shows the day its sibling was reviewed). */
+  const recallReady = (c: CardRow) => {
+    if (c.dir !== 'recall' || c.state !== State.New) return true
+    const rc = byId.get(cardId(c.wordId, 'recog'))
+    return !!rc && rc.state === State.Review && rc.scheduled_days >= recallAfter && (!rc.last_review || studyDay(rc.last_review) !== today)
+  }
   const due = cards
-    .filter((c) => wordIds.has(c.wordId) && isDue(c, now) && (settings.recallCards || c.dir === 'recog'))
+    .filter((c) => wordIds.has(c.wordId) && isDue(c, now) && (settings.recallCards || c.dir === 'recog') && recallReady(c))
     .sort((a, b) => a.due - b.due)
   const perWord = new Set<string>()
   const learning: QueueItem[] = []

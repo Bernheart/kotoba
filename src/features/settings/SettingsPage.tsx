@@ -125,8 +125,22 @@ export function SettingsPage() {
             ]}
           />
         </Row>
-        <Row label={t.settings.recallCards}>
-          <Toggle checked={s.recallCards} onChange={(v) => setSetting('recallCards', v)} label={t.settings.recallCards} />
+        <Row label={t.settings.recallStart} hint={t.settings.recallStartHint}>
+          <select
+            value={s.recallCards ? String(s.recallAfterDays) : 'off'}
+            onChange={(e) => {
+              const v = e.target.value
+              if (v === 'off') void setSetting('recallCards', false)
+              else void setSetting('recallCards', true).then(() => setSetting('recallAfterDays', Number(v)))
+            }}
+            className="h-10 rounded-xl border border-line bg-bg-2 px-2 text-[15px]"
+            aria-label={t.settings.recallStart}
+          >
+            <option value="off">{t.settings.recallOff}</option>
+            <option value="0">{t.settings.recallNextDay}</option>
+            <option value="7">{t.settings.recallWeek}</option>
+            <option value="21">{t.settings.recall3Weeks}</option>
+          </select>
         </Row>
         <Row label={t.settings.scheduler} hint={t.settings.schedulerHint}>
           <Segmented

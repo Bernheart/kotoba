@@ -15,6 +15,7 @@ import { lessonTitle, type VocabEntry } from '../../lib/vocab'
 import { useVocab } from '../../lib/vocab-context'
 import { deleteWord, setMnemonic } from '../../lib/words'
 import { AddWordSheet } from '../library/AddWordSheet'
+import { CardSchedule } from './CardSchedule'
 import { ConjugationTable } from './ConjugationTable'
 
 const Ctx = createContext<(id: string) => void>(() => {})
@@ -132,6 +133,8 @@ function WordDetail({ word, onEdit, onDeleted }: { word: VocabEntry; onEdit: () 
         )}
         {p?.leech && <p className="mt-2 text-[14px] text-accent">● {t.word.leech}</p>}
       </section>
+
+      {data && p && p.status !== 'new' && <CardSchedule wordId={word.id} cards={data.cards} logs={data.logs} />}
 
       <section className="mt-5">
         <label htmlFor="mnemonic" className="mb-2 block text-[13px] font-semibold text-muted">

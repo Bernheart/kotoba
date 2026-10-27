@@ -356,7 +356,14 @@ export function ReviewPage() {
                 verdict={verdict ? { kind: verdict, typed } : undefined}
                 badge={
                   <div className="flex justify-between px-5 pt-4 text-[12px] text-faint">
-                    <span>{item.dir === 'recog' ? t.review.recogPrompt : t.review.recallPrompt}</span>
+                    <span className="flex items-center gap-2">
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${item.dir === 'recog' ? 'bg-easy/15 text-easy' : 'bg-accent/15 text-accent'}`}
+                      >
+                        {item.dir === 'recog' ? t.word.dirRecog : t.word.dirRecall}
+                      </span>
+                      {item.dir === 'recog' ? t.review.recogPrompt : t.review.recallPrompt}
+                    </span>
                     {cards.get(item.cardId)?.leech ? <span className="text-accent">{t.word.leech}</span> : null}
                   </div>
                 }

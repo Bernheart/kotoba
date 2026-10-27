@@ -112,3 +112,25 @@ describe('answer checking', () => {
     expect(checkJapanese('koohii'.length ? 'こおひい' : '', { japanese: 'コーヒー', kana: 'コーヒー' })).toBe('correct')
   })
 })
+
+describe('meaning → Japanese cards start once recognition holds', () => {
+  const day = 86400000
+  const base = Date.now()
+  const recog = (ivl: number, reviewedAt: number) => ({ ...newCardRow('w', 'recog', base - 30 * day), state: State.Review, scheduled_days: ivl, stability: ivl, last_review: reviewedAt, due: reviewedAt + ivl * day })
+  const recall = { ...newCardRow('w', 'recall', base - 30 * day), due: base - 20 * day } // unlocked long ago, never studied
+  const q = (r: ReturnType<typeof recog>, after: number) =>
+    buildQueue({ words: [word('w')], cards: [r, recall], todayLogs: [], settings: { newPerDay: 0, currentLesson: 10, recallCards: true, recallAfterDays: after }, now: base })
+
+  it('waits while recognition is shorter than the threshold', () => {
+    expect(q(recog(3, base - 2 * day), 7).some((i) => i.dir === 'recall')).toBe(false)
+  })
+  it('starts once recognition reaches the threshold', () => {
+    expect(q(recog(8, base - 2 * day), 7).some((i) => i.dir === 'recall')).toBe(true)
+  })
+  it('never starts on the day its sibling was reviewed', () => {
+    expect(q(recog(8, base - 60_000), 7).some((i) => i.dir === 'recall')).toBe(false)
+  })
+  it('"Next day" setting starts it right after graduating, like Anki', () => {
+    expect(q(recog(1, base - 2 * day), 0).some((i) => i.dir === 'recall')).toBe(true)
+  })
+})

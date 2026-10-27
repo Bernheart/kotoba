@@ -1,3 +1,4 @@
+import { dayDiff, studyDay } from '../time'
 import { useSettings } from '../settings'
 import type { Lang, Word } from '../types'
 import { en, type Dict } from './en'
@@ -27,8 +28,10 @@ export function relativeDay(ms: number, lang: Lang): string {
   const rtf = new Intl.RelativeTimeFormat(lang, { numeric: 'auto' })
   const abs = Math.abs(diff)
   if (abs < 3_600_000) return rtf.format(Math.round(diff / 60_000), 'minute')
-  if (abs < 86_400_000) return rtf.format(Math.round(diff / 3_600_000), 'hour')
-  if (abs < 30 * 86_400_000) return rtf.format(Math.round(diff / 86_400_000), 'day')
+  // Days are counted in study days (04:00 rollover), so a card due in 4 days says "in 4 days", not "in 3".
+  const days = dayDiff(studyDay(), studyDay(ms))
+  if (abs < 86_400_000 && days === 0) return rtf.format(Math.round(diff / 3_600_000), 'hour')
+  if (Math.abs(days) < 30) return rtf.format(days, 'day')
   if (abs < 365 * 86_400_000) return rtf.format(Math.round(diff / (30 * 86_400_000)), 'month')
   return rtf.format(Math.round(diff / (365 * 86_400_000)), 'year')
 }

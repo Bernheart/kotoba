@@ -19,6 +19,8 @@ export interface Settings {
   scheduler: 'anki' | 'fsrs'
   /** Which directions get cards: recognition (JP→meaning) and recall (meaning→JP) */
   recallCards: boolean
+  /** Meaning → Japanese cards start once the word's recognition interval reaches this many days (0 = next day, like Anki) */
+  recallAfterDays: number
   retention: number
   leechThreshold: number
   ttsRate: number
@@ -40,6 +42,7 @@ export const DEFAULT_SETTINGS: Settings = {
   reviewStyle: 'flip',
   scheduler: 'anki',
   recallCards: true,
+  recallAfterDays: 7,
   retention: 0.9,
   leechThreshold: 8,
   ttsRate: 0.9,
