@@ -1,13 +1,13 @@
 # Kotoba 言葉
 
-A personal Japanese vocabulary trainer that follows **Genki (3rd ed.) lessons 1–10**. It is dark-mode first, phone-first and works offline. Progress syncs between Mac and iPhone.
+A personal Japanese vocabulary trainer that follows **Genki (3rd ed.) lessons 1–23** (about 1,700 words). It is dark-mode first, phone-first and works offline. Progress syncs between Mac and iPhone.
 
 - **Spaced repetition like Anki.** Anki's classic scheduler (SM-2 with Anki's default options: steps 1m → 10m, graduating at 1 day, then intervals grow by the card's ease), with Anki-style session order (a "10m" card really waits 10 minutes). FSRS is available in Settings. Also sibling burying, leech rescue with mnemonics, and new words gated by your current Genki lesson.
 - **Practice modes.** Multiple choice, typing (romaji→kana as you type), listening, shadowing with record and compare, cloze, sentence builder, a matching game, a kana trainer, a conjugation trainer, a weak-words deck and a 5-minute session.
 - **Word library.** Search kanji, kana, romaji, English or Polish. Filter, group, and sort (gojūon order, weakest first, and more). Furigana can be toggled, and every word and example sentence has audio.
 - **EN / PL** interface and meanings.
 
-> The vocabulary was **written for this app** in the style of N5–N4 beginner lists and tagged by Genki lesson. It is **not** copied from the textbook. Entries marked with a yellow dot ("Please verify") are ones I wasn't sure about. They are listed in [`data/VERIFY.md`](data/VERIFY.md) and appear under *Words → Filter → Needs check*. Import your own lesson lists to match your course exactly (see below).
+> The word list follows the Genki 3rd-edition lessons 1–23 (each word in the lesson that introduces it, with reading-section words tagged `reading`). The meanings (EN/PL) and example sentences were **written for this app**; they are **not** copied from the textbook. Many words added from Genki II don't have an example sentence yet. Entries marked with a yellow dot ("Please verify") are ones I wasn't sure about. They are listed in [`data/VERIFY.md`](data/VERIFY.md) and appear under *Words → Filter → Needs check*. Import your own lesson lists to match your course exactly (see below).
 
 ---
 

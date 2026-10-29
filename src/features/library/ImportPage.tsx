@@ -202,7 +202,8 @@ export function ImportPage() {
               <span className="text-[14px]">{t.common.lesson(lesson || 0).replace(/\d+/, '#')} → ✓ existing</span>
               <Toggle checked={updateLessons} onChange={setUpdateLessons} label="update lessons" />
             </div>
-            {importDecks.length === 0 && counts.merge > 0 && missing.length > 0 && (
+            {/* only offered when the file looks like a full word list (it keeps most of the built-in words) */}
+            {importDecks.length === 0 && missing.length > 0 && missing.length < counts.merge && (
               <div className="flex items-center justify-between gap-3">
                 <div className="min-w-0">
                   <div className="text-[14px]">{t.importer.hideMissing(missing.length)}</div>

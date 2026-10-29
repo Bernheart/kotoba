@@ -66,10 +66,18 @@ export function buildVocab(rows: UserWordRow[]): Vocab {
     else custom.push(r)
   }
 
+  // One of your own lesson words that is also built in replaces the built-in one (it carries your progress).
+  const yours = new Set(
+    custom.flatMap((r) => {
+      const w = r.word as Partial<Word>
+      return !r.deleted && !w.deck && w.japanese && w.kana ? [`${w.japanese}|${normalizeKana(w.kana)}`] : []
+    }),
+  )
   const words: VocabEntry[] = []
   for (const w of BUILTIN_WORDS) {
     const p = patches.get(w.id)
     if (p?.deleted) continue
+    if (yours.has(`${w.japanese}|${normalizeKana(w.kana)}`)) continue
     words.push(entry(p ? { ...w, ...p.word, id: w.id, source: 'builtin' } : w, p?.mnemonic))
   }
   for (const r of custom) {

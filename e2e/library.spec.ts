@@ -50,7 +50,7 @@ test('add a word with romaji → kana input', async ({ page }) => {
 
 test('import a pasted TSV list', async ({ page }) => {
   await page.goto('/#/import')
-  await page.locator('textarea').fill('かいだん\tstairs\nうちゅう\tspace; universe\nだいがく\tcollege\n')
+  await page.locator('textarea').fill('きょうりゅう\tdinosaur\nうちゅう\tspace; universe\nだいがく\tcollege\n')
   await expect(page.getByText('2 new')).toBeVisible()
   await expect(page.getByText(/1 already in your library/)).toBeVisible()
   await page.getByRole('button', { name: /Import 3 words/ }).click()
