@@ -9,6 +9,8 @@ export interface Settings {
   theme: 'dark' | 'light' | 'system'
   /** Highest Genki lesson whose words may be introduced as new cards */
   currentLesson: number
+  /** Which lessons new words come from first: the current one working down to 1, or lesson 1 up */
+  lessonOrder: 'down' | 'up'
   newPerDay: number
   /** New words per day in each custom deck (separate from the main limit) */
   deckNewPerDay: number
@@ -36,6 +38,7 @@ export const DEFAULT_SETTINGS: Settings = {
   furigana: true,
   theme: 'dark',
   currentLesson: 10,
+  lessonOrder: 'down',
   newPerDay: 10,
   deckNewPerDay: 10,
   dailyGoal: 30,

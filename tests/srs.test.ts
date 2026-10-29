@@ -28,11 +28,20 @@ describe('study day', () => {
 describe('queue', () => {
   it('introduces new words only up to the current lesson, within the daily budget', () => {
     const words = [word('a', 1), word('b', 2), word('c', 3)]
-    const q = buildQueue({ words, cards: [], todayLogs: [], settings: { newPerDay: 10, currentLesson: 2, recallCards: true } })
+    const q = buildQueue({ words, cards: [], todayLogs: [], settings: { newPerDay: 10, currentLesson: 2, recallCards: true, lessonOrder: 'up' } })
     expect(q.map((i) => i.wordId)).toEqual(['a', 'b'])
     expect(q.every((i) => i.kind === 'intro')).toBe(true)
     const q2 = buildQueue({ words, cards: [], todayLogs: [], settings: { newPerDay: 1, currentLesson: 3, recallCards: true } })
     expect(q2).toHaveLength(1)
+  })
+
+  it('by default starts from the current lesson and works down', () => {
+    const words = [word('a1', 1), word('b9', 9), word('c10', 10), word('d10', 10), word('e11', 11)]
+    const ids = (currentLesson: number) =>
+      buildQueue({ words, cards: [], todayLogs: [], settings: { newPerDay: 10, currentLesson, recallCards: true } }).map((i) => i.wordId)
+    expect(ids(10)).toEqual(['c10', 'd10', 'b9', 'a1'])
+    // moving the lesson up switches to the newer lesson right away
+    expect(ids(11)[0]).toBe('e11')
   })
 
   it('shows only one card per word per day (sibling burying)', () => {

@@ -7,7 +7,7 @@ import { Page } from '../../components/Page'
 import { Button, Card, Segmented, Toggle, useToast } from '../../components/ui'
 import { deckLabel } from '../../lib/decks'
 import { useT } from '../../lib/i18n'
-import { applyImport, planImport } from '../../lib/import/apply'
+import { applyImport, missingBuiltin, planImport } from '../../lib/import/apply'
 import { buildRows, COL_ROLES, detectRoles, lessonFromFilename, parseText, type ColRole, type ImportRow } from '../../lib/import/parse'
 import { isKanaOnly } from '../../lib/jp/chars'
 import type { Lang } from '../../lib/types'
@@ -29,6 +29,7 @@ export function ImportPage() {
   const [lesson, setLesson] = useState<number>(0)
   const [tags, setTags] = useState('')
   const [updateLessons, setUpdateLessons] = useState(true)
+  const [hideMissing, setHideMissing] = useState(false)
   const [fixes, setFixes] = useState<Record<number, string>>({})
   const [busy, setBusy] = useState(false)
 
@@ -51,6 +52,7 @@ export function ImportPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [table, roles, lesson, tags, fixes])
   const plan = useMemo(() => planImport(rows, words), [rows, words])
+  const missing = useMemo(() => missingBuiltin(plan, words), [plan, words])
   const importDecks = [...new Set(rows.flatMap((r) => (r.deck ? [r.deck] : [])))]
   const counts = {
     add: plan.filter((p) => p.action === 'new').length,
@@ -72,8 +74,8 @@ export function ImportPage() {
   const run = async () => {
     setBusy(true)
     try {
-      const res = await applyImport(plan, { updateLessons, defaultLesson: lesson || 0 })
-      toast({ text: t.importer.done(res.added, res.merged), tone: 'good', ms: 5000 })
+      const res = await applyImport(plan, { updateLessons, defaultLesson: lesson || 0, hide: hideMissing ? missing : [] })
+      toast({ text: t.importer.done(res.added, res.merged) + (res.hidden ? ` ${t.importer.hidden(res.hidden)}` : ''), tone: 'good', ms: 5000 })
       navigate('/library')
     } finally {
       setBusy(false)
@@ -200,6 +202,20 @@ export function ImportPage() {
               <span className="text-[14px]">{t.common.lesson(lesson || 0).replace(/\d+/, '#')} → ✓ existing</span>
               <Toggle checked={updateLessons} onChange={setUpdateLessons} label="update lessons" />
             </div>
+            {importDecks.length === 0 && counts.merge > 0 && missing.length > 0 && (
+              <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="text-[14px]">{t.importer.hideMissing(missing.length)}</div>
+                  <div className="mt-0.5 text-[12px] text-faint">{t.importer.hideMissingHint}</div>
+                  {hideMissing && (
+                    <p lang="ja" className="mt-1 text-[13px] text-muted">
+                      {missing.map((w) => w.japanese).join('、')}
+                    </p>
+                  )}
+                </div>
+                <Toggle checked={hideMissing} onChange={setHideMissing} label={t.importer.hideMissing(missing.length)} />
+              </div>
+            )}
           </Card>
 
           <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 px-1 text-[14px]">
@@ -244,7 +260,7 @@ export function ImportPage() {
           {plan.length > 60 && <p className="mt-2 px-1 text-[12px] text-faint">+{plan.length - 60}</p>}
 
           <div className="sticky bottom-[calc(var(--nav-h)+var(--safe-bottom)+12px)] mt-5 lg:bottom-4">
-            <Button variant="primary" size="lg" className="w-full" disabled={busy || counts.add + counts.merge === 0} onClick={run}>
+            <Button variant="primary" size="lg" className="w-full" disabled={busy || counts.add + counts.merge + (hideMissing ? missing.length : 0) === 0} onClick={run}>
               {t.importer.run(counts.add + counts.merge)}
             </Button>
           </div>

@@ -2,7 +2,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { buildRows, detectRoles, lessonFromFilename, parseText, splitJapanese } from '../src/lib/import/parse'
-import { planImport } from '../src/lib/import/apply'
+import { missingBuiltin, planImport } from '../src/lib/import/apply'
 import { buildVocab } from '../src/lib/vocab'
 import { guessType } from '../src/lib/jp/guess'
 
@@ -94,5 +94,20 @@ describe.skipIf(!existsSync(USER_CSV))("user's own CSV files", () => {
     const bad = rows.filter((r) => r.problem)
     expect(rows.length).toBeGreaterThan(5)
     expect(bad.length / rows.length, JSON.stringify(bad.slice(0, 3))).toBeLessThan(0.1)
+  })
+})
+
+describe('replacing the word list', () => {
+  it('lists the built-in words a full word list leaves out (never your own or deck words)', () => {
+    const { words } = buildVocab([
+      { id: 'u-mine', kind: 'custom', word: { japanese: 'ねこ', kana: 'ねこ', en: 'cat' }, createdAt: 0, updatedAt: 0, dirty: 0 },
+    ])
+    const builtin = words.filter((w) => w.source === 'builtin')
+    const kept = builtin.slice(0, 5)
+    const t = parseText(JSON.stringify(kept.map((w) => ({ japanese: w.japanese, kana: w.kana, en: w.en }))))
+    const plan = planImport(buildRows(t, detectRoles(t)), words)
+    const missing = missingBuiltin(plan, words)
+    expect(missing).toHaveLength(builtin.length - 5)
+    expect(missing.some((w) => w.id === 'u-mine' || kept.includes(w))).toBe(false)
   })
 })

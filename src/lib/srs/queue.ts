@@ -37,7 +37,7 @@ export interface QueueInput {
   cards: CardRow[]
   /** Logs of the current study day (for the new-cards-per-day budget) */
   todayLogs: Pick<ReviewLogRow, 'state' | 'scheduled' | 'cardId'>[]
-  settings: Pick<Settings, 'newPerDay' | 'currentLesson' | 'recallCards'> & Partial<Pick<Settings, 'deckNewPerDay' | 'recallAfterDays'>>
+  settings: Pick<Settings, 'newPerDay' | 'currentLesson' | 'recallCards'> & Partial<Pick<Settings, 'deckNewPerDay' | 'recallAfterDays' | 'lessonOrder'>>
   now?: number
 }
 
@@ -63,18 +63,29 @@ export function newPerDayOf(settings: QueueInput['settings'], deck?: string): nu
 }
 
 /** Next new words of a track: main = lesson order gated by the current lesson; deck = frequency order, no gating. */
-export function trackCandidates(words: Word[], cards: Map<string, CardRow>, settings: Pick<Settings, 'currentLesson'>, deck?: string): Word[] {
+export function trackCandidates(
+  words: Word[],
+  cards: Map<string, CardRow>,
+  settings: Pick<Settings, 'currentLesson'> & Partial<Pick<Settings, 'lessonOrder'>>,
+  deck?: string,
+): Word[] {
   const scoped = trackWords(words, deck)
-  return deck ? newCandidates(byFrequency(scoped), cards, Infinity) : newCandidates(scoped, cards, settings.currentLesson)
+  return deck
+    ? newCandidates(byFrequency(scoped), cards, Infinity)
+    : newCandidates(scoped, cards, settings.currentLesson, settings.lessonOrder ?? DEFAULT_SETTINGS.lessonOrder)
 }
 
-/** Words that may be introduced next, in lesson order (WaniKani-style gating by current lesson). */
-export function newCandidates(words: Word[], cards: Map<string, CardRow>, currentLesson: number): Word[] {
-  return words.filter((w) => {
+/**
+ * Words that may be introduced next (WaniKani-style gating by current lesson): newest lesson first and
+ * working down (10 → 9 → … → 1), or lesson 1 first. Within a lesson the list order is kept.
+ */
+export function newCandidates(words: Word[], cards: Map<string, CardRow>, currentLesson: number, order: Settings['lessonOrder'] = 'up'): Word[] {
+  const fresh = words.filter((w) => {
     if (w.genkiLesson > currentLesson) return false
     const c = cards.get(cardId(w.id, 'recog'))
     return !c || (c.state === State.New && !c.suspended && !c.deleted)
   })
+  return fresh.sort((a, b) => (order === 'down' ? b.genkiLesson - a.genkiLesson : a.genkiLesson - b.genkiLesson))
 }
 
 /**

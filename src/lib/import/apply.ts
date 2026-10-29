@@ -27,16 +27,27 @@ export function planImport(rows: ImportRow[], existing: VocabEntry[]): PlanItem[
   })
 }
 
+/** Built-in lesson words this import doesn't contain — hidden when the file is meant to replace the word list. */
+export function missingBuiltin(plan: PlanItem[], existing: VocabEntry[]): VocabEntry[] {
+  const kept = new Set(plan.flatMap((p) => (p.action === 'merge' && p.target ? [p.target.id] : [])))
+  return existing.filter((w) => w.source === 'builtin' && !w.deck && !kept.has(w.id))
+}
+
 /** Writes the plan in one transaction. Returns counts. */
 export async function applyImport(
   plan: PlanItem[],
-  opts: { updateLessons: boolean; defaultLesson: number },
+  opts: { updateLessons: boolean; defaultLesson: number; hide?: VocabEntry[] },
   now = Date.now(),
-): Promise<{ added: number; merged: number }> {
+): Promise<{ added: number; merged: number; hidden: number }> {
   let added = 0
   let merged = 0
   await db.transaction('rw', db.userWords, async () => {
     const puts: UserWordRow[] = []
+    // Hidden like a deleted built-in word, but the cards are kept, so un-hiding later restores the progress.
+    for (const w of opts.hide ?? []) {
+      const prev = await db.userWords.get(w.id)
+      puts.push({ id: w.id, kind: 'patch', word: prev?.word ?? {}, mnemonic: prev?.mnemonic, createdAt: prev?.createdAt ?? now, updatedAt: now, dirty: 1, deleted: 1 })
+    }
     for (const { row, action, target } of plan) {
       if (action === 'new') {
         const id = slugId(row.kana)
@@ -109,5 +120,5 @@ export async function applyImport(
     }
     await db.userWords.bulkPut(puts)
   })
-  return { added, merged }
+  return { added, merged, hidden: opts.hide?.length ?? 0 }
 }

@@ -104,6 +104,16 @@ export function SettingsPage() {
         <Row label={t.settings.currentLesson} hint={t.settings.currentLessonHint}>
           <Stepper value={s.currentLesson} min={1} max={23} onChange={(v) => setSetting('currentLesson', v)} />
         </Row>
+        <Row label={t.settings.lessonOrder} hint={t.settings.lessonOrderHint}>
+          <Segmented
+            value={s.lessonOrder}
+            onChange={(v) => setSetting('lessonOrder', v)}
+            options={[
+              { value: 'down', label: t.settings.lessonOrderDown },
+              { value: 'up', label: t.settings.lessonOrderUp },
+            ]}
+          />
+        </Row>
         <Row label={t.settings.newPerDay}>
           <Stepper value={s.newPerDay} min={0} max={50} step={5} onChange={(v) => setSetting('newPerDay', v)} />
         </Row>

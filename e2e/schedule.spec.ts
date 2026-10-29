@@ -1,6 +1,9 @@
 import { expect, test } from '@playwright/test'
 
 test('word details show both cards’ schedule and the answer history', async ({ page }, info) => {
+  await page.goto('/#/settings')
+  await page.getByRole('radio', { name: 'Lesson 1' }).click() // first new word: おはようございます
+  await page.waitForTimeout(400)
   await page.goto('/?safe=1#/review')
   await page.getByRole('button', { name: 'Got it' }).click()
   await page.getByRole('button', { name: 'Got it' }).click()
