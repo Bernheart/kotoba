@@ -7,7 +7,7 @@ A personal Japanese vocabulary trainer that follows **Genki (3rd ed.) lessons 1�
 - **Word library.** Search kanji, kana, romaji, English or Polish. Filter, group, and sort (gojūon order, weakest first, and more). Furigana can be toggled, and every word and example sentence has audio.
 - **EN / PL** interface and meanings.
 
-> The word list follows the Genki 3rd-edition lessons 1–23 (each word in the lesson that introduces it, with reading-section words tagged `reading`). The meanings (EN/PL) and example sentences were **written for this app**; they are **not** copied from the textbook. Many words added from Genki II don't have an example sentence yet. Entries marked with a yellow dot ("Please verify") are ones I wasn't sure about. They are listed in [`data/VERIFY.md`](data/VERIFY.md) and appear under *Words → Filter → Needs check*. Import your own lesson lists to match your course exactly (see below).
+> The word list follows the Genki 3rd-edition lessons 1–23 (each word in the lesson that introduces it, with reading-section words tagged `reading`). The meanings (EN/PL) and example sentences were **written for this app**; they are **not** copied from the textbook. Entries marked with a yellow dot ("Please verify") are ones I wasn't sure about. They are listed in [`data/VERIFY.md`](data/VERIFY.md) and appear under *Words → Filter → Needs check*. Import your own lesson lists to match your course exactly (see below).
 
 ---
 

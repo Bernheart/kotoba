@@ -108,9 +108,13 @@
       "example": { "ja": "マイクさんは *ドア*を {開けて|あけて}、 {部屋|へや}に {入りました|はいりました}。", "en": "Mike opened the door and went into the room.", "pl": "Mike otworzył drzwi i wszedł do pokoju." } },
     { "id": "l06-denki", "japanese": "電気", "kana": "でんき", "en": "electricity; (electric) light", "pl": "prąd; światło (elektryczne)", "type": "noun", "genkiLesson": 2, "tags": ["house", "things"],
       "example": { "ja": "*{電気|でんき}*を つけましょうか。", "en": "Shall I turn on the light?", "pl": "Włączyć światło?" } },
-    { "id": "l02-kaaten", "japanese": "カーテン", "kana": "カーテン", "en": "curtain", "pl": "zasłona; firanka", "type": "noun", "genkiLesson": 2, "tags": ["extra"] },
-    { "id": "l02-keshigomu", "japanese": "消しゴム", "kana": "けしゴム", "en": "rubber eraser", "pl": "gumka do mazania", "type": "noun", "genkiLesson": 2, "tags": ["extra"] },
-    { "id": "l02-kokuban", "japanese": "黒板", "kana": "こくばん", "en": "blackboard; chalkboard", "pl": "tablica (szkolna)", "type": "noun", "genkiLesson": 2, "tags": ["extra"] },
-    { "id": "l02-tonkatsu", "japanese": "とんかつ", "kana": "とんかつ", "en": "breaded, deep-fried pork cutlet", "pl": "panierowany kotlet schabowy (tonkatsu)", "type": "noun", "genkiLesson": 2, "tags": [] }
+    { "id": "l02-kaaten", "japanese": "カーテン", "kana": "カーテン", "en": "curtain", "pl": "zasłona; firanka", "type": "noun", "genkiLesson": 2, "tags": ["extra"],
+      "example": { "ja": "すみません、この *カーテン*は いくらですか。", "en": "Excuse me, how much is this curtain?", "pl": "Przepraszam, ile kosztuje ta zasłona?" } },
+    { "id": "l02-keshigomu", "japanese": "消しゴム", "kana": "けしゴム", "en": "rubber eraser", "pl": "gumka do mazania", "type": "noun", "genkiLesson": 2, "tags": ["extra"],
+      "example": { "ja": "すみません、*{消|け}しゴム*は どこですか。", "en": "Excuse me, where are the erasers?", "pl": "Przepraszam, gdzie są gumki do mazania?" } },
+    { "id": "l02-kokuban", "japanese": "黒板", "kana": "こくばん", "en": "blackboard; chalkboard", "pl": "tablica (szkolna)", "type": "noun", "genkiLesson": 2, "tags": ["extra"],
+      "example": { "ja": "A：*{黒板|こくばん}*の {字|じ}は {日本語|にほんご}ですか。 B：いいえ、{英語|えいご}です。", "en": "A: Is the writing on the blackboard Japanese? B: No, it's English.", "pl": "A: Czy napis na tablicy jest po japońsku? B: Nie, po angielsku." } },
+    { "id": "l02-tonkatsu", "japanese": "とんかつ", "kana": "とんかつ", "en": "breaded, deep-fried pork cutlet", "pl": "panierowany kotlet schabowy (tonkatsu)", "type": "noun", "genkiLesson": 2, "tags": [],
+      "example": { "ja": "すみません、*とんかつ*を ひとつ ください。", "en": "Excuse me, one pork cutlet, please.", "pl": "Przepraszam, poproszę jeden kotlet tonkatsu." } }
   ]
 }

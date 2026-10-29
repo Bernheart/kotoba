@@ -110,9 +110,13 @@
       "example": { "ja": "テニスは よく します。 *でも*、 サッカーは しません。", "en": "I often play tennis. But I don't play football.", "pl": "Często gram w tenisa. Ale w piłkę nożną nie gram." } },
     { "id": "l03-doudesuka", "japanese": "どうですか", "kana": "どうですか", "en": "how about …?; how is …?", "pl": "a może …?; co powiesz na …?; jak tam …?", "type": "expression", "genkiLesson": 3, "tags": ["expressions", "questions"],
       "example": { "ja": "じゃあ、 {土曜日|どようび}は *どうですか*。", "en": "Then how about Saturday?", "pl": "To może w sobotę?" } },
-    { "id": "l03-uchi", "japanese": "うち", "kana": "うち", "en": "home; house; one's own place", "pl": "dom; mieszkanie; mój dom", "type": "noun", "genkiLesson": 3, "tags": [] },
-    { "id": "l03-sake", "japanese": "酒", "kana": "さけ", "en": "sake; alcohol in general", "pl": "sake; alkohol", "type": "noun", "genkiLesson": 3, "tags": [] },
-    { "id": "l03-cha", "japanese": "茶", "kana": "ちゃ", "en": "tea; green tea", "pl": "herbata; zielona herbata", "type": "noun", "genkiLesson": 3, "tags": [] },
-    { "id": "l03-hayai", "japanese": "早い", "kana": "はやい", "en": "early; soon", "pl": "wczesny; wcześnie", "type": "i-adj", "genkiLesson": 3, "tags": [] }
+    { "id": "l03-uchi", "japanese": "うち", "kana": "うち", "en": "home; house; one's own place", "pl": "dom; mieszkanie; mój dom", "type": "noun", "genkiLesson": 3, "tags": [],
+      "example": { "ja": "ユイさんは {週末|しゅうまつ} *うち*で {勉強します|べんきょうします}。", "en": "Yui studies at home on weekends.", "pl": "Yui w weekendy uczy się w domu." } },
+    { "id": "l03-sake", "japanese": "酒", "kana": "さけ", "en": "sake; alcohol in general", "pl": "sake; alkohol", "type": "noun", "genkiLesson": 3, "tags": [],
+      "example": { "ja": "マイクさんは お*{酒|さけ}*を {飲みません|のみません}。", "en": "Mike doesn't drink alcohol.", "pl": "Mike nie pije alkoholu." } },
+    { "id": "l03-cha", "japanese": "茶", "kana": "ちゃ", "en": "tea; green tea", "pl": "herbata; zielona herbata", "type": "noun", "genkiLesson": 3, "tags": [],
+      "example": { "ja": "{毎朝|まいあさ} お*{茶|ちゃ}*を {飲みます|のみます}。", "en": "I drink tea every morning.", "pl": "Co rano piję herbatę." } },
+    { "id": "l03-hayai", "japanese": "早い", "kana": "はやい", "en": "early; soon", "pl": "wczesny; wcześnie", "type": "i-adj", "genkiLesson": 3, "tags": [],
+      "example": { "ja": "ケンさんは {毎朝|まいあさ} *{早く|はやく}* {起きます|おきます}。", "en": "Ken gets up early every morning.", "pl": "Ken codziennie wstaje wcześnie." } }
   ]
 }
