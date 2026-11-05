@@ -58,7 +58,7 @@ function entry(w: Word, mnemonic?: string): VocabEntry {
 }
 
 /** Built-in words + your words/edits from IndexedDB (patches override fields of built-in words by id). */
-export function buildVocab(rows: UserWordRow[]): Vocab {
+export function buildVocab(rows: UserWordRow[], opts: { extended?: boolean } = {}): Vocab {
   const patches = new Map<string, UserWordRow>()
   const custom: UserWordRow[] = []
   for (const r of rows) {
@@ -77,6 +77,8 @@ export function buildVocab(rows: UserWordRow[]): Vocab {
   for (const w of BUILTIN_WORDS) {
     const p = patches.get(w.id)
     if (p?.deleted) continue
+    // the extended list's extra words are hidden (progress kept) unless it's switched on
+    if (w.extra && !opts.extended) continue
     if (yours.has(`${w.japanese}|${normalizeKana(w.kana)}`)) continue
     words.push(entry(p ? { ...w, ...p.word, id: w.id, source: 'builtin' } : w, p?.mnemonic))
   }

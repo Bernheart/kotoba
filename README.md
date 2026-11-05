@@ -1,6 +1,6 @@
 # Kotoba 言葉
 
-A personal Japanese vocabulary trainer that follows **Genki (3rd ed.) lessons 1–23** (about 1,700 words). It is dark-mode first, phone-first and works offline. Progress syncs between Mac and iPhone.
+A personal Japanese vocabulary trainer that follows **Genki (3rd ed.) lessons 1–23**: the *normal* list is each lesson's vocabulary list (about 1,200 words), the *extended* list (Settings → Word list) adds the rest of the textbook's word index (about 1,700 in total). It is dark-mode first, phone-first and works offline. Progress syncs between Mac and iPhone.
 
 - **Spaced repetition like Anki.** Anki's classic scheduler (SM-2 with Anki's default options: steps 1m → 10m, graduating at 1 day, then intervals grow by the card's ease), with Anki-style session order (a "10m" card really waits 10 minutes). FSRS is available in Settings. Also sibling burying, leech rescue with mnemonics, and new words gated by your current Genki lesson.
 - **Practice modes.** Multiple choice, typing (romaji→kana as you type), listening, shadowing with record and compare, cloze, sentence builder, a matching game, a kana trainer, a conjugation trainer, a weak-words deck and a 5-minute session.

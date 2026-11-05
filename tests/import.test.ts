@@ -111,3 +111,13 @@ describe('replacing the word list', () => {
     expect(missing.some((w) => w.id === 'u-mine' || kept.includes(w))).toBe(false)
   })
 })
+
+describe('normal and extended word lists', () => {
+  it('normal shows only the textbook lesson lists; extended adds the rest', () => {
+    const normal = buildVocab([]).words
+    const extended = buildVocab([], { extended: true }).words
+    expect(normal.length).toBeLessThan(extended.length)
+    expect(normal.some((w) => w.extra)).toBe(false)
+    expect(extended.filter((w) => w.extra).length).toBe(extended.length - normal.length)
+  })
+})

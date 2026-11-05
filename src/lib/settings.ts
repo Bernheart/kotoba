@@ -11,6 +11,8 @@ export interface Settings {
   currentLesson: number
   /** Which lessons new words come from first: the current one working down to 1, or lesson 1 up */
   lessonOrder: 'down' | 'up'
+  /** Built-in words: the textbook's lesson lists (normal) or the full word index (extended) */
+  wordList: 'normal' | 'extended'
   newPerDay: number
   /** New words per day in each custom deck (separate from the main limit) */
   deckNewPerDay: number
@@ -39,6 +41,7 @@ export const DEFAULT_SETTINGS: Settings = {
   theme: 'dark',
   currentLesson: 10,
   lessonOrder: 'down',
+  wordList: 'normal',
   newPerDay: 10,
   deckNewPerDay: 10,
   dailyGoal: 30,

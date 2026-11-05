@@ -27,6 +27,7 @@ export const wordSchema = z.object({
   frequency: z.number().optional(),
   deck: z.string().regex(/^[a-z0-9][a-z0-9-]*$/, 'deck must be lowercase slug').optional(),
   verify: z.string().optional(),
+  extra: z.literal(true).optional(),
 })
 
 export const lessonFileSchema = z.object({

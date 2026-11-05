@@ -104,6 +104,16 @@ export function SettingsPage() {
         <Row label={t.settings.currentLesson} hint={t.settings.currentLessonHint}>
           <Stepper value={s.currentLesson} min={1} max={23} onChange={(v) => setSetting('currentLesson', v)} />
         </Row>
+        <Row label={t.settings.wordList} hint={t.settings.wordListHint}>
+          <Segmented
+            value={s.wordList}
+            onChange={(v) => setSetting('wordList', v)}
+            options={[
+              { value: 'normal', label: t.settings.wordListNormal },
+              { value: 'extended', label: t.settings.wordListExtended },
+            ]}
+          />
+        </Row>
         <Row label={t.settings.lessonOrder} hint={t.settings.lessonOrderHint}>
           <Segmented
             value={s.lessonOrder}

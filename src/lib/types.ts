@@ -57,6 +57,8 @@ export interface Word {
   deck?: string
   /** Note for the user to double-check this entry. */
   verify?: string
+  /** Built-in word that's only in the extended list (not in the textbook's lesson vocabulary list). */
+  extra?: boolean
   /** Where the word comes from — set at load time. */
   source?: 'builtin' | 'user'
 }
