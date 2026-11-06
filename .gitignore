@@ -17,3 +17,11 @@ tools/arcane/data/
 *.ass
 arcane-draft.json
 arcane-deck.json
+
+# claude-kit:begin
+CLAUDE.local.md
+.claude/settings.local.json
+.claude/.kit/
+.kit/
+.claude/worktrees/
+# claude-kit:end

@@ -1,0 +1,27 @@
+{
+  "kitVersion": "0.8.1",
+  "profile": "solo",
+  "modifiers": [],
+  "decidedBy": "user-confirmed",
+  "commands": {
+    "test": "npm test",
+    "typecheck": "npm run typecheck",
+    "build": "npm run build",
+    "done": "npm run typecheck && npm test"
+  },
+  "protected": [
+    ".env*",
+    "package-lock.json",
+    ".git/",
+    ".claude/hooks/**"
+  ],
+  "riskGlobs": [
+    ".github/workflows/**"
+  ],
+  "blocks": {
+    "CLAUDE.md#commands": "5dc95139",
+    "CLAUDE.md#done": "46b82269"
+  },
+  "appliedAt": "2026-11-07",
+  "claudeCodeTested": "2.1.318"
+}
