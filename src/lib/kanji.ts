@@ -248,30 +248,83 @@ export function resample(pts: Pt[], n = 16): Pt[] {
 }
 
 const meanDist = (a: Pt[], b: Pt[]) => a.reduce((s, p, i) => s + Math.hypot(p[0] - b[i]![0], p[1] - b[i]![1]), 0) / a.length
+const pathLen = (p: Pt[]) => p.slice(1).reduce((s, q, i) => s + Math.hypot(q[0] - p[i]![0], q[1] - p[i]![1]), 0)
 
 /** Mean point distance (in the 109 box) under which a drawn stroke counts as the model stroke. */
-export const STROKE_TOLERANCE = 15
+export const STROKE_TOLERANCE = 17
+
+/**
+ * How the learner's writing sits in the box compared with the model: drawn point p maps to
+ * `C + scale * (p - C) + [dx, dy]`, C = centre of the box. People write smaller, bigger or off-centre; once a stroke or two are accepted
+ * that is learnt and taken out, so later strokes are judged on shape, direction and order.
+ */
+export interface Fit {
+  scale: number
+  dx: number
+  dy: number
+}
+export const NO_FIT: Fit = { scale: 1, dx: 0, dy: 0 }
+
+/** Fit from accepted strokes (drawn and model points, resampled to the same length). */
+export function fitStrokes(pairs: { drawn: Pt[]; model: Pt[] }[]): Fit {
+  const u = pairs.flatMap((p) => p.drawn)
+  const m = pairs.flatMap((p) => p.model)
+  if (!u.length) return NO_FIT
+  const mean = (pts: Pt[]): Pt => [pts.reduce((s, p) => s + p[0], 0) / pts.length, pts.reduce((s, p) => s + p[1], 0) / pts.length]
+  const mu = mean(u)
+  const mm = mean(m)
+  let scale = 1
+  // scale only once there is enough spread to measure it (two strokes, or one long one)
+  if (pairs.length >= 2 || pathLen(pairs[0]!.model) > 40) {
+    let num = 0
+    let den = 0
+    u.forEach((p, i) => {
+      const a = [p[0] - mu[0], p[1] - mu[1]]
+      const b = [m[i]![0] - mm[0], m[i]![1] - mm[1]]
+      num += a[0]! * b[0]! + a[1]! * b[1]!
+      den += a[0]! * a[0]! + a[1]! * a[1]!
+    })
+    if (den > 0) scale = Math.min(1.4, Math.max(0.7, num / den))
+  }
+  const c = STROKE_BOX / 2
+  const clamp = (v: number) => Math.max(-25, Math.min(25, v))
+  return { scale, dx: clamp(mm[0] - c - scale * (mu[0] - c)), dy: clamp(mm[1] - c - scale * (mu[1] - c)) }
+}
+
+/**
+ * The fit to judge the next stroke with. Before any stroke is accepted there is nothing to compare the
+ * position with, so the first stroke is lined up with its model and judged on shape and direction only.
+ */
+export function strokeFit(accepted: { drawn: Pt[]; model: Pt[] }[], drawn: Pt[], target: Pt[]): Fit {
+  return fitStrokes(accepted.length ? accepted : [{ drawn: resample(drawn, target.length), model: target }])
+}
+
+export function applyFit(pts: Pt[], f: Fit): Pt[] {
+  const c = STROKE_BOX / 2
+  return pts.map((p) => [c + f.scale * (p[0] - c) + f.dx, c + f.scale * (p[1] - c) + f.dy])
+}
 
 export type StrokeVerdict = 'ok' | 'direction' | 'order' | 'shape'
 
 /**
- * Compare a drawn stroke (109-box coordinates) with the expected next stroke.
- * 'direction' = right place but drawn backwards; 'order' = it matches a later stroke instead.
+ * Compare a drawn stroke (109-box coordinates) with the expected next stroke, after taking out the
+ * learner's size/position (`fit`, see `fitStrokes`).
+ * 'direction' = right place but drawn backwards; 'order' = it is a later stroke drawn too early.
  */
-export function checkStroke(drawn: Pt[], expected: number, model: Pt[][]): StrokeVerdict {
+export function checkStroke(drawn: Pt[], expected: number, model: Pt[][], fit: Fit = NO_FIT): StrokeVerdict {
   const target = model[expected]
   if (!target || drawn.length < 2) return 'shape'
-  const user = resample(drawn, target.length)
+  const user = resample(applyFit(drawn, fit), target.length)
   const fwd = meanDist(user, target)
   const rev = meanDist([...user].reverse(), target)
-  const len = (p: Pt[]) => p.slice(1).reduce((s, q, i) => s + Math.hypot(q[0] - p[i]![0], q[1] - p[i]![1]), 0)
-  // a quick tap or a stroke far shorter/longer than the model doesn't count
-  const ratio = len(user) / Math.max(1, len(target))
-  const sizeOk = ratio > 0.4 && ratio < 2.2
+  // a stroke far shorter or longer than the model doesn't count
+  const ratio = pathLen(user) / Math.max(1, pathLen(target))
+  const sizeOk = ratio > 0.35 && ratio < 2.5
+  // a later stroke that fits clearly better means the order is wrong (三: the bottom line drawn first)
+  const later = model.slice(expected + 1).map((m) => meanDist(resample(user, m.length), m))
+  const bestLater = Math.min(Infinity, ...later)
+  if (bestLater <= STROKE_TOLERANCE && bestLater < fwd - 2) return 'order'
   if (fwd <= STROKE_TOLERANCE && sizeOk && fwd <= rev) return 'ok'
   if (rev <= STROKE_TOLERANCE && sizeOk && rev < fwd) return 'direction'
-  for (let j = expected + 1; j < model.length; j++) {
-    if (meanDist(resample(drawn, model[j]!.length), model[j]!) <= STROKE_TOLERANCE) return 'order'
-  }
   return 'shape'
 }

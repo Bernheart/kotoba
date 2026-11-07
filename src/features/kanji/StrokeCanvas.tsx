@@ -1,7 +1,7 @@
-import { useRef, useState, type PointerEvent as RPointerEvent, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type PointerEvent as RPointerEvent, type ReactNode } from 'react'
 import { Button } from '../../components/ui'
 import { useT } from '../../lib/i18n'
-import { checkStroke, STROKE_BOX, STROKES, type Pt, type StrokeVerdict } from '../../lib/kanji'
+import { checkStroke, resample, strokeFit, STROKE_BOX, STROKES, type Pt, type StrokeVerdict } from '../../lib/kanji'
 
 const B = STROKE_BOX
 const toPoints = (pts: Pt[]) => pts.map((p) => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ')
@@ -19,8 +19,8 @@ function Box({ children, className = '', ...rest }: { children: ReactNode; class
   )
 }
 
-/** Shorter than 3% of the box: a tap, not a stroke. */
-const isTap = (pts: Pt[]) => pts.slice(1).reduce((s, p, i) => s + Math.hypot(p[0] - pts[i]![0], p[1] - pts[i]![1]), 0) < B * 0.03
+/** Barely moved: a tap, not a stroke (short dots like the one in 六 are still longer). */
+const isTap = (pts: Pt[]) => pts.slice(1).reduce((s, p, i) => s + Math.hypot(p[0] - pts[i]![0], p[1] - pts[i]![1]), 0) < 1.5
 
 const strokeProps = { fill: 'none', strokeLinecap: 'round', strokeLinejoin: 'round' } as const
 
@@ -54,6 +54,19 @@ function useDrawing(onStroke: (pts: Pt[]) => void) {
     const r = ref.current!.getBoundingClientRect()
     return [((e.clientX - r.left) / r.width) * B, ((e.clientY - r.top) / r.height) * B]
   }
+  // iOS: stop the page from scrolling or zooming under a finger that is drawing. React registers touch
+  // listeners as passive (they can't preventDefault), and touch-action alone isn't honoured on inline SVG.
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const stop = (e: TouchEvent) => e.cancelable && e.preventDefault()
+    el.addEventListener('touchstart', stop, { passive: false })
+    el.addEventListener('touchmove', stop, { passive: false })
+    return () => {
+      el.removeEventListener('touchstart', stop)
+      el.removeEventListener('touchmove', stop)
+    }
+  }, [])
   const handlers = {
     onPointerDown: (e: RPointerEvent<SVGSVGElement>) => {
       e.preventDefault()
@@ -73,7 +86,12 @@ function useDrawing(onStroke: (pts: Pt[]) => void) {
       if (done.length) onStroke(done)
     },
   }
-  return { ref, current, handlers: { ...handlers, onPointerCancel: handlers.onPointerUp } }
+  // The browser cancelled the touch (e.g. it started scrolling): drop the half-drawn stroke instead of judging it.
+  const onPointerCancel = () => {
+    pts.current = []
+    setCurrent(null)
+  }
+  return { ref, current, handlers: { ...handlers, onPointerCancel } }
 }
 
 /**
@@ -89,13 +107,16 @@ export function DrawCheck({ kanji, onDone }: { kanji: string; onDone: (misses: n
   const [verdict, setVerdict] = useState<StrokeVerdict | null>(null)
   const [trace, setTrace] = useState(false)
   const [miss, setMiss] = useState<Pt[] | null>(null)
+  // accepted strokes, used to learn how big and where the learner writes
+  const accepted = useRef<{ drawn: Pt[]; model: Pt[] }[]>([])
   const done = idx >= data.d.length
 
   const { ref, current, handlers } = useDrawing((pts) => {
     if (done || isTap(pts)) return // a stray tap is not an attempt
-    const v = checkStroke(pts, idx, data.pts)
+    const v = checkStroke(pts, idx, data.pts, strokeFit(accepted.current, pts, data.pts[idx]!))
     setVerdict(v)
     if (v === 'ok') {
+      accepted.current.push({ drawn: resample(pts, data.pts[idx]!.length), model: data.pts[idx]! })
       setMiss(null)
       setHint(null)
       const next = idx + 1

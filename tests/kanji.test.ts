@@ -4,6 +4,8 @@ import { KotobaDB } from '../src/lib/db'
 import {
   checkQuizReading,
   checkStroke,
+  strokeFit,
+  resample,
   checkWordReading,
   KANJI,
   KANJI_BY_CHAR,
@@ -132,6 +134,75 @@ describe('draw-and-check', () => {
     const model = STROKES['三']!.pts
     model.forEach((s, i) => expect(checkStroke(s, i, model)).toBe('ok'))
     expect(checkStroke(model[2]!, 0, model)).toBe('order')
+  })
+})
+
+describe('draw-and-check leniency (simulated handwriting)', () => {
+  // Deterministic "sloppy phone writing": the whole kanji smaller/bigger, shifted and slightly rotated,
+  // each stroke a little off, wobbly, with ends too short or too long.
+  let seed = 7
+  const rnd = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 2 ** 32
+  const between = (a: number, b: number) => a + (b - a) * rnd()
+  const hand = (model: Pt[], g: { s: number; dx: number; dy: number; rot: number }): Pt[] => {
+    let p = resample(model, 60)
+    const a = between(-0.18, 0.18)
+    const b = between(-0.18, 0.18)
+    if (a > 0) p = p.slice(Math.floor(p.length * a))
+    if (b > 0) p = p.slice(0, p.length - Math.floor(p.length * b))
+    const lx = between(-4.5, 4.5)
+    const ly = between(-4.5, 4.5)
+    const ph = between(0, 6)
+    const amp = between(0.75, 3)
+    const [c, si] = [Math.cos(g.rot), Math.sin(g.rot)]
+    return p.map(([x, y], i) => {
+      const w = Math.sin(i / 6 + ph) * amp
+      return [54.5 + g.s * ((x - 54.5) * c - (y - 54.5) * si) + g.dx + lx + w, 54.5 + g.s * ((x - 54.5) * si + (y - 54.5) * c) + g.dy + ly + w * 0.7]
+    })
+  }
+
+  it('accepts sloppy but correct strokes and still rejects backwards and out-of-order ones', () => {
+    let ok = 0
+    let n = 0
+    let backOk = 0
+    let backN = 0
+    let earlyOk = 0
+    let earlyN = 0
+    for (let rep = 0; rep < 2; rep++)
+      for (const k of KANJI) {
+        const model = STROKES[k.kanji]!.pts
+        const g = { s: between(0.73, 1.12), dx: between(-12, 12), dy: between(-12, 12), rot: between(-0.09, 0.09) }
+        const accepted: { drawn: Pt[]; model: Pt[] }[] = []
+        model.forEach((m, i) => {
+          const drawn = hand(m, g)
+          const fit = strokeFit(accepted, drawn, m)
+          n++
+          if (checkStroke(drawn, i, model, fit) === 'ok') ok++
+          const len = m.slice(1).reduce((s, q, j) => s + Math.hypot(q[0] - m[j]![0], q[1] - m[j]![1]), 0)
+          if (len > 15) {
+            backN++
+            if (checkStroke([...drawn].reverse(), i, model, fit) === 'ok') backOk++
+          }
+          if (i + 1 < model.length) {
+            earlyN++
+            if (checkStroke(hand(model[i + 1]!, g), i, model, fit) === 'ok') earlyOk++
+          }
+          accepted.push({ drawn: resample(drawn, m.length), model: m })
+        })
+      }
+    expect(ok / n).toBeGreaterThan(0.95)
+    expect(backOk / backN).toBeLessThan(0.01)
+    expect(earlyOk / earlyN).toBeLessThan(0.03)
+  })
+
+  it('learns a small, off-centre kanji from the first stroke', () => {
+    const model = STROKES['三']!.pts
+    const small = (pts: Pt[]) => pts.map(([x, y]) => [x * 0.6 + 30, y * 0.6 + 35] as Pt)
+    const accepted: { drawn: Pt[]; model: Pt[] }[] = []
+    for (let i = 0; i < model.length; i++) {
+      const drawn = small(model[i]!)
+      expect(checkStroke(drawn, i, model, strokeFit(accepted, drawn, model[i]!)), `stroke ${i + 1}`).toBe('ok')
+      accepted.push({ drawn: resample(drawn, model[i]!.length), model: model[i]! })
+    }
   })
 })
 
