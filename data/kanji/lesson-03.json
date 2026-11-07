@@ -1,0 +1,755 @@
+{
+  "lesson": 3,
+  "kanji": [
+    {
+      "n": 1,
+      "kanji": "一",
+      "on": [
+        "イチ",
+        "イッ"
+      ],
+      "kun": [
+        "ひと"
+      ],
+      "meaning": {
+        "en": "one",
+        "pl": "jeden"
+      },
+      "strokes": 1,
+      "words": [
+        {
+          "w": "一",
+          "r": "いち",
+          "en": "one",
+          "pl": "jeden",
+          "hl": true
+        },
+        {
+          "w": "一時",
+          "r": "いちじ",
+          "en": "one o'clock",
+          "pl": "pierwsza (godzina)",
+          "hl": true
+        },
+        {
+          "w": "一年生",
+          "r": "いちねんせい",
+          "en": "first-year student",
+          "pl": "uczeń/student pierwszego roku",
+          "hl": false
+        },
+        {
+          "w": "一分",
+          "r": "いっぷん",
+          "en": "one minute",
+          "pl": "jedna minuta",
+          "hl": false
+        },
+        {
+          "w": "一つ",
+          "r": "ひとつ",
+          "en": "one",
+          "pl": "jeden (rzecz)",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 2,
+      "kanji": "二",
+      "on": [
+        "ニ"
+      ],
+      "kun": [
+        "ふた"
+      ],
+      "meaning": {
+        "en": "two",
+        "pl": "dwa"
+      },
+      "strokes": 2,
+      "words": [
+        {
+          "w": "二",
+          "r": "に",
+          "en": "two",
+          "pl": "dwa",
+          "hl": true
+        },
+        {
+          "w": "二時",
+          "r": "にじ",
+          "en": "two o'clock",
+          "pl": "druga (godzina)",
+          "hl": true
+        },
+        {
+          "w": "二年生",
+          "r": "にねんせい",
+          "en": "second-year student",
+          "pl": "uczeń/student drugiego roku",
+          "hl": false
+        },
+        {
+          "w": "二つ",
+          "r": "ふたつ",
+          "en": "two",
+          "pl": "dwa (rzeczy)",
+          "hl": false
+        },
+        {
+          "w": "二日間",
+          "r": "ふつかかん",
+          "en": "two days",
+          "pl": "dwa dni",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 3,
+      "kanji": "三",
+      "on": [
+        "サン"
+      ],
+      "kun": [
+        "みっ"
+      ],
+      "meaning": {
+        "en": "three",
+        "pl": "trzy"
+      },
+      "strokes": 3,
+      "words": [
+        {
+          "w": "三",
+          "r": "さん",
+          "en": "three",
+          "pl": "trzy",
+          "hl": true
+        },
+        {
+          "w": "三時",
+          "r": "さんじ",
+          "en": "three o'clock",
+          "pl": "trzecia (godzina)",
+          "hl": true
+        },
+        {
+          "w": "三年生",
+          "r": "さんねんせい",
+          "en": "third-year student",
+          "pl": "uczeń/student trzeciego roku",
+          "hl": false
+        },
+        {
+          "w": "三月",
+          "r": "さんがつ",
+          "en": "March",
+          "pl": "marzec",
+          "hl": false
+        },
+        {
+          "w": "三つ",
+          "r": "みっつ",
+          "en": "three",
+          "pl": "trzy (rzeczy)",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 4,
+      "kanji": "四",
+      "on": [
+        "シ"
+      ],
+      "kun": [
+        "よん",
+        "よ",
+        "よっ"
+      ],
+      "meaning": {
+        "en": "four",
+        "pl": "cztery"
+      },
+      "strokes": 5,
+      "words": [
+        {
+          "w": "四",
+          "r": "よん",
+          "en": "four",
+          "pl": "cztery",
+          "hl": true
+        },
+        {
+          "w": "四時",
+          "r": "よじ",
+          "en": "four o'clock",
+          "pl": "czwarta (godzina)",
+          "hl": true
+        },
+        {
+          "w": "四年生",
+          "r": "よねんせい",
+          "en": "fourth-year student",
+          "pl": "uczeń/student czwartego roku",
+          "hl": false
+        },
+        {
+          "w": "四月",
+          "r": "しがつ",
+          "en": "April",
+          "pl": "kwiecień",
+          "hl": false
+        },
+        {
+          "w": "四つ",
+          "r": "よっつ",
+          "en": "four",
+          "pl": "cztery (rzeczy)",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 5,
+      "kanji": "五",
+      "on": [
+        "ゴ"
+      ],
+      "kun": [
+        "いつ"
+      ],
+      "meaning": {
+        "en": "five",
+        "pl": "pięć"
+      },
+      "strokes": 4,
+      "words": [
+        {
+          "w": "五",
+          "r": "ご",
+          "en": "five",
+          "pl": "pięć",
+          "hl": true
+        },
+        {
+          "w": "五時",
+          "r": "ごじ",
+          "en": "five o'clock",
+          "pl": "piąta (godzina)",
+          "hl": true
+        },
+        {
+          "w": "五月",
+          "r": "ごがつ",
+          "en": "May",
+          "pl": "maj",
+          "hl": false
+        },
+        {
+          "w": "五歳",
+          "r": "ごさい",
+          "en": "five years old",
+          "pl": "pięć lat (wiek)",
+          "hl": false
+        },
+        {
+          "w": "五つ",
+          "r": "いつつ",
+          "en": "five",
+          "pl": "pięć (rzeczy)",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 6,
+      "kanji": "六",
+      "on": [
+        "ロク",
+        "ロッ"
+      ],
+      "kun": [
+        "むっ"
+      ],
+      "meaning": {
+        "en": "six",
+        "pl": "sześć"
+      },
+      "strokes": 4,
+      "words": [
+        {
+          "w": "六",
+          "r": "ろく",
+          "en": "six",
+          "pl": "sześć",
+          "hl": true
+        },
+        {
+          "w": "六時",
+          "r": "ろくじ",
+          "en": "six o'clock",
+          "pl": "szósta (godzina)",
+          "hl": true
+        },
+        {
+          "w": "六百",
+          "r": "ろっぴゃく",
+          "en": "six hundred",
+          "pl": "sześćset",
+          "hl": true
+        },
+        {
+          "w": "六分",
+          "r": "ろっぷん",
+          "en": "six minutes",
+          "pl": "sześć minut",
+          "hl": false
+        },
+        {
+          "w": "六つ",
+          "r": "むっつ",
+          "en": "six",
+          "pl": "sześć (rzeczy)",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 7,
+      "kanji": "七",
+      "on": [
+        "シチ"
+      ],
+      "kun": [
+        "なな"
+      ],
+      "meaning": {
+        "en": "seven",
+        "pl": "siedem"
+      },
+      "strokes": 2,
+      "words": [
+        {
+          "w": "七",
+          "r": "しち／なな",
+          "en": "seven",
+          "pl": "siedem",
+          "hl": true
+        },
+        {
+          "w": "七時",
+          "r": "しちじ",
+          "en": "seven o'clock",
+          "pl": "siódma (godzina)",
+          "hl": true
+        },
+        {
+          "w": "七月",
+          "r": "しちがつ",
+          "en": "July",
+          "pl": "lipiec",
+          "hl": false
+        },
+        {
+          "w": "七つ",
+          "r": "ななつ",
+          "en": "seven",
+          "pl": "siedem (rzeczy)",
+          "hl": false
+        },
+        {
+          "w": "七人",
+          "r": "ななにん／しちにん",
+          "en": "seven people",
+          "pl": "siedem osób",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 8,
+      "kanji": "八",
+      "on": [
+        "ハチ",
+        "ハッ"
+      ],
+      "kun": [
+        "やっ"
+      ],
+      "meaning": {
+        "en": "eight",
+        "pl": "osiem"
+      },
+      "strokes": 2,
+      "words": [
+        {
+          "w": "八",
+          "r": "はち",
+          "en": "eight",
+          "pl": "osiem",
+          "hl": true
+        },
+        {
+          "w": "八時",
+          "r": "はちじ",
+          "en": "eight o'clock",
+          "pl": "ósma (godzina)",
+          "hl": true
+        },
+        {
+          "w": "八百",
+          "r": "はっぴゃく",
+          "en": "eight hundred",
+          "pl": "osiemset",
+          "hl": true
+        },
+        {
+          "w": "八歳",
+          "r": "はっさい",
+          "en": "eight years old",
+          "pl": "osiem lat (wiek)",
+          "hl": false
+        },
+        {
+          "w": "八つ",
+          "r": "やっつ",
+          "en": "eight",
+          "pl": "osiem (rzeczy)",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 9,
+      "kanji": "九",
+      "on": [
+        "キュウ",
+        "ク"
+      ],
+      "kun": [
+        "ここの"
+      ],
+      "meaning": {
+        "en": "nine",
+        "pl": "dziewięć"
+      },
+      "strokes": 2,
+      "words": [
+        {
+          "w": "九",
+          "r": "きゅう",
+          "en": "nine",
+          "pl": "dziewięć",
+          "hl": true
+        },
+        {
+          "w": "九時",
+          "r": "くじ",
+          "en": "nine o'clock",
+          "pl": "dziewiąta (godzina)",
+          "hl": true
+        },
+        {
+          "w": "九月",
+          "r": "くがつ",
+          "en": "September",
+          "pl": "wrzesień",
+          "hl": false
+        },
+        {
+          "w": "九歳",
+          "r": "きゅうさい",
+          "en": "nine years old",
+          "pl": "dziewięć lat (wiek)",
+          "hl": false
+        },
+        {
+          "w": "九つ",
+          "r": "ここのつ",
+          "en": "nine",
+          "pl": "dziewięć (rzeczy)",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 10,
+      "kanji": "十",
+      "on": [
+        "ジュウ",
+        "ジュッ",
+        "ジッ"
+      ],
+      "kun": [
+        "とお"
+      ],
+      "meaning": {
+        "en": "ten",
+        "pl": "dziesięć"
+      },
+      "strokes": 2,
+      "words": [
+        {
+          "w": "十",
+          "r": "じゅう",
+          "en": "ten",
+          "pl": "dziesięć",
+          "hl": true
+        },
+        {
+          "w": "十時",
+          "r": "じゅうじ",
+          "en": "ten o'clock",
+          "pl": "dziesiąta (godzina)",
+          "hl": true
+        },
+        {
+          "w": "十月",
+          "r": "じゅうがつ",
+          "en": "October",
+          "pl": "październik",
+          "hl": false
+        },
+        {
+          "w": "十歳",
+          "r": "じゅっさい／じっさい",
+          "en": "ten years old",
+          "pl": "dziesięć lat (wiek)",
+          "hl": false
+        },
+        {
+          "w": "十",
+          "r": "とお",
+          "en": "ten",
+          "pl": "dziesięć (rzeczy)",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 11,
+      "kanji": "百",
+      "on": [
+        "ヒャク",
+        "ビャク",
+        "ピャク"
+      ],
+      "kun": [],
+      "meaning": {
+        "en": "hundred",
+        "pl": "sto"
+      },
+      "strokes": 6,
+      "words": [
+        {
+          "w": "百",
+          "r": "ひゃく",
+          "en": "hundred",
+          "pl": "sto",
+          "hl": true
+        },
+        {
+          "w": "三百",
+          "r": "さんびゃく",
+          "en": "three hundred",
+          "pl": "trzysta",
+          "hl": true
+        },
+        {
+          "w": "六百",
+          "r": "ろっぴゃく",
+          "en": "six hundred",
+          "pl": "sześćset",
+          "hl": true
+        },
+        {
+          "w": "八百",
+          "r": "はっぴゃく",
+          "en": "eight hundred",
+          "pl": "osiemset",
+          "hl": true
+        }
+      ]
+    },
+    {
+      "n": 12,
+      "kanji": "千",
+      "on": [
+        "セン",
+        "ゼン"
+      ],
+      "kun": [],
+      "meaning": {
+        "en": "thousand",
+        "pl": "tysiąc"
+      },
+      "strokes": 3,
+      "words": [
+        {
+          "w": "千",
+          "r": "せん",
+          "en": "thousand",
+          "pl": "tysiąc",
+          "hl": true
+        },
+        {
+          "w": "三千",
+          "r": "さんぜん",
+          "en": "three thousand",
+          "pl": "trzy tysiące",
+          "hl": true
+        },
+        {
+          "w": "八千",
+          "r": "はっせん",
+          "en": "eight thousand",
+          "pl": "osiem tysięcy",
+          "hl": true
+        },
+        {
+          "w": "千円",
+          "r": "せんえん",
+          "en": "one thousand yen",
+          "pl": "tysiąc jenów",
+          "hl": true
+        }
+      ]
+    },
+    {
+      "n": 13,
+      "kanji": "万",
+      "on": [
+        "マン"
+      ],
+      "kun": [],
+      "meaning": {
+        "en": "ten thousand",
+        "pl": "dziesięć tysięcy"
+      },
+      "strokes": 3,
+      "words": [
+        {
+          "w": "一万",
+          "r": "いちまん",
+          "en": "ten thousand",
+          "pl": "dziesięć tysięcy",
+          "hl": true
+        },
+        {
+          "w": "十万",
+          "r": "じゅうまん",
+          "en": "one hundred thousand",
+          "pl": "sto tysięcy",
+          "hl": true
+        },
+        {
+          "w": "百万",
+          "r": "ひゃくまん",
+          "en": "one million",
+          "pl": "milion",
+          "hl": true
+        }
+      ]
+    },
+    {
+      "n": 14,
+      "kanji": "円",
+      "on": [
+        "エン"
+      ],
+      "kun": [
+        "まる"
+      ],
+      "meaning": {
+        "en": "yen; circle",
+        "pl": "jen; koło"
+      },
+      "strokes": 4,
+      "words": [
+        {
+          "w": "百円",
+          "r": "ひゃくえん",
+          "en": "one hundred yen",
+          "pl": "sto jenów",
+          "hl": true
+        },
+        {
+          "w": "円",
+          "r": "えん",
+          "en": "circle",
+          "pl": "koło",
+          "hl": false
+        },
+        {
+          "w": "円高",
+          "r": "えんだか",
+          "en": "strong yen",
+          "pl": "silny jen",
+          "hl": false
+        },
+        {
+          "w": "円い",
+          "r": "まるい",
+          "en": "round",
+          "pl": "okrągły",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 15,
+      "kanji": "時",
+      "on": [
+        "ジ"
+      ],
+      "kun": [
+        "とき"
+      ],
+      "meaning": {
+        "en": "time",
+        "pl": "czas"
+      },
+      "strokes": 10,
+      "words": [
+        {
+          "w": "一時",
+          "r": "いちじ",
+          "en": "one o'clock",
+          "pl": "pierwsza (godzina)",
+          "hl": true
+        },
+        {
+          "w": "時間",
+          "r": "じかん",
+          "en": "time; . . . hours",
+          "pl": "czas; … godzin",
+          "hl": false
+        },
+        {
+          "w": "子どもの時",
+          "r": "こどものとき",
+          "en": "in one's childhood",
+          "pl": "w dzieciństwie",
+          "hl": false
+        },
+        {
+          "w": "時々",
+          "r": "ときどき",
+          "en": "sometimes",
+          "pl": "czasami",
+          "hl": false
+        },
+        {
+          "w": "時計",
+          "r": "とけい",
+          "en": "watch; clock",
+          "pl": "zegarek; zegar",
+          "hl": false
+        }
+      ]
+    }
+  ]
+}

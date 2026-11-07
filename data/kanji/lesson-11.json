@@ -1,0 +1,233 @@
+{
+  "lesson": 11,
+  "kanji": [
+    {
+      "n": 116,
+      "kanji": "手",
+      "on": ["シュ"],
+      "kun": ["て"],
+      "meaning": { "en": "hand", "pl": "ręka" },
+      "strokes": 4,
+      "words": [
+        { "w": "手紙", "r": "てがみ", "en": "letter", "pl": "list", "hl": true },
+        { "w": "歌手", "r": "かしゅ", "en": "singer", "pl": "piosenkarz", "hl": true },
+        { "w": "手", "r": "て", "en": "hand", "pl": "ręka", "hl": false },
+        { "w": "手話", "r": "しゅわ", "en": "sign language", "pl": "język migowy", "hl": false },
+        { "w": "上手な", "r": "じょうずな", "en": "good at", "pl": "dobry w czymś", "hl": false }
+      ]
+    },
+    {
+      "n": 117,
+      "kanji": "紙",
+      "on": ["シ"],
+      "kun": ["がみ", "かみ"],
+      "meaning": { "en": "paper", "pl": "papier" },
+      "strokes": 10,
+      "words": [
+        { "w": "手紙", "r": "てがみ", "en": "letter", "pl": "list", "hl": true },
+        { "w": "紙", "r": "かみ", "en": "paper", "pl": "papier", "hl": false },
+        { "w": "和紙", "r": "わし", "en": "Japanese paper", "pl": "papier japoński", "hl": false },
+        { "w": "表紙", "r": "ひょうし", "en": "cover page", "pl": "okładka", "hl": false },
+        { "w": "折り紙", "r": "おりがみ", "en": "origami", "pl": "origami", "hl": false }
+      ]
+    },
+    {
+      "n": 118,
+      "kanji": "好",
+      "on": ["コウ"],
+      "kun": ["す", "この"],
+      "meaning": { "en": "favorite; to like", "pl": "ulubiony; lubić" },
+      "strokes": 6,
+      "words": [
+        { "w": "好きな", "r": "すきな", "en": "to like", "pl": "lubić", "hl": true },
+        { "w": "大好きな", "r": "だいすきな", "en": "to love", "pl": "uwielbiać", "hl": true },
+        { "w": "好意", "r": "こうい", "en": "goodwill", "pl": "życzliwość", "hl": false },
+        { "w": "好み", "r": "このみ", "en": "liking; taste", "pl": "upodobanie; gust", "hl": false },
+        { "w": "好物", "r": "こうぶつ", "en": "favorite food", "pl": "ulubione jedzenie", "hl": false }
+      ]
+    },
+    {
+      "n": 119,
+      "kanji": "近",
+      "on": ["キン"],
+      "kun": ["ちか"],
+      "meaning": { "en": "near", "pl": "blisko" },
+      "strokes": 7,
+      "words": [
+        { "w": "近く", "r": "ちかく", "en": "near; nearby", "pl": "blisko; w pobliżu", "hl": true },
+        { "w": "近所", "r": "きんじょ", "en": "neighborhood", "pl": "sąsiedztwo", "hl": true },
+        { "w": "最近", "r": "さいきん", "en": "recently", "pl": "ostatnio", "hl": false },
+        { "w": "中近東", "r": "ちゅうきんとう", "en": "the Middle and Near East", "pl": "Bliski i Środkowy Wschód", "hl": false }
+      ]
+    },
+    {
+      "n": 120,
+      "kanji": "明",
+      "on": ["メイ"],
+      "kun": ["あか"],
+      "meaning": { "en": "bright", "pl": "jasny" },
+      "strokes": 8,
+      "words": [
+        { "w": "明るい", "r": "あかるい", "en": "cheerful; bright", "pl": "pogodny; jasny", "hl": true },
+        { "w": "明日", "r": "あした", "en": "tomorrow", "pl": "jutro", "hl": false },
+        { "w": "説明", "r": "せつめい", "en": "explanation", "pl": "wyjaśnienie", "hl": false },
+        { "w": "発明", "r": "はつめい", "en": "invention", "pl": "wynalazek", "hl": false },
+        { "w": "文明", "r": "ぶんめい", "en": "civilization", "pl": "cywilizacja", "hl": false }
+      ]
+    },
+    {
+      "n": 121,
+      "kanji": "病",
+      "on": ["ビョウ"],
+      "kun": [],
+      "meaning": { "en": "ill; sick", "pl": "chory; choroba" },
+      "strokes": 10,
+      "words": [
+        { "w": "病院", "r": "びょういん", "en": "hospital", "pl": "szpital", "hl": true },
+        { "w": "病気", "r": "びょうき", "en": "illness", "pl": "choroba", "hl": true },
+        { "w": "重病", "r": "じゅうびょう", "en": "serious illness", "pl": "ciężka choroba", "hl": false },
+        { "w": "急病", "r": "きゅうびょう", "en": "sudden illness", "pl": "nagła choroba", "hl": false }
+      ]
+    },
+    {
+      "n": 122,
+      "kanji": "院",
+      "on": ["イン"],
+      "kun": [],
+      "meaning": { "en": "institution", "pl": "instytucja" },
+      "strokes": 10,
+      "words": [
+        { "w": "病院", "r": "びょういん", "en": "hospital", "pl": "szpital", "hl": true },
+        { "w": "大学院", "r": "だいがくいん", "en": "graduate school", "pl": "studia podyplomowe", "hl": false },
+        { "w": "美容院", "r": "びよういん", "en": "beauty parlor", "pl": "salon fryzjerski", "hl": false }
+      ]
+    },
+    {
+      "n": 123,
+      "kanji": "映",
+      "on": ["エイ"],
+      "kun": ["うつ"],
+      "meaning": { "en": "to reflect", "pl": "odbijać (się)" },
+      "strokes": 9,
+      "words": [
+        { "w": "映画", "r": "えいが", "en": "movie", "pl": "film", "hl": true },
+        { "w": "映画館", "r": "えいがかん", "en": "movie theater", "pl": "kino", "hl": false },
+        { "w": "映る", "r": "うつる", "en": "to be reflected", "pl": "odbijać się", "hl": false }
+      ]
+    },
+    {
+      "n": 124,
+      "kanji": "画",
+      "on": ["ガ", "カク"],
+      "kun": [],
+      "meaning": { "en": "picture", "pl": "obraz" },
+      "strokes": 8,
+      "words": [
+        { "w": "映画", "r": "えいが", "en": "movie", "pl": "film", "hl": true },
+        { "w": "画家", "r": "がか", "en": "painter", "pl": "malarz", "hl": false },
+        { "w": "計画", "r": "けいかく", "en": "plan", "pl": "plan", "hl": false },
+        { "w": "漫画", "r": "まんが", "en": "comic", "pl": "komiks", "hl": false }
+      ]
+    },
+    {
+      "n": 125,
+      "kanji": "歌",
+      "on": ["カ"],
+      "kun": ["うた"],
+      "meaning": { "en": "to sing", "pl": "śpiewać" },
+      "strokes": 14,
+      "words": [
+        { "w": "歌う", "r": "うたう", "en": "to sing", "pl": "śpiewać", "hl": true },
+        { "w": "歌", "r": "うた", "en": "song", "pl": "piosenka", "hl": true },
+        { "w": "歌手", "r": "かしゅ", "en": "singer", "pl": "piosenkarz", "hl": true },
+        { "w": "国歌", "r": "こっか", "en": "national anthem", "pl": "hymn narodowy", "hl": false },
+        { "w": "歌舞伎", "r": "かぶき", "en": "Kabuki", "pl": "kabuki", "hl": false },
+        { "w": "歌詞", "r": "かし", "en": "lyrics", "pl": "tekst piosenki", "hl": false }
+      ]
+    },
+    {
+      "n": 126,
+      "kanji": "市",
+      "on": ["シ"],
+      "kun": ["いち"],
+      "meaning": { "en": "city", "pl": "miasto" },
+      "strokes": 5,
+      "words": [
+        { "w": "川口市", "r": "かわぐちし", "en": "Kawaguchi City", "pl": "miasto Kawaguchi", "hl": true },
+        { "w": "市役所", "r": "しやくしょ", "en": "city hall", "pl": "ratusz", "hl": false },
+        { "w": "市長", "r": "しちょう", "en": "mayor", "pl": "burmistrz", "hl": false },
+        { "w": "市場", "r": "いちば", "en": "market", "pl": "targ", "hl": false }
+      ]
+    },
+    {
+      "n": 127,
+      "kanji": "所",
+      "on": ["ジョ", "ショ"],
+      "kun": ["ところ", "どころ"],
+      "meaning": { "en": "place", "pl": "miejsce" },
+      "strokes": 8,
+      "words": [
+        { "w": "いろいろな所", "r": "いろいろなところ", "en": "various places", "pl": "różne miejsca", "hl": true },
+        { "w": "近所", "r": "きんじょ", "en": "neighborhood", "pl": "sąsiedztwo", "hl": true },
+        { "w": "台所", "r": "だいどころ", "en": "kitchen", "pl": "kuchnia", "hl": false },
+        { "w": "住所", "r": "じゅうしょ", "en": "address", "pl": "adres", "hl": false }
+      ]
+    },
+    {
+      "n": 128,
+      "kanji": "勉",
+      "on": ["ベン"],
+      "kun": ["つと"],
+      "meaning": { "en": "to make efforts", "pl": "starać się" },
+      "strokes": 10,
+      "words": [
+        { "w": "勉強する", "r": "べんきょうする", "en": "to study", "pl": "uczyć się", "hl": true },
+        { "w": "勉める", "r": "つとめる", "en": "to try hard", "pl": "usilnie się starać", "hl": false },
+        { "w": "勤勉な", "r": "きんべんな", "en": "diligent", "pl": "pracowity", "hl": false }
+      ]
+    },
+    {
+      "n": 129,
+      "kanji": "強",
+      "on": ["キョウ", "ゴウ"],
+      "kun": ["つよ"],
+      "meaning": { "en": "strong", "pl": "silny" },
+      "strokes": 11,
+      "words": [
+        { "w": "勉強する", "r": "べんきょうする", "en": "to study", "pl": "uczyć się", "hl": true },
+        { "w": "強い", "r": "つよい", "en": "strong", "pl": "silny", "hl": false },
+        { "w": "強情な", "r": "ごうじょうな", "en": "obstinate", "pl": "uparty", "hl": false },
+        { "w": "強盗", "r": "ごうとう", "en": "robbery", "pl": "rozbój", "hl": false },
+        { "w": "強力な", "r": "きょうりょくな", "en": "powerful", "pl": "potężny", "hl": false }
+      ]
+    },
+    {
+      "n": 130,
+      "kanji": "有",
+      "on": ["ユウ"],
+      "kun": ["あ"],
+      "meaning": { "en": "to exist", "pl": "istnieć" },
+      "strokes": 6,
+      "words": [
+        { "w": "有名な", "r": "ゆうめいな", "en": "famous", "pl": "sławny", "hl": true },
+        { "w": "有料", "r": "ゆうりょう", "en": "toll; fee", "pl": "płatny; opłata", "hl": false },
+        { "w": "有る", "r": "ある", "en": "to exist", "pl": "istnieć; być", "hl": false },
+        { "w": "有能な", "r": "ゆうのうな", "en": "talented", "pl": "utalentowany", "hl": false }
+      ]
+    },
+    {
+      "n": 131,
+      "kanji": "旅",
+      "on": ["リョ"],
+      "kun": ["たび"],
+      "meaning": { "en": "travel", "pl": "podróż" },
+      "strokes": 10,
+      "words": [
+        { "w": "旅行", "r": "りょこう", "en": "travel", "pl": "podróż", "hl": true },
+        { "w": "旅館", "r": "りょかん", "en": "Japanese inn", "pl": "japońska gospoda", "hl": false },
+        { "w": "一人旅", "r": "ひとりたび", "en": "traveling alone", "pl": "samotna podróż", "hl": false },
+        { "w": "旅券", "r": "りょけん", "en": "passport", "pl": "paszport", "hl": false }
+      ]
+    }
+  ]
+}

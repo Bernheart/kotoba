@@ -1,0 +1,586 @@
+{
+  "lesson": 10,
+  "kanji": [
+    {
+      "n": 102,
+      "kanji": "住",
+      "on": [
+        "ジュウ"
+      ],
+      "kun": [
+        "す"
+      ],
+      "meaning": {
+        "en": "to live",
+        "pl": "mieszkać"
+      },
+      "strokes": 7,
+      "words": [
+        {
+          "w": "住む",
+          "r": "すむ",
+          "en": "to live",
+          "pl": "mieszkać",
+          "hl": true
+        },
+        {
+          "w": "住所",
+          "r": "じゅうしょ",
+          "en": "address",
+          "pl": "adres",
+          "hl": false
+        },
+        {
+          "w": "移住する",
+          "r": "いじゅうする",
+          "en": "to immigrate",
+          "pl": "emigrować; przesiedlać się",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 103,
+      "kanji": "正",
+      "on": [
+        "ショウ",
+        "セイ"
+      ],
+      "kun": [
+        "ただ"
+      ],
+      "meaning": {
+        "en": "right",
+        "pl": "prawidłowy"
+      },
+      "strokes": 5,
+      "words": [
+        {
+          "w": "お正月",
+          "r": "おしょうがつ",
+          "en": "New Year",
+          "pl": "Nowy Rok",
+          "hl": true
+        },
+        {
+          "w": "正しい",
+          "r": "ただしい",
+          "en": "right",
+          "pl": "poprawny; słuszny",
+          "hl": false
+        },
+        {
+          "w": "正午",
+          "r": "しょうご",
+          "en": "noon",
+          "pl": "południe",
+          "hl": false
+        },
+        {
+          "w": "正解",
+          "r": "せいかい",
+          "en": "correct answer",
+          "pl": "poprawna odpowiedź",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 104,
+      "kanji": "年",
+      "on": [
+        "ネン"
+      ],
+      "kun": [
+        "とし"
+      ],
+      "meaning": {
+        "en": "year",
+        "pl": "rok"
+      },
+      "strokes": 6,
+      "words": [
+        {
+          "w": "三年生",
+          "r": "さんねんせい",
+          "en": "third-year student",
+          "pl": "student trzeciego roku",
+          "hl": true
+        },
+        {
+          "w": "来年",
+          "r": "らいねん",
+          "en": "next year",
+          "pl": "przyszły rok",
+          "hl": true
+        },
+        {
+          "w": "今年",
+          "r": "ことし",
+          "en": "this year",
+          "pl": "ten rok",
+          "hl": true
+        },
+        {
+          "w": "年",
+          "r": "とし",
+          "en": "year",
+          "pl": "rok",
+          "hl": true
+        }
+      ]
+    },
+    {
+      "n": 105,
+      "kanji": "売",
+      "on": [
+        "バイ"
+      ],
+      "kun": [
+        "う"
+      ],
+      "meaning": {
+        "en": "to sell",
+        "pl": "sprzedawać"
+      },
+      "strokes": 7,
+      "words": [
+        {
+          "w": "売る",
+          "r": "うる",
+          "en": "to sell",
+          "pl": "sprzedawać",
+          "hl": true
+        },
+        {
+          "w": "売店",
+          "r": "ばいてん",
+          "en": "stand; stall",
+          "pl": "kiosk; stoisko",
+          "hl": false
+        },
+        {
+          "w": "自動販売機",
+          "r": "じどうはんばいき",
+          "en": "vending machine",
+          "pl": "automat sprzedający",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 106,
+      "kanji": "買",
+      "on": [
+        "バイ"
+      ],
+      "kun": [
+        "か"
+      ],
+      "meaning": {
+        "en": "to buy",
+        "pl": "kupować"
+      },
+      "strokes": 12,
+      "words": [
+        {
+          "w": "買う",
+          "r": "かう",
+          "en": "to buy",
+          "pl": "kupować",
+          "hl": true
+        },
+        {
+          "w": "買い物",
+          "r": "かいもの",
+          "en": "shopping",
+          "pl": "zakupy",
+          "hl": false
+        },
+        {
+          "w": "売買",
+          "r": "ばいばい",
+          "en": "selling and buying",
+          "pl": "handel; kupno-sprzedaż",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 107,
+      "kanji": "町",
+      "on": [
+        "チョウ"
+      ],
+      "kun": [
+        "まち"
+      ],
+      "meaning": {
+        "en": "town",
+        "pl": "miasteczko"
+      },
+      "strokes": 7,
+      "words": [
+        {
+          "w": "町",
+          "r": "まち",
+          "en": "town",
+          "pl": "miasteczko",
+          "hl": true
+        },
+        {
+          "w": "北山町",
+          "r": "きたやまちょう",
+          "en": "Kitayama Town",
+          "pl": "miasteczko Kitayama",
+          "hl": false
+        },
+        {
+          "w": "町長",
+          "r": "ちょうちょう",
+          "en": "mayor of a town",
+          "pl": "burmistrz miasteczka",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 108,
+      "kanji": "長",
+      "on": [
+        "チョウ"
+      ],
+      "kun": [
+        "なが"
+      ],
+      "meaning": {
+        "en": "long",
+        "pl": "długi"
+      },
+      "strokes": 8,
+      "words": [
+        {
+          "w": "長い",
+          "r": "ながい",
+          "en": "long",
+          "pl": "długi",
+          "hl": true
+        },
+        {
+          "w": "長男",
+          "r": "ちょうなん",
+          "en": "the eldest son",
+          "pl": "najstarszy syn",
+          "hl": false
+        },
+        {
+          "w": "社長",
+          "r": "しゃちょう",
+          "en": "company president",
+          "pl": "prezes firmy",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 109,
+      "kanji": "道",
+      "on": [
+        "ドウ"
+      ],
+      "kun": [
+        "みち"
+      ],
+      "meaning": {
+        "en": "way",
+        "pl": "droga"
+      },
+      "strokes": 12,
+      "words": [
+        {
+          "w": "道",
+          "r": "みち",
+          "en": "way; road",
+          "pl": "droga",
+          "hl": true
+        },
+        {
+          "w": "書道",
+          "r": "しょどう",
+          "en": "calligraphy",
+          "pl": "kaligrafia",
+          "hl": false
+        },
+        {
+          "w": "柔道",
+          "r": "じゅうどう",
+          "en": "judo",
+          "pl": "judo",
+          "hl": false
+        },
+        {
+          "w": "北海道",
+          "r": "ほっかいどう",
+          "en": "Hokkaido",
+          "pl": "Hokkaido",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 110,
+      "kanji": "雪",
+      "on": [
+        "セツ"
+      ],
+      "kun": [
+        "ゆき"
+      ],
+      "meaning": {
+        "en": "snow",
+        "pl": "śnieg"
+      },
+      "strokes": 11,
+      "words": [
+        {
+          "w": "雪",
+          "r": "ゆき",
+          "en": "snow",
+          "pl": "śnieg",
+          "hl": true
+        },
+        {
+          "w": "新雪",
+          "r": "しんせつ",
+          "en": "new snow",
+          "pl": "świeży śnieg",
+          "hl": false
+        },
+        {
+          "w": "雪だるま",
+          "r": "ゆきだるま",
+          "en": "snowman",
+          "pl": "bałwan",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 111,
+      "kanji": "立",
+      "on": [
+        "リツ"
+      ],
+      "kun": [
+        "た"
+      ],
+      "meaning": {
+        "en": "to stand",
+        "pl": "stać"
+      },
+      "strokes": 5,
+      "words": [
+        {
+          "w": "立つ",
+          "r": "たつ",
+          "en": "to stand",
+          "pl": "stać; wstawać",
+          "hl": true
+        },
+        {
+          "w": "国立大学",
+          "r": "こくりつだいがく",
+          "en": "national university",
+          "pl": "uniwersytet państwowy",
+          "hl": false
+        },
+        {
+          "w": "私立高校",
+          "r": "しりつこうこう",
+          "en": "private high school",
+          "pl": "prywatne liceum",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 112,
+      "kanji": "自",
+      "on": [
+        "ジ"
+      ],
+      "kun": [],
+      "meaning": {
+        "en": "self",
+        "pl": "sam; siebie"
+      },
+      "strokes": 6,
+      "words": [
+        {
+          "w": "自分",
+          "r": "じぶん",
+          "en": "oneself",
+          "pl": "siebie; sam",
+          "hl": true
+        },
+        {
+          "w": "自動車",
+          "r": "じどうしゃ",
+          "en": "automobile",
+          "pl": "samochód",
+          "hl": false
+        },
+        {
+          "w": "自転車",
+          "r": "じてんしゃ",
+          "en": "bicycle",
+          "pl": "rower",
+          "hl": false
+        },
+        {
+          "w": "自由",
+          "r": "じゆう",
+          "en": "freedom",
+          "pl": "wolność",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 113,
+      "kanji": "夜",
+      "on": [
+        "ヤ"
+      ],
+      "kun": [
+        "よる",
+        "よ"
+      ],
+      "meaning": {
+        "en": "night",
+        "pl": "noc"
+      },
+      "strokes": 8,
+      "words": [
+        {
+          "w": "夜",
+          "r": "よる",
+          "en": "night",
+          "pl": "noc",
+          "hl": true
+        },
+        {
+          "w": "夜中",
+          "r": "よなか",
+          "en": "middle of night",
+          "pl": "środek nocy",
+          "hl": false
+        },
+        {
+          "w": "今夜",
+          "r": "こんや",
+          "en": "tonight",
+          "pl": "dziś wieczorem",
+          "hl": false
+        },
+        {
+          "w": "夜明け",
+          "r": "よあけ",
+          "en": "dawn",
+          "pl": "świt",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 114,
+      "kanji": "朝",
+      "on": [
+        "チョウ"
+      ],
+      "kun": [
+        "あさ"
+      ],
+      "meaning": {
+        "en": "morning",
+        "pl": "rano"
+      },
+      "strokes": 12,
+      "words": [
+        {
+          "w": "朝",
+          "r": "あさ",
+          "en": "morning",
+          "pl": "rano; poranek",
+          "hl": true
+        },
+        {
+          "w": "今朝",
+          "r": "けさ",
+          "en": "this morning",
+          "pl": "dziś rano",
+          "hl": true
+        },
+        {
+          "w": "朝食",
+          "r": "ちょうしょく",
+          "en": "breakfast",
+          "pl": "śniadanie",
+          "hl": false
+        },
+        {
+          "w": "毎朝",
+          "r": "まいあさ",
+          "en": "every morning",
+          "pl": "każdego ranka",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 115,
+      "kanji": "持",
+      "on": [
+        "ジ"
+      ],
+      "kun": [
+        "も"
+      ],
+      "meaning": {
+        "en": "to hold",
+        "pl": "trzymać"
+      },
+      "strokes": 9,
+      "words": [
+        {
+          "w": "持つ",
+          "r": "もつ",
+          "en": "to carry; to hold",
+          "pl": "nieść; trzymać",
+          "hl": true
+        },
+        {
+          "w": "持ってくる",
+          "r": "もってくる",
+          "en": "to bring",
+          "pl": "przynosić",
+          "hl": true
+        },
+        {
+          "w": "所持品",
+          "r": "しょじひん",
+          "en": "belongings",
+          "pl": "rzeczy osobiste",
+          "hl": false
+        },
+        {
+          "w": "気持ち",
+          "r": "きもち",
+          "en": "feeling",
+          "pl": "uczucie; samopoczucie",
+          "hl": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,770 @@
+{
+  "lesson": 6,
+  "kanji": [
+    {
+      "n": 44,
+      "kanji": "東",
+      "on": [
+        "トウ"
+      ],
+      "kun": [
+        "ひがし"
+      ],
+      "meaning": {
+        "en": "east",
+        "pl": "wschód"
+      },
+      "strokes": 8,
+      "words": [
+        {
+          "w": "東",
+          "r": "ひがし",
+          "en": "east",
+          "pl": "wschód",
+          "hl": true
+        },
+        {
+          "w": "東口",
+          "r": "ひがしぐち",
+          "en": "east exit",
+          "pl": "wyjście wschodnie",
+          "hl": true
+        },
+        {
+          "w": "東京",
+          "r": "とうきょう",
+          "en": "Tokyo",
+          "pl": "Tokio",
+          "hl": false
+        },
+        {
+          "w": "関東",
+          "r": "かんとう",
+          "en": "Kanto area",
+          "pl": "region Kantō",
+          "hl": false
+        },
+        {
+          "w": "東洋",
+          "r": "とうよう",
+          "en": "the East",
+          "pl": "Wschód (Orient)",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 45,
+      "kanji": "西",
+      "on": [
+        "セイ",
+        "サイ"
+      ],
+      "kun": [
+        "にし"
+      ],
+      "meaning": {
+        "en": "west",
+        "pl": "zachód"
+      },
+      "strokes": 6,
+      "words": [
+        {
+          "w": "西",
+          "r": "にし",
+          "en": "west",
+          "pl": "zachód",
+          "hl": true
+        },
+        {
+          "w": "西口",
+          "r": "にしぐち",
+          "en": "west exit",
+          "pl": "wyjście zachodnie",
+          "hl": true
+        },
+        {
+          "w": "北西",
+          "r": "ほくせい",
+          "en": "northwest",
+          "pl": "północny zachód",
+          "hl": false
+        },
+        {
+          "w": "関西",
+          "r": "かんさい",
+          "en": "Kansai area",
+          "pl": "region Kansai",
+          "hl": false
+        },
+        {
+          "w": "西洋",
+          "r": "せいよう",
+          "en": "the West",
+          "pl": "Zachód (kraje zachodnie)",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 46,
+      "kanji": "南",
+      "on": [
+        "ナン"
+      ],
+      "kun": [
+        "みなみ"
+      ],
+      "meaning": {
+        "en": "south",
+        "pl": "południe"
+      },
+      "strokes": 9,
+      "words": [
+        {
+          "w": "南",
+          "r": "みなみ",
+          "en": "south",
+          "pl": "południe",
+          "hl": true
+        },
+        {
+          "w": "南口",
+          "r": "みなみぐち",
+          "en": "south exit",
+          "pl": "wyjście południowe",
+          "hl": true
+        },
+        {
+          "w": "南東",
+          "r": "なんとう",
+          "en": "southeast",
+          "pl": "południowy wschód",
+          "hl": false
+        },
+        {
+          "w": "南極",
+          "r": "なんきょく",
+          "en": "Antarctica",
+          "pl": "Antarktyda",
+          "hl": false
+        },
+        {
+          "w": "東南アジア",
+          "r": "とうなんアジア",
+          "en": "Southeast Asia",
+          "pl": "Azja Południowo-Wschodnia",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 47,
+      "kanji": "北",
+      "on": [
+        "ホク",
+        "ホッ"
+      ],
+      "kun": [
+        "きた"
+      ],
+      "meaning": {
+        "en": "north",
+        "pl": "północ"
+      },
+      "strokes": 5,
+      "words": [
+        {
+          "w": "北",
+          "r": "きた",
+          "en": "north",
+          "pl": "północ",
+          "hl": true
+        },
+        {
+          "w": "北口",
+          "r": "きたぐち",
+          "en": "north exit",
+          "pl": "wyjście północne",
+          "hl": true
+        },
+        {
+          "w": "東北",
+          "r": "とうほく",
+          "en": "Tohoku area",
+          "pl": "region Tōhoku",
+          "hl": false
+        },
+        {
+          "w": "北極",
+          "r": "ほっきょく",
+          "en": "North Pole",
+          "pl": "biegun północny",
+          "hl": false
+        },
+        {
+          "w": "北海道",
+          "r": "ほっかいどう",
+          "en": "Hokkaido",
+          "pl": "Hokkaido",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 48,
+      "kanji": "口",
+      "on": [
+        "コウ"
+      ],
+      "kun": [
+        "ぐち",
+        "くち"
+      ],
+      "meaning": {
+        "en": "mouth",
+        "pl": "usta"
+      },
+      "strokes": 3,
+      "words": [
+        {
+          "w": "北口",
+          "r": "きたぐち",
+          "en": "north exit",
+          "pl": "wyjście północne",
+          "hl": true
+        },
+        {
+          "w": "口",
+          "r": "くち",
+          "en": "mouth",
+          "pl": "usta",
+          "hl": false
+        },
+        {
+          "w": "人口",
+          "r": "じんこう",
+          "en": "population",
+          "pl": "liczba ludności",
+          "hl": false
+        },
+        {
+          "w": "入り口／入口",
+          "r": "いりぐち",
+          "en": "entrance",
+          "pl": "wejście",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 49,
+      "kanji": "出",
+      "on": [
+        "シュッ",
+        "シュツ"
+      ],
+      "kun": [
+        "で",
+        "だ"
+      ],
+      "meaning": {
+        "en": "to exit",
+        "pl": "wychodzić"
+      },
+      "strokes": 5,
+      "words": [
+        {
+          "w": "出る",
+          "r": "でる",
+          "en": "to exit",
+          "pl": "wychodzić",
+          "hl": true
+        },
+        {
+          "w": "出口",
+          "r": "でぐち",
+          "en": "exit",
+          "pl": "wyjście",
+          "hl": true
+        },
+        {
+          "w": "出かける",
+          "r": "でかける",
+          "en": "to go out",
+          "pl": "wychodzić (z domu)",
+          "hl": true
+        },
+        {
+          "w": "出す",
+          "r": "だす",
+          "en": "to take something out",
+          "pl": "wyjmować, wysyłać",
+          "hl": false
+        },
+        {
+          "w": "出席",
+          "r": "しゅっせき",
+          "en": "attendance",
+          "pl": "obecność",
+          "hl": false
+        },
+        {
+          "w": "輸出",
+          "r": "ゆしゅつ",
+          "en": "export",
+          "pl": "eksport",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 50,
+      "kanji": "右",
+      "on": [
+        "ウ",
+        "ユウ"
+      ],
+      "kun": [
+        "みぎ"
+      ],
+      "meaning": {
+        "en": "right",
+        "pl": "prawo, prawy"
+      },
+      "strokes": 5,
+      "words": [
+        {
+          "w": "右",
+          "r": "みぎ",
+          "en": "right",
+          "pl": "prawo, prawa strona",
+          "hl": true
+        },
+        {
+          "w": "右折",
+          "r": "うせつ",
+          "en": "right turn",
+          "pl": "skręt w prawo",
+          "hl": false
+        },
+        {
+          "w": "左右",
+          "r": "さゆう",
+          "en": "right and left",
+          "pl": "lewo i prawo",
+          "hl": false
+        },
+        {
+          "w": "右手",
+          "r": "みぎて",
+          "en": "right hand",
+          "pl": "prawa ręka",
+          "hl": false
+        },
+        {
+          "w": "右側",
+          "r": "みぎがわ",
+          "en": "right side",
+          "pl": "prawa strona",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 51,
+      "kanji": "左",
+      "on": [
+        "サ"
+      ],
+      "kun": [
+        "ひだり"
+      ],
+      "meaning": {
+        "en": "left",
+        "pl": "lewo, lewy"
+      },
+      "strokes": 5,
+      "words": [
+        {
+          "w": "左",
+          "r": "ひだり",
+          "en": "left",
+          "pl": "lewo, lewa strona",
+          "hl": true
+        },
+        {
+          "w": "左折",
+          "r": "させつ",
+          "en": "left turn",
+          "pl": "skręt w lewo",
+          "hl": false
+        },
+        {
+          "w": "左手",
+          "r": "ひだりて",
+          "en": "left hand",
+          "pl": "lewa ręka",
+          "hl": false
+        },
+        {
+          "w": "左利き",
+          "r": "ひだりきき",
+          "en": "left-handed",
+          "pl": "leworęczny",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 52,
+      "kanji": "分",
+      "on": [
+        "フン",
+        "プン",
+        "ブン"
+      ],
+      "kun": [
+        "わ"
+      ],
+      "meaning": {
+        "en": "minute; to divide",
+        "pl": "minuta; dzielić"
+      },
+      "strokes": 4,
+      "words": [
+        {
+          "w": "五分",
+          "r": "ごふん",
+          "en": "five minutes",
+          "pl": "pięć minut",
+          "hl": true
+        },
+        {
+          "w": "十分",
+          "r": "じゅっぷん／じっぷん",
+          "en": "ten minutes",
+          "pl": "dziesięć minut",
+          "hl": true
+        },
+        {
+          "w": "自分",
+          "r": "じぶん",
+          "en": "oneself",
+          "pl": "siebie, sam",
+          "hl": false
+        },
+        {
+          "w": "分ける",
+          "r": "わける",
+          "en": "to divide",
+          "pl": "dzielić",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 53,
+      "kanji": "先",
+      "on": [
+        "セン"
+      ],
+      "kun": [
+        "さき"
+      ],
+      "meaning": {
+        "en": "ahead",
+        "pl": "przód, wcześniej"
+      },
+      "strokes": 6,
+      "words": [
+        {
+          "w": "先生",
+          "r": "せんせい",
+          "en": "teacher",
+          "pl": "nauczyciel",
+          "hl": true
+        },
+        {
+          "w": "先週",
+          "r": "せんしゅう",
+          "en": "last week",
+          "pl": "w zeszłym tygodniu",
+          "hl": false
+        },
+        {
+          "w": "先に",
+          "r": "さきに",
+          "en": "ahead",
+          "pl": "wcześniej, najpierw",
+          "hl": false
+        },
+        {
+          "w": "先月",
+          "r": "せんげつ",
+          "en": "last month",
+          "pl": "w zeszłym miesiącu",
+          "hl": false
+        },
+        {
+          "w": "先輩",
+          "r": "せんぱい",
+          "en": "senior member",
+          "pl": "starszy kolega (senpai)",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 54,
+      "kanji": "生",
+      "on": [
+        "セイ",
+        "ショウ"
+      ],
+      "kun": [
+        "う"
+      ],
+      "meaning": {
+        "en": "birth",
+        "pl": "narodziny, życie"
+      },
+      "strokes": 5,
+      "words": [
+        {
+          "w": "学生",
+          "r": "がくせい",
+          "en": "student",
+          "pl": "student",
+          "hl": true
+        },
+        {
+          "w": "先生",
+          "r": "せんせい",
+          "en": "teacher",
+          "pl": "nauczyciel",
+          "hl": true
+        },
+        {
+          "w": "生まれる",
+          "r": "うまれる",
+          "en": "to be born",
+          "pl": "urodzić się",
+          "hl": false
+        },
+        {
+          "w": "一生に一度",
+          "r": "いっしょうにいちど",
+          "en": "once in a life time",
+          "pl": "raz w życiu",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 55,
+      "kanji": "大",
+      "on": [
+        "ダイ",
+        "タイ"
+      ],
+      "kun": [
+        "おお"
+      ],
+      "meaning": {
+        "en": "big",
+        "pl": "duży"
+      },
+      "strokes": 3,
+      "words": [
+        {
+          "w": "大学生",
+          "r": "だいがくせい",
+          "en": "college student",
+          "pl": "student (uczelni)",
+          "hl": true
+        },
+        {
+          "w": "大きい",
+          "r": "おおきい",
+          "en": "big",
+          "pl": "duży",
+          "hl": true
+        },
+        {
+          "w": "大変な",
+          "r": "たいへんな",
+          "en": "tough",
+          "pl": "ciężki, trudny",
+          "hl": false
+        },
+        {
+          "w": "大人",
+          "r": "おとな",
+          "en": "adult",
+          "pl": "dorosły",
+          "hl": false
+        },
+        {
+          "w": "大使館",
+          "r": "たいしかん",
+          "en": "embassy",
+          "pl": "ambasada",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 56,
+      "kanji": "学",
+      "on": [
+        "ガク",
+        "ガッ"
+      ],
+      "kun": [
+        "まな"
+      ],
+      "meaning": {
+        "en": "learning",
+        "pl": "nauka"
+      },
+      "strokes": 8,
+      "words": [
+        {
+          "w": "大学",
+          "r": "だいがく",
+          "en": "university",
+          "pl": "uniwersytet",
+          "hl": true
+        },
+        {
+          "w": "学生",
+          "r": "がくせい",
+          "en": "student",
+          "pl": "student",
+          "hl": true
+        },
+        {
+          "w": "学校",
+          "r": "がっこう",
+          "en": "school",
+          "pl": "szkoła",
+          "hl": false
+        },
+        {
+          "w": "学ぶ",
+          "r": "まなぶ",
+          "en": "to study",
+          "pl": "uczyć się",
+          "hl": false
+        },
+        {
+          "w": "学部",
+          "r": "がくぶ",
+          "en": "department; faculty",
+          "pl": "wydział",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 57,
+      "kanji": "外",
+      "on": [
+        "ガイ"
+      ],
+      "kun": [
+        "そと"
+      ],
+      "meaning": {
+        "en": "outside",
+        "pl": "zewnątrz"
+      },
+      "strokes": 5,
+      "words": [
+        {
+          "w": "外国",
+          "r": "がいこく",
+          "en": "foreign country",
+          "pl": "zagranica, obcy kraj",
+          "hl": true
+        },
+        {
+          "w": "外国人",
+          "r": "がいこくじん",
+          "en": "foreigner",
+          "pl": "obcokrajowiec",
+          "hl": true
+        },
+        {
+          "w": "外",
+          "r": "そと",
+          "en": "outside",
+          "pl": "na zewnątrz",
+          "hl": false
+        },
+        {
+          "w": "海外",
+          "r": "かいがい",
+          "en": "overseas",
+          "pl": "za granicą",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 58,
+      "kanji": "国",
+      "on": [
+        "コク",
+        "ゴク",
+        "コッ"
+      ],
+      "kun": [
+        "くに"
+      ],
+      "meaning": {
+        "en": "country",
+        "pl": "kraj"
+      },
+      "strokes": 8,
+      "words": [
+        {
+          "w": "外国",
+          "r": "がいこく",
+          "en": "foreign country",
+          "pl": "zagranica, obcy kraj",
+          "hl": true
+        },
+        {
+          "w": "中国",
+          "r": "ちゅうごく",
+          "en": "China",
+          "pl": "Chiny",
+          "hl": true
+        },
+        {
+          "w": "国",
+          "r": "くに",
+          "en": "country",
+          "pl": "kraj",
+          "hl": false
+        },
+        {
+          "w": "韓国",
+          "r": "かんこく",
+          "en": "South Korea",
+          "pl": "Korea Południowa",
+          "hl": false
+        },
+        {
+          "w": "国会",
+          "r": "こっかい",
+          "en": "the Diet",
+          "pl": "parlament (Japonii)",
+          "hl": false
+        }
+      ]
+    }
+  ]
+}

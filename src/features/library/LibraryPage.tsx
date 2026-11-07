@@ -1,5 +1,5 @@
 import { memo, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
-import { useLocation, useSearch } from 'wouter'
+import { Link, useLocation, useSearch } from 'wouter'
 import { WordJP } from '../../components/Furigana'
 import { IconClose, IconFilter, IconPlus, IconSearch, IconUpload } from '../../components/icons'
 import { Page } from '../../components/Page'
@@ -167,6 +167,8 @@ export function LibraryPage() {
           ))}
         </div>
       </div>
+
+      {!q && <KanjiSection />}
 
       {shown.length === 0 ? (
         <div className="mt-16 text-center">
@@ -383,5 +385,33 @@ function FilterSheet({
         </div>
       </div>
     </Sheet>
+  )
+}
+
+/** Genki kanji lessons (kept here so the word list doesn't load the kanji data). */
+const KANJI_LESSONS = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+
+/** Entry to the kanji grid: one chip per lesson. */
+function KanjiSection() {
+  const t = useT()
+  return (
+    <section className="mt-2 mb-5 rounded-3xl border border-line/70 bg-surface p-4" aria-label={t.kanji.title}>
+      <Link href="/kanji?" className="flex items-center gap-3.5">
+        <span lang="ja" className="jp-serif grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-bg-2 text-[24px] text-accent">
+          漢
+        </span>
+        <span className="min-w-0">
+          <span className="block text-[16px] font-semibold">{t.kanji.title} ›</span>
+          <span className="block text-[13px] leading-snug text-muted">{t.kanji.libraryDesc(145)}</span>
+        </span>
+      </Link>
+      <div className="no-scrollbar -mx-4 mt-3 flex gap-2 overflow-x-auto px-4">
+        {KANJI_LESSONS.map((n) => (
+          <Link key={n} href={`/kanji?l=${n}`} className="inline-flex h-8 shrink-0 items-center rounded-full border border-line bg-bg-2 px-3 text-[13px] text-muted hover:text-text">
+            {t.common.lessonShort(n)}
+          </Link>
+        ))}
+      </div>
+    </section>
   )
 }

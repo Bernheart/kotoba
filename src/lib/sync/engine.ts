@@ -14,6 +14,8 @@ export interface SyncStatus {
   error?: string
   /** Likely the free Supabase project paused after a week without traffic */
   maybePaused?: boolean
+  /** The server rejected kanji stats (its schema predates them); everything else synced */
+  kanjiRejected?: boolean
 }
 
 let status: SyncStatus = { state: 'off' }
@@ -161,7 +163,8 @@ export function syncNow(): Promise<void> {
       if (full) await setMeta('lastFullSync', Date.now())
       const now = Date.now()
       await setMeta('lastSync', now)
-      set({ state: 'idle', lastSync: now })
+      if (res.optionalError) console.warn('Kanji stats were not synced:', res.optionalError)
+      set({ state: 'idle', lastSync: now, kanjiRejected: !!res.optionalError })
     } catch (e) {
       const msg = e instanceof Error ? e.message : String((e as { message?: string })?.message ?? e)
       const maybePaused = navigator.onLine && /fetch|network|5\d\d|paused|unavailable/i.test(msg)
@@ -190,7 +193,7 @@ let started = false
 export function startSync() {
   if (started) return
   started = true
-  for (const t of [db.cards, db.reviewLogs, db.userWords, db.settings]) {
+  for (const t of [db.cards, db.reviewLogs, db.userWords, db.settings, db.kanjiProgress] as const) {
     t.hook('creating', (_k, obj) => {
       if ((obj as { dirty?: number }).dirty) scheduleSync()
     })

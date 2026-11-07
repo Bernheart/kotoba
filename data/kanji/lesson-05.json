@@ -1,0 +1,603 @@
+{
+  "lesson": 5,
+  "kanji": [
+    {
+      "n": 30,
+      "kanji": "山",
+      "on": [
+        "サン"
+      ],
+      "kun": [
+        "やま"
+      ],
+      "meaning": {
+        "en": "mountain",
+        "pl": "góra"
+      },
+      "strokes": 3,
+      "words": [
+        {
+          "w": "山",
+          "r": "やま",
+          "en": "mountain",
+          "pl": "góra",
+          "hl": true
+        },
+        {
+          "w": "山川さん",
+          "r": "やまかわさん",
+          "en": "Mr./Ms. Yamakawa",
+          "pl": "pan/pani Yamakawa",
+          "hl": true
+        },
+        {
+          "w": "富士山",
+          "r": "ふじさん",
+          "en": "Mt. Fuji",
+          "pl": "góra Fuji",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 31,
+      "kanji": "川",
+      "on": [],
+      "kun": [
+        "かわ",
+        "がわ"
+      ],
+      "meaning": {
+        "en": "river",
+        "pl": "rzeka"
+      },
+      "strokes": 3,
+      "words": [
+        {
+          "w": "川",
+          "r": "かわ",
+          "en": "river",
+          "pl": "rzeka",
+          "hl": true
+        },
+        {
+          "w": "山川さん",
+          "r": "やまかわさん",
+          "en": "Mr./Ms. Yamakawa",
+          "pl": "pan/pani Yamakawa",
+          "hl": true
+        },
+        {
+          "w": "小川さん",
+          "r": "おがわさん",
+          "en": "Mr./Ms. Ogawa",
+          "pl": "pan/pani Ogawa",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 32,
+      "kanji": "元",
+      "on": [
+        "ゲン",
+        "ガン"
+      ],
+      "kun": [
+        "もと"
+      ],
+      "meaning": {
+        "en": "origin",
+        "pl": "początek, źródło"
+      },
+      "strokes": 4,
+      "words": [
+        {
+          "w": "元気な",
+          "r": "げんきな",
+          "en": "fine",
+          "pl": "zdrowy, w dobrej formie",
+          "hl": true
+        },
+        {
+          "w": "元日",
+          "r": "がんじつ",
+          "en": "the first day of the year",
+          "pl": "Nowy Rok (1 stycznia)",
+          "hl": false
+        },
+        {
+          "w": "地元",
+          "r": "じもと",
+          "en": "local",
+          "pl": "lokalny; okolica, z której się pochodzi",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 33,
+      "kanji": "気",
+      "on": [
+        "キ"
+      ],
+      "kun": [],
+      "meaning": {
+        "en": "spirit",
+        "pl": "duch, energia"
+      },
+      "strokes": 6,
+      "words": [
+        {
+          "w": "元気な",
+          "r": "げんきな",
+          "en": "fine",
+          "pl": "zdrowy, w dobrej formie",
+          "hl": true
+        },
+        {
+          "w": "天気",
+          "r": "てんき",
+          "en": "weather",
+          "pl": "pogoda",
+          "hl": true
+        },
+        {
+          "w": "電気",
+          "r": "でんき",
+          "en": "electricity",
+          "pl": "elektryczność; światło",
+          "hl": false
+        },
+        {
+          "w": "気持ち",
+          "r": "きもち",
+          "en": "feeling",
+          "pl": "uczucie, samopoczucie",
+          "hl": false
+        },
+        {
+          "w": "人気",
+          "r": "にんき",
+          "en": "popularity",
+          "pl": "popularność",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 34,
+      "kanji": "天",
+      "on": [
+        "テン"
+      ],
+      "kun": [],
+      "meaning": {
+        "en": "heaven",
+        "pl": "niebo"
+      },
+      "strokes": 4,
+      "words": [
+        {
+          "w": "天気",
+          "r": "てんき",
+          "en": "weather",
+          "pl": "pogoda",
+          "hl": true
+        },
+        {
+          "w": "天国",
+          "r": "てんごく",
+          "en": "heaven",
+          "pl": "raj, niebo",
+          "hl": false
+        },
+        {
+          "w": "天皇",
+          "r": "てんのう",
+          "en": "Japanese emperor",
+          "pl": "cesarz Japonii",
+          "hl": false
+        },
+        {
+          "w": "天才",
+          "r": "てんさい",
+          "en": "genius",
+          "pl": "geniusz",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 35,
+      "kanji": "私",
+      "on": [
+        "シ"
+      ],
+      "kun": [
+        "わたし"
+      ],
+      "meaning": {
+        "en": "I; private",
+        "pl": "ja; prywatny"
+      },
+      "strokes": 7,
+      "words": [
+        {
+          "w": "私",
+          "r": "わたし",
+          "en": "I",
+          "pl": "ja",
+          "hl": true
+        },
+        {
+          "w": "私立大学",
+          "r": "しりつだいがく",
+          "en": "private university",
+          "pl": "prywatny uniwersytet",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 36,
+      "kanji": "今",
+      "on": [
+        "コン"
+      ],
+      "kun": [
+        "いま"
+      ],
+      "meaning": {
+        "en": "now",
+        "pl": "teraz"
+      },
+      "strokes": 4,
+      "words": [
+        {
+          "w": "今",
+          "r": "いま",
+          "en": "now",
+          "pl": "teraz",
+          "hl": true
+        },
+        {
+          "w": "今日",
+          "r": "きょう",
+          "en": "today",
+          "pl": "dzisiaj",
+          "hl": true
+        },
+        {
+          "w": "今晩",
+          "r": "こんばん",
+          "en": "tonight",
+          "pl": "dziś wieczorem",
+          "hl": false
+        },
+        {
+          "w": "今月",
+          "r": "こんげつ",
+          "en": "this month",
+          "pl": "w tym miesiącu",
+          "hl": false
+        },
+        {
+          "w": "今年",
+          "r": "ことし",
+          "en": "this year",
+          "pl": "w tym roku",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 37,
+      "kanji": "田",
+      "on": [],
+      "kun": [
+        "た",
+        "だ"
+      ],
+      "meaning": {
+        "en": "rice field",
+        "pl": "pole ryżowe"
+      },
+      "strokes": 5,
+      "words": [
+        {
+          "w": "田中さん",
+          "r": "たなかさん",
+          "en": "Mr./Ms. Tanaka",
+          "pl": "pan/pani Tanaka",
+          "hl": true
+        },
+        {
+          "w": "山田さん",
+          "r": "やまださん",
+          "en": "Mr./Ms. Yamada",
+          "pl": "pan/pani Yamada",
+          "hl": true
+        },
+        {
+          "w": "田んぼ",
+          "r": "たんぼ",
+          "en": "rice field",
+          "pl": "pole ryżowe",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 38,
+      "kanji": "女",
+      "on": [
+        "ジョ"
+      ],
+      "kun": [
+        "おんな"
+      ],
+      "meaning": {
+        "en": "woman",
+        "pl": "kobieta"
+      },
+      "strokes": 3,
+      "words": [
+        {
+          "w": "女の人",
+          "r": "おんなのひと",
+          "en": "woman",
+          "pl": "kobieta",
+          "hl": true
+        },
+        {
+          "w": "女性",
+          "r": "じょせい",
+          "en": "woman",
+          "pl": "kobieta",
+          "hl": false
+        },
+        {
+          "w": "女の子",
+          "r": "おんなのこ",
+          "en": "girl",
+          "pl": "dziewczynka",
+          "hl": false
+        },
+        {
+          "w": "長女",
+          "r": "ちょうじょ",
+          "en": "the eldest daughter",
+          "pl": "najstarsza córka",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 39,
+      "kanji": "男",
+      "on": [
+        "ダン"
+      ],
+      "kun": [
+        "おとこ"
+      ],
+      "meaning": {
+        "en": "man",
+        "pl": "mężczyzna"
+      },
+      "strokes": 7,
+      "words": [
+        {
+          "w": "男の人",
+          "r": "おとこのひと",
+          "en": "man",
+          "pl": "mężczyzna",
+          "hl": true
+        },
+        {
+          "w": "男性",
+          "r": "だんせい",
+          "en": "man",
+          "pl": "mężczyzna",
+          "hl": false
+        },
+        {
+          "w": "男の子",
+          "r": "おとこのこ",
+          "en": "boy",
+          "pl": "chłopiec",
+          "hl": false
+        },
+        {
+          "w": "男子学生",
+          "r": "だんしがくせい",
+          "en": "male student",
+          "pl": "student (mężczyzna)",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 40,
+      "kanji": "見",
+      "on": [
+        "ケン"
+      ],
+      "kun": [
+        "み"
+      ],
+      "meaning": {
+        "en": "to see",
+        "pl": "widzieć"
+      },
+      "strokes": 7,
+      "words": [
+        {
+          "w": "見る",
+          "r": "みる",
+          "en": "to see",
+          "pl": "widzieć, oglądać",
+          "hl": true
+        },
+        {
+          "w": "見物",
+          "r": "けんぶつ",
+          "en": "sightseeing",
+          "pl": "zwiedzanie",
+          "hl": false
+        },
+        {
+          "w": "花見",
+          "r": "はなみ",
+          "en": "flower viewing",
+          "pl": "podziwianie kwitnących wiśni",
+          "hl": false
+        },
+        {
+          "w": "意見",
+          "r": "いけん",
+          "en": "opinion",
+          "pl": "opinia",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 41,
+      "kanji": "行",
+      "on": [
+        "コウ",
+        "ギョウ"
+      ],
+      "kun": [
+        "い"
+      ],
+      "meaning": {
+        "en": "to go",
+        "pl": "iść, jechać"
+      },
+      "strokes": 6,
+      "words": [
+        {
+          "w": "行く",
+          "r": "いく",
+          "en": "to go",
+          "pl": "iść, jechać",
+          "hl": true
+        },
+        {
+          "w": "銀行",
+          "r": "ぎんこう",
+          "en": "bank",
+          "pl": "bank",
+          "hl": false
+        },
+        {
+          "w": "一行目",
+          "r": "いちぎょうめ",
+          "en": "first line",
+          "pl": "pierwsza linijka",
+          "hl": false
+        },
+        {
+          "w": "旅行",
+          "r": "りょこう",
+          "en": "travel",
+          "pl": "podróż",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 42,
+      "kanji": "食",
+      "on": [
+        "ショク"
+      ],
+      "kun": [
+        "た"
+      ],
+      "meaning": {
+        "en": "to eat",
+        "pl": "jeść"
+      },
+      "strokes": 9,
+      "words": [
+        {
+          "w": "食べる",
+          "r": "たべる",
+          "en": "to eat",
+          "pl": "jeść",
+          "hl": true
+        },
+        {
+          "w": "食べ物",
+          "r": "たべもの",
+          "en": "food",
+          "pl": "jedzenie",
+          "hl": false
+        },
+        {
+          "w": "食堂",
+          "r": "しょくどう",
+          "en": "cafeteria",
+          "pl": "stołówka",
+          "hl": false
+        },
+        {
+          "w": "食事",
+          "r": "しょくじ",
+          "en": "meal",
+          "pl": "posiłek",
+          "hl": false
+        },
+        {
+          "w": "朝食",
+          "r": "ちょうしょく",
+          "en": "breakfast",
+          "pl": "śniadanie",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 43,
+      "kanji": "飲",
+      "on": [
+        "イン"
+      ],
+      "kun": [
+        "の"
+      ],
+      "meaning": {
+        "en": "to drink",
+        "pl": "pić"
+      },
+      "strokes": 12,
+      "words": [
+        {
+          "w": "飲む",
+          "r": "のむ",
+          "en": "to drink",
+          "pl": "pić",
+          "hl": true
+        },
+        {
+          "w": "飲み物",
+          "r": "のみもの",
+          "en": "drink",
+          "pl": "napój",
+          "hl": false
+        },
+        {
+          "w": "飲酒運転",
+          "r": "いんしゅうんてん",
+          "en": "drunken driving",
+          "pl": "jazda po pijanemu",
+          "hl": false
+        }
+      ]
+    }
+  ]
+}

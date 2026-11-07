@@ -1,0 +1,618 @@
+{
+  "lesson": 8,
+  "kanji": [
+    {
+      "n": 73,
+      "kanji": "員",
+      "on": [
+        "イン"
+      ],
+      "kun": [],
+      "meaning": {
+        "en": "member",
+        "pl": "członek"
+      },
+      "strokes": 10,
+      "words": [
+        {
+          "w": "会社員",
+          "r": "かいしゃいん",
+          "en": "office worker",
+          "pl": "pracownik biurowy",
+          "hl": true
+        },
+        {
+          "w": "店員",
+          "r": "てんいん",
+          "en": "store clerk",
+          "pl": "sprzedawca",
+          "hl": false
+        },
+        {
+          "w": "会員",
+          "r": "かいいん",
+          "en": "member",
+          "pl": "członek",
+          "hl": false
+        },
+        {
+          "w": "駅員",
+          "r": "えきいん",
+          "en": "station attendant",
+          "pl": "pracownik stacji",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 74,
+      "kanji": "新",
+      "on": [
+        "シン"
+      ],
+      "kun": [
+        "あたら"
+      ],
+      "meaning": {
+        "en": "new",
+        "pl": "nowy"
+      },
+      "strokes": 13,
+      "words": [
+        {
+          "w": "新しい",
+          "r": "あたらしい",
+          "en": "new",
+          "pl": "nowy",
+          "hl": true
+        },
+        {
+          "w": "新聞",
+          "r": "しんぶん",
+          "en": "newspaper",
+          "pl": "gazeta",
+          "hl": true
+        },
+        {
+          "w": "新幹線",
+          "r": "しんかんせん",
+          "en": "Bullet Train",
+          "pl": "shinkansen (pociąg szybkobieżny)",
+          "hl": false
+        },
+        {
+          "w": "新鮮な",
+          "r": "しんせんな",
+          "en": "fresh",
+          "pl": "świeży",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 75,
+      "kanji": "聞",
+      "on": [
+        "ブン"
+      ],
+      "kun": [
+        "き"
+      ],
+      "meaning": {
+        "en": "to listen",
+        "pl": "słuchać"
+      },
+      "strokes": 14,
+      "words": [
+        {
+          "w": "聞く",
+          "r": "きく",
+          "en": "to listen",
+          "pl": "słuchać",
+          "hl": true
+        },
+        {
+          "w": "新聞",
+          "r": "しんぶん",
+          "en": "newspaper",
+          "pl": "gazeta",
+          "hl": true
+        },
+        {
+          "w": "聞こえる",
+          "r": "きこえる",
+          "en": "can be heard",
+          "pl": "być słyszalnym",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 76,
+      "kanji": "作",
+      "on": [
+        "サク"
+      ],
+      "kun": [
+        "つく"
+      ],
+      "meaning": {
+        "en": "to make",
+        "pl": "robić, tworzyć"
+      },
+      "strokes": 7,
+      "words": [
+        {
+          "w": "作る",
+          "r": "つくる",
+          "en": "to make",
+          "pl": "robić, tworzyć",
+          "hl": true
+        },
+        {
+          "w": "作文",
+          "r": "さくぶん",
+          "en": "composition",
+          "pl": "wypracowanie",
+          "hl": false
+        },
+        {
+          "w": "作品",
+          "r": "さくひん",
+          "en": "artistic piece",
+          "pl": "dzieło",
+          "hl": false
+        },
+        {
+          "w": "作者",
+          "r": "さくしゃ",
+          "en": "author",
+          "pl": "autor",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 77,
+      "kanji": "仕",
+      "on": [
+        "シ"
+      ],
+      "kun": [
+        "つか"
+      ],
+      "meaning": {
+        "en": "to serve",
+        "pl": "służyć"
+      },
+      "strokes": 5,
+      "words": [
+        {
+          "w": "仕事",
+          "r": "しごと",
+          "en": "job",
+          "pl": "praca",
+          "hl": true
+        },
+        {
+          "w": "仕返し",
+          "r": "しかえし",
+          "en": "revenge",
+          "pl": "zemsta",
+          "hl": false
+        },
+        {
+          "w": "仕える",
+          "r": "つかえる",
+          "en": "to serve; to work under",
+          "pl": "służyć; pracować pod kimś",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 78,
+      "kanji": "事",
+      "on": [
+        "ジ"
+      ],
+      "kun": [
+        "ごと",
+        "こと"
+      ],
+      "meaning": {
+        "en": "thing",
+        "pl": "rzecz"
+      },
+      "strokes": 8,
+      "words": [
+        {
+          "w": "仕事",
+          "r": "しごと",
+          "en": "job",
+          "pl": "praca",
+          "hl": true
+        },
+        {
+          "w": "事",
+          "r": "こと",
+          "en": "thing",
+          "pl": "rzecz",
+          "hl": false
+        },
+        {
+          "w": "火事",
+          "r": "かじ",
+          "en": "fire",
+          "pl": "pożar",
+          "hl": false
+        },
+        {
+          "w": "食事",
+          "r": "しょくじ",
+          "en": "meal",
+          "pl": "posiłek",
+          "hl": false
+        },
+        {
+          "w": "返事",
+          "r": "へんじ",
+          "en": "reply",
+          "pl": "odpowiedź",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 79,
+      "kanji": "電",
+      "on": [
+        "デン"
+      ],
+      "kun": [],
+      "meaning": {
+        "en": "electricity",
+        "pl": "elektryczność"
+      },
+      "strokes": 13,
+      "words": [
+        {
+          "w": "電車",
+          "r": "でんしゃ",
+          "en": "train",
+          "pl": "pociąg",
+          "hl": true
+        },
+        {
+          "w": "電気",
+          "r": "でんき",
+          "en": "electricity; light",
+          "pl": "prąd; światło",
+          "hl": true
+        },
+        {
+          "w": "電話",
+          "r": "でんわ",
+          "en": "telephone",
+          "pl": "telefon",
+          "hl": false
+        },
+        {
+          "w": "電池",
+          "r": "でんち",
+          "en": "battery",
+          "pl": "bateria",
+          "hl": false
+        },
+        {
+          "w": "電子レンジ",
+          "r": "でんしレンジ",
+          "en": "microwave oven",
+          "pl": "kuchenka mikrofalowa",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 80,
+      "kanji": "車",
+      "on": [
+        "シャ"
+      ],
+      "kun": [
+        "くるま"
+      ],
+      "meaning": {
+        "en": "car",
+        "pl": "samochód"
+      },
+      "strokes": 7,
+      "words": [
+        {
+          "w": "車",
+          "r": "くるま",
+          "en": "car",
+          "pl": "samochód",
+          "hl": true
+        },
+        {
+          "w": "電車",
+          "r": "でんしゃ",
+          "en": "train",
+          "pl": "pociąg",
+          "hl": true
+        },
+        {
+          "w": "自転車",
+          "r": "じてんしゃ",
+          "en": "bicycle",
+          "pl": "rower",
+          "hl": false
+        },
+        {
+          "w": "車いす",
+          "r": "くるまいす",
+          "en": "wheelchair",
+          "pl": "wózek inwalidzki",
+          "hl": false
+        },
+        {
+          "w": "駐車場",
+          "r": "ちゅうしゃじょう",
+          "en": "parking lot",
+          "pl": "parking",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 81,
+      "kanji": "休",
+      "on": [
+        "キュウ"
+      ],
+      "kun": [
+        "やす"
+      ],
+      "meaning": {
+        "en": "to rest",
+        "pl": "odpoczywać"
+      },
+      "strokes": 6,
+      "words": [
+        {
+          "w": "休む",
+          "r": "やすむ",
+          "en": "to be absent; to rest",
+          "pl": "być nieobecnym; odpoczywać",
+          "hl": true
+        },
+        {
+          "w": "休み",
+          "r": "やすみ",
+          "en": "holiday; absence",
+          "pl": "wolne; nieobecność",
+          "hl": true
+        },
+        {
+          "w": "休日",
+          "r": "きゅうじつ",
+          "en": "holiday",
+          "pl": "dzień wolny",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 82,
+      "kanji": "言",
+      "on": [
+        "ゲン"
+      ],
+      "kun": [
+        "い",
+        "こと"
+      ],
+      "meaning": {
+        "en": "to say",
+        "pl": "mówić"
+      },
+      "strokes": 7,
+      "words": [
+        {
+          "w": "言う",
+          "r": "いう",
+          "en": "to say",
+          "pl": "mówić",
+          "hl": true
+        },
+        {
+          "w": "言語学",
+          "r": "げんごがく",
+          "en": "linguistics",
+          "pl": "językoznawstwo",
+          "hl": false
+        },
+        {
+          "w": "方言",
+          "r": "ほうげん",
+          "en": "dialect",
+          "pl": "dialekt",
+          "hl": false
+        },
+        {
+          "w": "言葉",
+          "r": "ことば",
+          "en": "word; language",
+          "pl": "słowo; język",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 83,
+      "kanji": "読",
+      "on": [
+        "ドク"
+      ],
+      "kun": [
+        "よ"
+      ],
+      "meaning": {
+        "en": "to read",
+        "pl": "czytać"
+      },
+      "strokes": 14,
+      "words": [
+        {
+          "w": "読む",
+          "r": "よむ",
+          "en": "to read",
+          "pl": "czytać",
+          "hl": true
+        },
+        {
+          "w": "読書",
+          "r": "どくしょ",
+          "en": "reading books",
+          "pl": "czytanie książek",
+          "hl": false
+        },
+        {
+          "w": "読み物",
+          "r": "よみもの",
+          "en": "reading matter",
+          "pl": "lektura",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 84,
+      "kanji": "思",
+      "on": [
+        "シ"
+      ],
+      "kun": [
+        "おも"
+      ],
+      "meaning": {
+        "en": "to think",
+        "pl": "myśleć"
+      },
+      "strokes": 9,
+      "words": [
+        {
+          "w": "思う",
+          "r": "おもう",
+          "en": "to think",
+          "pl": "myśleć",
+          "hl": true
+        },
+        {
+          "w": "不思議な",
+          "r": "ふしぎな",
+          "en": "mysterious",
+          "pl": "tajemniczy, dziwny",
+          "hl": false
+        },
+        {
+          "w": "思い出す",
+          "r": "おもいだす",
+          "en": "to recall; to remember",
+          "pl": "przypominać sobie",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 85,
+      "kanji": "次",
+      "on": [
+        "ジ"
+      ],
+      "kun": [
+        "つぎ"
+      ],
+      "meaning": {
+        "en": "next",
+        "pl": "następny"
+      },
+      "strokes": 6,
+      "words": [
+        {
+          "w": "次",
+          "r": "つぎ",
+          "en": "next",
+          "pl": "następny",
+          "hl": true
+        },
+        {
+          "w": "次女",
+          "r": "じじょ",
+          "en": "second daughter",
+          "pl": "druga córka",
+          "hl": false
+        },
+        {
+          "w": "目次",
+          "r": "もくじ",
+          "en": "table of contents",
+          "pl": "spis treści",
+          "hl": false
+        },
+        {
+          "w": "次回",
+          "r": "じかい",
+          "en": "next time",
+          "pl": "następnym razem",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 86,
+      "kanji": "何",
+      "on": [],
+      "kun": [
+        "なに",
+        "なん"
+      ],
+      "meaning": {
+        "en": "what",
+        "pl": "co"
+      },
+      "strokes": 7,
+      "words": [
+        {
+          "w": "何",
+          "r": "なに",
+          "en": "what",
+          "pl": "co",
+          "hl": true
+        },
+        {
+          "w": "何時",
+          "r": "なんじ",
+          "en": "what time",
+          "pl": "która godzina",
+          "hl": true
+        },
+        {
+          "w": "何人",
+          "r": "なんにん",
+          "en": "how many people",
+          "pl": "ile osób",
+          "hl": true
+        },
+        {
+          "w": "何か",
+          "r": "なにか",
+          "en": "something",
+          "pl": "coś",
+          "hl": false
+        }
+      ]
+    }
+  ]
+}

@@ -3,7 +3,13 @@
 import type { KotobaDB } from '../db'
 import { LOCAL_ONLY } from '../settings'
 
-export type Collection = 'cards' | 'logs' | 'words' | 'settings'
+export type Collection = 'cards' | 'logs' | 'words' | 'settings' | 'kanji'
+
+/**
+ * Collections added after the first server schema: a server that hasn't run the migration in
+ * supabase/schema.sql rejects them, so they are pushed separately and a rejection doesn't stop the rest.
+ */
+export const OPTIONAL: Collection[] = ['kanji']
 
 export interface RemoteRecord {
   collection: Collection
@@ -22,7 +28,7 @@ export interface Remote {
 type AnyRow = Record<string, unknown> & { dirty?: number; deleted?: number; updatedAt?: number; at?: number }
 
 const tableOf = (db: KotobaDB, c: Collection) =>
-  ({ cards: db.cards, logs: db.reviewLogs, words: db.userWords, settings: db.settings })[c] as unknown as {
+  ({ cards: db.cards, logs: db.reviewLogs, words: db.userWords, settings: db.settings, kanji: db.kanjiProgress })[c] as unknown as {
     get(id: string): Promise<AnyRow | undefined>
     put(row: AnyRow): Promise<unknown>
     where(i: string): { equals(v: number): { toArray(): Promise<AnyRow[]> } }
@@ -36,7 +42,7 @@ export function toRecord(c: Collection, row: AnyRow): RemoteRecord {
   return { collection: c, id: keyOf(c, row), data, updated_at: stamp(row), deleted: !!row.deleted }
 }
 
-const COLLECTIONS: Collection[] = ['words', 'cards', 'logs', 'settings']
+const COLLECTIONS: Collection[] = ['words', 'cards', 'logs', 'settings', 'kanji']
 
 export async function collectDirty(db: KotobaDB): Promise<RemoteRecord[]> {
   const out: RemoteRecord[] = []
@@ -52,7 +58,7 @@ export async function collectDirty(db: KotobaDB): Promise<RemoteRecord[]> {
 
 /** After a successful push, clear the dirty flag unless the row changed meanwhile. */
 export async function markClean(db: KotobaDB, pushed: RemoteRecord[]) {
-  await db.transaction('rw', [db.cards, db.reviewLogs, db.userWords, db.settings], async () => {
+  await db.transaction('rw', [db.cards, db.reviewLogs, db.userWords, db.settings, db.kanjiProgress], async () => {
     for (const r of pushed) {
       const t = tableOf(db, r.collection)
       const cur = await t.get(r.id)
@@ -64,7 +70,7 @@ export async function markClean(db: KotobaDB, pushed: RemoteRecord[]) {
 /** Apply remote records: a remote row wins only if it is strictly newer than the local one. */
 export async function applyRemote(db: KotobaDB, records: RemoteRecord[]): Promise<number> {
   let applied = 0
-  await db.transaction('rw', [db.cards, db.reviewLogs, db.userWords, db.settings], async () => {
+  await db.transaction('rw', [db.cards, db.reviewLogs, db.userWords, db.settings, db.kanjiProgress], async () => {
     for (const r of records) {
       if (r.collection === 'settings' && LOCAL_ONLY.includes(r.id as never)) continue
       const t = tableOf(db, r.collection)
@@ -82,15 +88,32 @@ export interface SyncResult {
   pushed: number
   pulled: number
   cursor: number
+  /** Set when the server rejected an optional collection (e.g. kanji stats before the migration); they stay dirty */
+  optionalError?: string
 }
 
 export async function syncOnce(db: KotobaDB, remote: Remote, opts: { cursor: number; batch?: number } = { cursor: 0 }): Promise<SyncResult> {
   const batch = opts.batch ?? 500
-  const dirty = await collectDirty(db)
+  const all = await collectDirty(db)
+  const dirty = all.filter((r) => !OPTIONAL.includes(r.collection))
+  const optional = all.filter((r) => OPTIONAL.includes(r.collection))
+  let pushed = 0
   for (let i = 0; i < dirty.length; i += batch) {
     const part = dirty.slice(i, i + batch)
     await remote.push(part)
     await markClean(db, part)
+    pushed += part.length
+  }
+  let optionalError: string | undefined
+  try {
+    for (let i = 0; i < optional.length; i += batch) {
+      const part = optional.slice(i, i + batch)
+      await remote.push(part)
+      await markClean(db, part)
+      pushed += part.length
+    }
+  } catch (e) {
+    optionalError = e instanceof Error ? e.message : String((e as { message?: string })?.message ?? e)
   }
   let cursor = opts.cursor
   let pulled = 0
@@ -101,7 +124,7 @@ export async function syncOnce(db: KotobaDB, remote: Remote, opts: { cursor: num
     cursor = Math.max(cursor, ...rows.map((r) => r.seq ?? 0))
     if (rows.length < 1000) break
   }
-  return { pushed: dirty.length, pulled, cursor }
+  return { pushed, pulled, cursor, ...(optionalError ? { optionalError } : {}) }
 }
 
 /** In-memory server with the same semantics as supabase/schema.sql (used by tests). */

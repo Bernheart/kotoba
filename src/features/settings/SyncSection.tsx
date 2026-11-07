@@ -97,6 +97,7 @@ export function SyncSection() {
                     ? t.sync.lastSync(relativeDay(st.lastSync, lang))
                     : t.sync.ok}
             </p>
+            {st.kanjiRejected && st.state !== 'error' && <p className="text-[13px] text-warn">{t.sync.kanjiMigration}</p>}
             <div className="flex flex-wrap gap-2">
               <Button size="sm" variant="primary" disabled={st.state === 'syncing'} onClick={() => void syncNow()}>
                 <IconSync size={16} className={st.state === 'syncing' ? 'animate-spin' : ''} /> {t.sync.now}

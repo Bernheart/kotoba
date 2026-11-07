@@ -28,8 +28,11 @@ const MatchingPage = lazy(() => import('./features/quiz/MatchingPage').then((m) 
 const QuizPage = lazy(() => import('./features/quiz/QuizPage').then((m) => ({ default: m.QuizPage })))
 const SessionPage = lazy(() => import('./features/quiz/SessionPage').then((m) => ({ default: m.SessionPage })))
 const ShadowingPage = lazy(() => import('./features/quiz/ShadowingPage').then((m) => ({ default: m.ShadowingPage })))
+const KanjiPage = lazy(() => import('./features/kanji/KanjiPage').then((m) => ({ default: m.KanjiPage })))
+const KanjiQuizPage = lazy(() => import('./features/kanji/KanjiQuizPage').then((m) => ({ default: m.KanjiQuizPage })))
+const KanjiWritePage = lazy(() => import('./features/kanji/KanjiWritePage').then((m) => ({ default: m.KanjiWritePage })))
 const StatsPage = lazy(() => import('./features/stats/StatsPage').then((m) => ({ default: m.StatsPage })))
-const FOCUS_ROUTES = ['/review', '/session', '/quiz', '/conjugation', '/kana', '/shadowing', '/matching']
+const FOCUS_ROUTES = ['/review', '/session', '/quiz', '/conjugation', '/kana', '/shadowing', '/matching', '/kanji/quiz', '/kanji/write']
 
 function useApplySettings() {
   const s = useSettings()
@@ -85,6 +88,9 @@ function Shell() {
           <Route path="/kana" component={KanaPage} />
           <Route path="/shadowing" component={ShadowingPage} />
           <Route path="/session" component={SessionPage} />
+          <Route path="/kanji" component={KanjiPage} />
+          <Route path="/kanji/quiz" component={KanjiQuizPage} />
+          <Route path="/kanji/write/:ch" component={KanjiWritePage} />
           <Route>
             <Page title="404">
               <p className="text-muted">Not found.</p>

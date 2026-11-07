@@ -1,0 +1,656 @@
+{
+  "lesson": 4,
+  "kanji": [
+    {
+      "n": 16,
+      "kanji": "日",
+      "on": [
+        "ニ",
+        "ニチ",
+        "ニッ"
+      ],
+      "kun": [
+        "び",
+        "ひ",
+        "か"
+      ],
+      "meaning": {
+        "en": "day; sun",
+        "pl": "dzień; słońce"
+      },
+      "strokes": 4,
+      "words": [
+        {
+          "w": "日本",
+          "r": "にほん",
+          "en": "Japan",
+          "pl": "Japonia",
+          "hl": true
+        },
+        {
+          "w": "日曜日",
+          "r": "にちようび",
+          "en": "Sunday",
+          "pl": "niedziela",
+          "hl": true
+        },
+        {
+          "w": "毎日",
+          "r": "まいにち",
+          "en": "every day",
+          "pl": "codziennie",
+          "hl": false
+        },
+        {
+          "w": "母の日",
+          "r": "ははのひ",
+          "en": "Mother's Day",
+          "pl": "Dzień Matki",
+          "hl": false
+        },
+        {
+          "w": "日記",
+          "r": "にっき",
+          "en": "diary",
+          "pl": "pamiętnik",
+          "hl": false
+        },
+        {
+          "w": "三日",
+          "r": "みっか",
+          "en": "three days",
+          "pl": "trzy dni",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 17,
+      "kanji": "本",
+      "on": [
+        "ホン"
+      ],
+      "kun": [
+        "もと"
+      ],
+      "meaning": {
+        "en": "book; basis",
+        "pl": "książka; podstawa"
+      },
+      "strokes": 5,
+      "words": [
+        {
+          "w": "本",
+          "r": "ほん",
+          "en": "book",
+          "pl": "książka",
+          "hl": true
+        },
+        {
+          "w": "日本",
+          "r": "にほん",
+          "en": "Japan",
+          "pl": "Japonia",
+          "hl": true
+        },
+        {
+          "w": "日本語",
+          "r": "にほんご",
+          "en": "Japanese language",
+          "pl": "język japoński",
+          "hl": false
+        },
+        {
+          "w": "山本さん",
+          "r": "やまもとさん",
+          "en": "Mr./Ms. Yamamoto",
+          "pl": "pan/pani Yamamoto",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 18,
+      "kanji": "人",
+      "on": [
+        "ジン",
+        "ニン"
+      ],
+      "kun": [
+        "ひと"
+      ],
+      "meaning": {
+        "en": "person",
+        "pl": "człowiek"
+      },
+      "strokes": 2,
+      "words": [
+        {
+          "w": "日本人",
+          "r": "にほんじん",
+          "en": "Japanese people",
+          "pl": "Japończyk",
+          "hl": true
+        },
+        {
+          "w": "一人で",
+          "r": "ひとりで",
+          "en": "alone",
+          "pl": "samemu",
+          "hl": true
+        },
+        {
+          "w": "この人",
+          "r": "このひと",
+          "en": "this person",
+          "pl": "ta osoba",
+          "hl": true
+        },
+        {
+          "w": "三人",
+          "r": "さんにん",
+          "en": "three people",
+          "pl": "trzy osoby",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 19,
+      "kanji": "月",
+      "on": [
+        "ゲツ",
+        "ガツ"
+      ],
+      "kun": [
+        "つき"
+      ],
+      "meaning": {
+        "en": "moon; month",
+        "pl": "księżyc; miesiąc"
+      },
+      "strokes": 4,
+      "words": [
+        {
+          "w": "月曜日",
+          "r": "げつようび",
+          "en": "Monday",
+          "pl": "poniedziałek",
+          "hl": true
+        },
+        {
+          "w": "一月",
+          "r": "いちがつ",
+          "en": "January",
+          "pl": "styczeń",
+          "hl": true
+        },
+        {
+          "w": "月",
+          "r": "つき",
+          "en": "moon",
+          "pl": "księżyc",
+          "hl": false
+        },
+        {
+          "w": "今月",
+          "r": "こんげつ",
+          "en": "this month",
+          "pl": "w tym miesiącu",
+          "hl": false
+        },
+        {
+          "w": "一か月",
+          "r": "いっかげつ",
+          "en": "one month",
+          "pl": "jeden miesiąc",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 20,
+      "kanji": "火",
+      "on": [
+        "カ"
+      ],
+      "kun": [
+        "ひ",
+        "び"
+      ],
+      "meaning": {
+        "en": "fire",
+        "pl": "ogień"
+      },
+      "strokes": 4,
+      "words": [
+        {
+          "w": "火曜日",
+          "r": "かようび",
+          "en": "Tuesday",
+          "pl": "wtorek",
+          "hl": true
+        },
+        {
+          "w": "火",
+          "r": "ひ",
+          "en": "fire",
+          "pl": "ogień",
+          "hl": false
+        },
+        {
+          "w": "火山",
+          "r": "かざん",
+          "en": "volcano",
+          "pl": "wulkan",
+          "hl": false
+        },
+        {
+          "w": "花火",
+          "r": "はなび",
+          "en": "fireworks",
+          "pl": "fajerwerki",
+          "hl": false
+        },
+        {
+          "w": "火星",
+          "r": "かせい",
+          "en": "Mars",
+          "pl": "Mars",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 21,
+      "kanji": "水",
+      "on": [
+        "スイ"
+      ],
+      "kun": [
+        "みず"
+      ],
+      "meaning": {
+        "en": "water",
+        "pl": "woda"
+      },
+      "strokes": 4,
+      "words": [
+        {
+          "w": "水曜日",
+          "r": "すいようび",
+          "en": "Wednesday",
+          "pl": "środa",
+          "hl": true
+        },
+        {
+          "w": "水",
+          "r": "みず",
+          "en": "water",
+          "pl": "woda",
+          "hl": true
+        },
+        {
+          "w": "水泳",
+          "r": "すいえい",
+          "en": "swimming",
+          "pl": "pływanie",
+          "hl": false
+        },
+        {
+          "w": "水道",
+          "r": "すいどう",
+          "en": "water supply",
+          "pl": "wodociąg",
+          "hl": false
+        },
+        {
+          "w": "水着",
+          "r": "みずぎ",
+          "en": "bathing suit",
+          "pl": "strój kąpielowy",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 22,
+      "kanji": "木",
+      "on": [
+        "モク"
+      ],
+      "kun": [
+        "き"
+      ],
+      "meaning": {
+        "en": "tree",
+        "pl": "drzewo"
+      },
+      "strokes": 4,
+      "words": [
+        {
+          "w": "木曜日",
+          "r": "もくようび",
+          "en": "Thursday",
+          "pl": "czwartek",
+          "hl": true
+        },
+        {
+          "w": "木",
+          "r": "き",
+          "en": "tree",
+          "pl": "drzewo",
+          "hl": false
+        },
+        {
+          "w": "木村さん",
+          "r": "きむらさん",
+          "en": "Mr./Ms. Kimura",
+          "pl": "pan/pani Kimura",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 23,
+      "kanji": "金",
+      "on": [
+        "キン"
+      ],
+      "kun": [
+        "かね"
+      ],
+      "meaning": {
+        "en": "gold; money",
+        "pl": "złoto; pieniądze"
+      },
+      "strokes": 8,
+      "words": [
+        {
+          "w": "金曜日",
+          "r": "きんようび",
+          "en": "Friday",
+          "pl": "piątek",
+          "hl": true
+        },
+        {
+          "w": "お金",
+          "r": "おかね",
+          "en": "money",
+          "pl": "pieniądze",
+          "hl": false
+        },
+        {
+          "w": "料金",
+          "r": "りょうきん",
+          "en": "charge",
+          "pl": "opłata",
+          "hl": false
+        },
+        {
+          "w": "お金持ち",
+          "r": "おかねもち",
+          "en": "rich person",
+          "pl": "bogacz",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 24,
+      "kanji": "土",
+      "on": [
+        "ド",
+        "ト"
+      ],
+      "kun": [
+        "つち"
+      ],
+      "meaning": {
+        "en": "soil",
+        "pl": "ziemia"
+      },
+      "strokes": 3,
+      "words": [
+        {
+          "w": "土曜日",
+          "r": "どようび",
+          "en": "Saturday",
+          "pl": "sobota",
+          "hl": true
+        },
+        {
+          "w": "土",
+          "r": "つち",
+          "en": "soil",
+          "pl": "ziemia; gleba",
+          "hl": false
+        },
+        {
+          "w": "土地",
+          "r": "とち",
+          "en": "land",
+          "pl": "grunt; działka",
+          "hl": false
+        },
+        {
+          "w": "粘土",
+          "r": "ねんど",
+          "en": "clay",
+          "pl": "glina",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 25,
+      "kanji": "曜",
+      "on": [
+        "ヨウ"
+      ],
+      "kun": [],
+      "meaning": {
+        "en": "weekday",
+        "pl": "dzień tygodnia"
+      },
+      "strokes": 18,
+      "words": [
+        {
+          "w": "日曜日",
+          "r": "にちようび",
+          "en": "Sunday",
+          "pl": "niedziela",
+          "hl": true
+        },
+        {
+          "w": "曜日",
+          "r": "ようび",
+          "en": "day of the week",
+          "pl": "dzień tygodnia",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 26,
+      "kanji": "上",
+      "on": [
+        "ジョウ"
+      ],
+      "kun": [
+        "うえ",
+        "のぼ"
+      ],
+      "meaning": {
+        "en": "up",
+        "pl": "góra"
+      },
+      "strokes": 3,
+      "words": [
+        {
+          "w": "上",
+          "r": "うえ",
+          "en": "top; above",
+          "pl": "góra; nad",
+          "hl": true
+        },
+        {
+          "w": "上手な",
+          "r": "じょうずな",
+          "en": "good at",
+          "pl": "zdolny; dobry w czymś",
+          "hl": false
+        },
+        {
+          "w": "屋上",
+          "r": "おくじょう",
+          "en": "rooftop",
+          "pl": "dach (taras)",
+          "hl": false
+        },
+        {
+          "w": "上る",
+          "r": "のぼる",
+          "en": "to go up",
+          "pl": "wchodzić w górę",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 27,
+      "kanji": "下",
+      "on": [
+        "カ"
+      ],
+      "kun": [
+        "した",
+        "くだ"
+      ],
+      "meaning": {
+        "en": "down",
+        "pl": "dół"
+      },
+      "strokes": 3,
+      "words": [
+        {
+          "w": "下",
+          "r": "した",
+          "en": "under",
+          "pl": "pod; dół",
+          "hl": true
+        },
+        {
+          "w": "地下鉄",
+          "r": "ちかてつ",
+          "en": "subway",
+          "pl": "metro",
+          "hl": false
+        },
+        {
+          "w": "下手な",
+          "r": "へたな",
+          "en": "poor at",
+          "pl": "słaby w czymś",
+          "hl": false
+        },
+        {
+          "w": "下さい",
+          "r": "ください",
+          "en": "Please give/do . . .",
+          "pl": "proszę (daj/zrób)…",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 28,
+      "kanji": "中",
+      "on": [
+        "チュウ",
+        "ジュウ"
+      ],
+      "kun": [
+        "なか"
+      ],
+      "meaning": {
+        "en": "middle",
+        "pl": "środek"
+      },
+      "strokes": 4,
+      "words": [
+        {
+          "w": "中",
+          "r": "なか",
+          "en": "inside",
+          "pl": "wewnątrz; środek",
+          "hl": true
+        },
+        {
+          "w": "中国",
+          "r": "ちゅうごく",
+          "en": "China",
+          "pl": "Chiny",
+          "hl": false
+        },
+        {
+          "w": "中学",
+          "r": "ちゅうがく",
+          "en": "junior high school",
+          "pl": "gimnazjum",
+          "hl": false
+        },
+        {
+          "w": "一年中",
+          "r": "いちねんじゅう",
+          "en": "all year around",
+          "pl": "przez cały rok",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 29,
+      "kanji": "半",
+      "on": [
+        "ハン"
+      ],
+      "kun": [],
+      "meaning": {
+        "en": "half",
+        "pl": "połowa"
+      },
+      "strokes": 5,
+      "words": [
+        {
+          "w": "三時半",
+          "r": "さんじはん",
+          "en": "half past three",
+          "pl": "wpół do czwartej",
+          "hl": true
+        },
+        {
+          "w": "半分",
+          "r": "はんぶん",
+          "en": "half",
+          "pl": "połowa",
+          "hl": false
+        },
+        {
+          "w": "半年",
+          "r": "はんとし",
+          "en": "half a year",
+          "pl": "pół roku",
+          "hl": false
+        },
+        {
+          "w": "半額",
+          "r": "はんがく",
+          "en": "half price",
+          "pl": "za pół ceny",
+          "hl": false
+        }
+      ]
+    }
+  ]
+}

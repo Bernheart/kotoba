@@ -1,0 +1,200 @@
+{
+  "lesson": 12,
+  "kanji": [
+    {
+      "n": 132,
+      "kanji": "昔",
+      "on": [],
+      "kun": ["むかし"],
+      "meaning": { "en": "ancient times", "pl": "dawne czasy" },
+      "strokes": 8,
+      "words": [
+        { "w": "昔", "r": "むかし", "en": "old times", "pl": "dawniej; dawne czasy", "hl": true },
+        { "w": "昔話", "r": "むかしばなし", "en": "old tale", "pl": "dawna opowieść; baśń", "hl": false },
+        { "w": "大昔", "r": "おおむかし", "en": "ancient times", "pl": "zamierzchłe czasy", "hl": false }
+      ]
+    },
+    {
+      "n": 133,
+      "kanji": "々",
+      "on": [],
+      "kun": [],
+      "meaning": { "en": "symbol of repetition of a kanji", "pl": "znak powtórzenia kanji" },
+      "strokes": 3,
+      "words": [
+        { "w": "昔々", "r": "むかしむかし", "en": "once upon a time", "pl": "dawno, dawno temu", "hl": true },
+        { "w": "人々", "r": "ひとびと", "en": "people", "pl": "ludzie", "hl": true },
+        { "w": "時々", "r": "ときどき", "en": "sometimes", "pl": "czasami", "hl": false },
+        { "w": "色々な", "r": "いろいろな", "en": "various", "pl": "różny", "hl": false }
+      ]
+    },
+    {
+      "n": 134,
+      "kanji": "神",
+      "on": ["ジン", "シン", "コウ"],
+      "kun": ["かみ"],
+      "meaning": { "en": "God", "pl": "bóg" },
+      "strokes": 9,
+      "words": [
+        { "w": "神さま", "r": "かみさま", "en": "God", "pl": "Bóg", "hl": true },
+        { "w": "神社", "r": "じんじゃ", "en": "shrine", "pl": "chram shintō", "hl": true },
+        { "w": "神道", "r": "しんとう", "en": "Shinto", "pl": "shintō", "hl": false },
+        { "w": "神戸市", "r": "こうべし", "en": "Kobe City", "pl": "miasto Kobe", "hl": false }
+      ]
+    },
+    {
+      "n": 135,
+      "kanji": "早",
+      "on": ["ソウ"],
+      "kun": ["はや"],
+      "meaning": { "en": "early", "pl": "wcześnie" },
+      "strokes": 6,
+      "words": [
+        { "w": "早い", "r": "はやい", "en": "early", "pl": "wczesny", "hl": true },
+        { "w": "早起きする", "r": "はやおきする", "en": "to get up early", "pl": "wcześnie wstawać", "hl": false },
+        { "w": "早朝", "r": "そうちょう", "en": "early morning", "pl": "wczesny ranek", "hl": false }
+      ]
+    },
+    {
+      "n": 136,
+      "kanji": "起",
+      "on": ["キ"],
+      "kun": ["お"],
+      "meaning": { "en": "to get up", "pl": "wstawać" },
+      "strokes": 10,
+      "words": [
+        { "w": "起きる", "r": "おきる", "en": "to get up", "pl": "wstawać", "hl": true },
+        { "w": "起こす", "r": "おこす", "en": "to wake someone up", "pl": "budzić kogoś", "hl": false },
+        { "w": "再起動", "r": "さいきどう", "en": "reboot", "pl": "ponowne uruchomienie", "hl": false }
+      ]
+    },
+    {
+      "n": 137,
+      "kanji": "牛",
+      "on": ["ギュウ"],
+      "kun": ["うし"],
+      "meaning": { "en": "cow", "pl": "krowa" },
+      "strokes": 4,
+      "words": [
+        { "w": "牛", "r": "うし", "en": "cow", "pl": "krowa", "hl": true },
+        { "w": "牛乳", "r": "ぎゅうにゅう", "en": "milk", "pl": "mleko", "hl": false },
+        { "w": "牛肉", "r": "ぎゅうにく", "en": "beef", "pl": "wołowina", "hl": false },
+        { "w": "子牛", "r": "こうし", "en": "calf; veal", "pl": "cielę; cielęcina", "hl": false }
+      ]
+    },
+    {
+      "n": 138,
+      "kanji": "使",
+      "on": ["シ"],
+      "kun": ["つか"],
+      "meaning": { "en": "to use", "pl": "używać" },
+      "strokes": 8,
+      "words": [
+        { "w": "使う", "r": "つかう", "en": "to use", "pl": "używać", "hl": true },
+        { "w": "大使", "r": "たいし", "en": "ambassador", "pl": "ambasador", "hl": false },
+        { "w": "使用中", "r": "しようちゅう", "en": "“Occupied”", "pl": "„Zajęte”", "hl": false },
+        { "w": "お使い", "r": "おつかい", "en": "errand", "pl": "sprawunek", "hl": false }
+      ]
+    },
+    {
+      "n": 139,
+      "kanji": "働",
+      "on": ["ドウ"],
+      "kun": ["はたら", "ばたら"],
+      "meaning": { "en": "to work", "pl": "pracować" },
+      "strokes": 13,
+      "words": [
+        { "w": "働く", "r": "はたらく", "en": "to work", "pl": "pracować", "hl": true },
+        { "w": "共働き", "r": "ともばたらき", "en": "both husband and wife working", "pl": "praca obojga małżonków", "hl": false },
+        { "w": "労働", "r": "ろうどう", "en": "labor", "pl": "praca fizyczna; robocizna", "hl": false }
+      ]
+    },
+    {
+      "n": 140,
+      "kanji": "連",
+      "on": ["レン"],
+      "kun": ["つ"],
+      "meaning": { "en": "to link", "pl": "łączyć" },
+      "strokes": 10,
+      "words": [
+        { "w": "連れて帰る", "r": "つれてかえる", "en": "to bring (a person) back", "pl": "przyprowadzić (kogoś) z powrotem", "hl": true },
+        { "w": "国連", "r": "こくれん", "en": "United Nations", "pl": "ONZ", "hl": false },
+        { "w": "連休", "r": "れんきゅう", "en": "consecutive holidays", "pl": "kilka dni wolnych z rzędu", "hl": false }
+      ]
+    },
+    {
+      "n": 141,
+      "kanji": "別",
+      "on": ["ベツ"],
+      "kun": ["わか"],
+      "meaning": { "en": "to separate", "pl": "rozdzielać" },
+      "strokes": 7,
+      "words": [
+        { "w": "別れる", "r": "わかれる", "en": "to separate", "pl": "rozstawać się", "hl": true },
+        { "w": "別に", "r": "べつに", "en": "not in particular", "pl": "nic szczególnego", "hl": true },
+        { "w": "特別な", "r": "とくべつな", "en": "special", "pl": "specjalny", "hl": false },
+        { "w": "差別", "r": "さべつ", "en": "discrimination", "pl": "dyskryminacja", "hl": false },
+        { "w": "別々に", "r": "べつべつに", "en": "separately", "pl": "osobno", "hl": false }
+      ]
+    },
+    {
+      "n": 142,
+      "kanji": "度",
+      "on": ["ド"],
+      "kun": [],
+      "meaning": { "en": "time; degrees", "pl": "raz; stopień" },
+      "strokes": 9,
+      "words": [
+        { "w": "一度", "r": "いちど", "en": "once", "pl": "raz", "hl": true },
+        { "w": "今度", "r": "こんど", "en": "near future", "pl": "najbliższa przyszłość; następnym razem", "hl": true },
+        { "w": "温度", "r": "おんど", "en": "temperature", "pl": "temperatura", "hl": false },
+        { "w": "三十度", "r": "さんじゅうど", "en": "30 degrees", "pl": "30 stopni", "hl": false },
+        { "w": "態度", "r": "たいど", "en": "attitude", "pl": "postawa", "hl": false }
+      ]
+    },
+    {
+      "n": 143,
+      "kanji": "赤",
+      "on": ["セキ"],
+      "kun": ["あか"],
+      "meaning": { "en": "red", "pl": "czerwony" },
+      "strokes": 7,
+      "words": [
+        { "w": "赤", "r": "あか", "en": "red color", "pl": "kolor czerwony", "hl": true },
+        { "w": "赤い", "r": "あかい", "en": "red", "pl": "czerwony", "hl": true },
+        { "w": "赤ちゃん", "r": "あかちゃん", "en": "baby", "pl": "niemowlę", "hl": false },
+        { "w": "赤道", "r": "せきどう", "en": "the equator", "pl": "równik", "hl": false },
+        { "w": "赤十字", "r": "せきじゅうじ", "en": "the Red Cross", "pl": "Czerwony Krzyż", "hl": false }
+      ]
+    },
+    {
+      "n": 144,
+      "kanji": "青",
+      "on": ["セイ"],
+      "kun": ["あお"],
+      "meaning": { "en": "blue", "pl": "niebieski" },
+      "strokes": 8,
+      "words": [
+        { "w": "青", "r": "あお", "en": "blue color", "pl": "kolor niebieski", "hl": true },
+        { "w": "青い", "r": "あおい", "en": "blue", "pl": "niebieski", "hl": true },
+        { "w": "青年", "r": "せいねん", "en": "youth", "pl": "młodzieniec", "hl": false },
+        { "w": "青空", "r": "あおぞら", "en": "blue sky", "pl": "błękitne niebo", "hl": false },
+        { "w": "青信号", "r": "あおしんごう", "en": "green light", "pl": "zielone światło", "hl": false }
+      ]
+    },
+    {
+      "n": 145,
+      "kanji": "色",
+      "on": ["シキ", "ショク"],
+      "kun": ["いろ"],
+      "meaning": { "en": "color", "pl": "kolor" },
+      "strokes": 6,
+      "words": [
+        { "w": "色", "r": "いろ", "en": "color", "pl": "kolor", "hl": true },
+        { "w": "色々な", "r": "いろいろな", "en": "various", "pl": "różny", "hl": false },
+        { "w": "景色", "r": "けしき", "en": "scenery", "pl": "krajobraz", "hl": false },
+        { "w": "特色", "r": "とくしょく", "en": "characteristic", "pl": "cecha charakterystyczna", "hl": false }
+      ]
+    }
+  ]
+}

@@ -80,6 +80,19 @@ export interface ReviewLogRow {
 /** Live (non-undone) logs */
 export const liveLog = (l: Pick<ReviewLogRow, 'deleted'>) => !l.deleted
 
+/** Kanji practice stats (a quiz, not SRS): `k:<kanji>` per kanji, `w:<kanji>:<word>` per example word. */
+export interface KanjiProgressRow extends Syncable {
+  id: string
+  /** Reading/meaning answers */
+  right: number
+  wrong: number
+  /** Writing practice (draw-and-check, self-graded free draw) */
+  writeRight?: number
+  writeWrong?: number
+  /** Last answer, epoch ms */
+  last: number
+}
+
 export interface SettingRow extends Syncable {
   key: string
   value: unknown
@@ -96,6 +109,7 @@ export class KotobaDB extends Dexie {
   reviewLogs!: Table<ReviewLogRow, string>
   settings!: Table<SettingRow, string>
   meta!: Table<MetaRow, string>
+  kanjiProgress!: Table<KanjiProgressRow, string>
 
   constructor(name = 'kotoba') {
     super(name)
@@ -105,6 +119,9 @@ export class KotobaDB extends Dexie {
       reviewLogs: 'id, cardId, wordId, at, day, mode, dirty',
       settings: 'key, dirty',
       meta: 'key',
+    })
+    this.version(2).stores({
+      kanjiProgress: 'id, dirty, updatedAt',
     })
   }
 }

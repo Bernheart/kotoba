@@ -68,6 +68,8 @@ Sync is optional. Without it the app works fully offline on one device. Setup ta
 6. On the first device: enter your email and a password, then tap **Create account**. On the other device, use **Sign in** with the same details. You stay signed in on both.
 7. Optional lock-down once both devices are signed in: in **Authentication → Sign In / Providers**, turn off **"Allow new users to sign up"**, so nobody else can create accounts in your project.
 
+**Already set up sync before kanji practice?** Run [`supabase/schema.sql`](supabase/schema.sql) once more in the SQL Editor (it is safe to re-run). It lets the server store kanji stats. Until then everything else keeps syncing, and *Settings → Sync* shows a note that kanji stats are waiting.
+
 **Why a password and not an email link?** On iOS the Home Screen app keeps its storage separately from Safari. A login link from an email opens in Safari, so it signs in Safari, not the app. The app also has an **Email code** option (a 6-digit code typed into the app). It only works if you set up **custom SMTP** (Authentication → Emails, e.g. Gmail with an app password, or Resend), because Supabase's built-in mailer no longer lets you edit templates to include `{{ .Token }}`.
 
 **How sync works:**
@@ -159,6 +161,16 @@ The site is public, so anyone with the link can use it. Each person's progress l
 - **Sync is private.** It uses the owner's Supabase project, and visitors see a "Private sync" notice instead of a sign-in form. To keep it that way, turn off **Allow new users to sign up** in Supabase (Authentication → Sign In / Providers). A classmate who wants sync can create a free project of their own (steps above) and use **Settings → Sync → Use my own Supabase**.
 - **New visitors** get a one-time welcome screen: language, current Genki lesson, how to install, and a reminder to back up.
 - **Disclaimer.** The vocabulary and example sentences were written for this app with AI help and proofread, but not by a teacher. They are not official course material and may contain mistakes. The app is not affiliated with Genki or The Japan Times; "Genki" is used only to describe which lessons the words belong to.
+
+## Kanji (Genki I, lessons 3–12)
+
+*Study → Kanji* (or the Kanji section on *Words*) opens the 145 kanji of Genki I's reading-and-writing section, by lesson. Tap a kanji for its readings (on in katakana, kun in hiragana), meaning, every example word from the book (★ = highlighted in the book), a stroke-order animation and writing practice:
+
+- **Kanji quiz:** word → type the reading, word → meaning, kanji → meaning, kanji → reading. Choose lessons, count and question types; *Weak kanji first* puts the ones you miss most at the front. It is a quiz, not spaced repetition: kanji never show up in Flashcards or due counts.
+- **Writing:** *Draw & check* checks each stroke's direction and order and shows the correct stroke after a miss; *Free draw* lets you write from memory, compare with the model and grade yourself.
+- Right/wrong counts per kanji and per word sync like the rest and are part of the backup.
+
+The kanji data was transcribed from the textbook pages into [`data/kanji/`](data/kanji/). Genki has English meanings only, so the Polish ones were written for the app: see [`data/kanji/VERIFY.md`](data/kanji/VERIFY.md). Stroke data comes from [KanjiVG](https://kanjivg.tagaini.net) (© Ulrich Apel, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)); `node scripts/kanji-strokes.mjs` regenerates `data/kanji/strokes.json` for the kanji in the lesson files.
 
 ## How it's built
 

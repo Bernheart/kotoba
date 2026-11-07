@@ -201,3 +201,24 @@ rt {
   letter-spacing: 0.04em;
   font-weight: 400;
 }
+
+/* Kanji stroke animation: paths use pathLength="1", so a dash of 1 covers the whole stroke. */
+@keyframes kanji-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.kanji-stroke-anim {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: kanji-draw var(--dur, 0.55s) ease-in-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+@media (prefers-reduced-motion: reduce) {
+  .kanji-stroke-anim {
+    animation-duration: 0.01s;
+  }
+}

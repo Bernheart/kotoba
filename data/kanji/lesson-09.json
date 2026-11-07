@@ -1,0 +1,713 @@
+{
+  "lesson": 9,
+  "kanji": [
+    {
+      "n": 87,
+      "kanji": "午",
+      "on": [
+        "ゴ"
+      ],
+      "kun": [],
+      "meaning": {
+        "en": "noon",
+        "pl": "południe"
+      },
+      "strokes": 4,
+      "words": [
+        {
+          "w": "午前",
+          "r": "ごぜん",
+          "en": "A.M.",
+          "pl": "przed południem",
+          "hl": true
+        },
+        {
+          "w": "午後",
+          "r": "ごご",
+          "en": "P.M.; in the afternoon",
+          "pl": "po południu",
+          "hl": true
+        },
+        {
+          "w": "午前中",
+          "r": "ごぜんちゅう",
+          "en": "in the morning",
+          "pl": "przed południem (rano)",
+          "hl": true
+        },
+        {
+          "w": "正午",
+          "r": "しょうご",
+          "en": "noon",
+          "pl": "południe",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 88,
+      "kanji": "後",
+      "on": [
+        "ゴ"
+      ],
+      "kun": [
+        "あと",
+        "うし"
+      ],
+      "meaning": {
+        "en": "after",
+        "pl": "po; za"
+      },
+      "strokes": 9,
+      "words": [
+        {
+          "w": "午後",
+          "r": "ごご",
+          "en": "P.M.; in the afternoon",
+          "pl": "po południu",
+          "hl": true
+        },
+        {
+          "w": "〜の後",
+          "r": "のあと",
+          "en": "after …",
+          "pl": "po …",
+          "hl": true
+        },
+        {
+          "w": "後で",
+          "r": "あとで",
+          "en": "later",
+          "pl": "później",
+          "hl": true
+        },
+        {
+          "w": "後ろ",
+          "r": "うしろ",
+          "en": "back; behind",
+          "pl": "tył; z tyłu",
+          "hl": true
+        },
+        {
+          "w": "最後に",
+          "r": "さいごに",
+          "en": "lastly",
+          "pl": "na koniec",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 89,
+      "kanji": "前",
+      "on": [
+        "ゼン"
+      ],
+      "kun": [
+        "まえ"
+      ],
+      "meaning": {
+        "en": "before",
+        "pl": "przed"
+      },
+      "strokes": 9,
+      "words": [
+        {
+          "w": "前",
+          "r": "まえ",
+          "en": "before; front",
+          "pl": "przed; przód",
+          "hl": true
+        },
+        {
+          "w": "午前",
+          "r": "ごぜん",
+          "en": "A.M.",
+          "pl": "przed południem",
+          "hl": true
+        },
+        {
+          "w": "名前",
+          "r": "なまえ",
+          "en": "name",
+          "pl": "imię",
+          "hl": true
+        },
+        {
+          "w": "前売り",
+          "r": "まえうり",
+          "en": "advance sale",
+          "pl": "przedsprzedaż",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 90,
+      "kanji": "名",
+      "on": [
+        "メイ",
+        "ミョウ"
+      ],
+      "kun": [
+        "な"
+      ],
+      "meaning": {
+        "en": "name",
+        "pl": "imię; nazwa"
+      },
+      "strokes": 6,
+      "words": [
+        {
+          "w": "名前",
+          "r": "なまえ",
+          "en": "name",
+          "pl": "imię",
+          "hl": true
+        },
+        {
+          "w": "有名な",
+          "r": "ゆうめいな",
+          "en": "famous",
+          "pl": "sławny",
+          "hl": false
+        },
+        {
+          "w": "名刺",
+          "r": "めいし",
+          "en": "name card",
+          "pl": "wizytówka",
+          "hl": false
+        },
+        {
+          "w": "氏名",
+          "r": "しめい",
+          "en": "full name",
+          "pl": "imię i nazwisko",
+          "hl": false
+        },
+        {
+          "w": "名字",
+          "r": "みょうじ",
+          "en": "family name",
+          "pl": "nazwisko",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 91,
+      "kanji": "白",
+      "on": [
+        "ハク"
+      ],
+      "kun": [
+        "しろ"
+      ],
+      "meaning": {
+        "en": "white",
+        "pl": "biały"
+      },
+      "strokes": 5,
+      "words": [
+        {
+          "w": "白い",
+          "r": "しろい",
+          "en": "white",
+          "pl": "biały",
+          "hl": true
+        },
+        {
+          "w": "白紙",
+          "r": "はくし",
+          "en": "blank sheet",
+          "pl": "czysta kartka",
+          "hl": false
+        },
+        {
+          "w": "白",
+          "r": "しろ",
+          "en": "white color",
+          "pl": "kolor biały",
+          "hl": false
+        },
+        {
+          "w": "白鳥",
+          "r": "はくちょう",
+          "en": "swan",
+          "pl": "łabędź",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 92,
+      "kanji": "雨",
+      "on": [
+        "ウ"
+      ],
+      "kun": [
+        "あめ"
+      ],
+      "meaning": {
+        "en": "rain",
+        "pl": "deszcz"
+      },
+      "strokes": 8,
+      "words": [
+        {
+          "w": "雨",
+          "r": "あめ",
+          "en": "rain",
+          "pl": "deszcz",
+          "hl": true
+        },
+        {
+          "w": "雨期",
+          "r": "うき",
+          "en": "rainy season",
+          "pl": "pora deszczowa",
+          "hl": false
+        },
+        {
+          "w": "梅雨",
+          "r": "つゆ",
+          "en": "rainy season",
+          "pl": "pora deszczowa (czerwiec–lipiec)",
+          "hl": false
+        },
+        {
+          "w": "大雨",
+          "r": "おおあめ",
+          "en": "heavy rain",
+          "pl": "ulewa",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 93,
+      "kanji": "書",
+      "on": [
+        "ショ"
+      ],
+      "kun": [
+        "か"
+      ],
+      "meaning": {
+        "en": "to write",
+        "pl": "pisać"
+      },
+      "strokes": 10,
+      "words": [
+        {
+          "w": "書く",
+          "r": "かく",
+          "en": "to write",
+          "pl": "pisać",
+          "hl": true
+        },
+        {
+          "w": "辞書",
+          "r": "じしょ",
+          "en": "dictionary",
+          "pl": "słownik",
+          "hl": false
+        },
+        {
+          "w": "教科書",
+          "r": "きょうかしょ",
+          "en": "textbook",
+          "pl": "podręcznik",
+          "hl": false
+        },
+        {
+          "w": "図書館",
+          "r": "としょかん",
+          "en": "library",
+          "pl": "biblioteka",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 94,
+      "kanji": "友",
+      "on": [
+        "ユウ"
+      ],
+      "kun": [
+        "とも"
+      ],
+      "meaning": {
+        "en": "friend",
+        "pl": "przyjaciel"
+      },
+      "strokes": 4,
+      "words": [
+        {
+          "w": "友だち",
+          "r": "ともだち",
+          "en": "friend",
+          "pl": "przyjaciel; kolega",
+          "hl": true
+        },
+        {
+          "w": "親友",
+          "r": "しんゆう",
+          "en": "best friend",
+          "pl": "najlepszy przyjaciel",
+          "hl": false
+        },
+        {
+          "w": "友人",
+          "r": "ゆうじん",
+          "en": "friend",
+          "pl": "przyjaciel",
+          "hl": false
+        },
+        {
+          "w": "友情",
+          "r": "ゆうじょう",
+          "en": "friendship",
+          "pl": "przyjaźń",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 95,
+      "kanji": "間",
+      "on": [
+        "カン",
+        "ゲン"
+      ],
+      "kun": [
+        "あいだ"
+      ],
+      "meaning": {
+        "en": "between",
+        "pl": "między"
+      },
+      "strokes": 12,
+      "words": [
+        {
+          "w": "時間",
+          "r": "じかん",
+          "en": "time",
+          "pl": "czas",
+          "hl": true
+        },
+        {
+          "w": "二時間",
+          "r": "にじかん",
+          "en": "two hours",
+          "pl": "dwie godziny",
+          "hl": true
+        },
+        {
+          "w": "間",
+          "r": "あいだ",
+          "en": "between",
+          "pl": "między",
+          "hl": true
+        },
+        {
+          "w": "人間",
+          "r": "にんげん",
+          "en": "human being",
+          "pl": "człowiek",
+          "hl": false
+        },
+        {
+          "w": "一週間",
+          "r": "いっしゅうかん",
+          "en": "one week",
+          "pl": "jeden tydzień",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 96,
+      "kanji": "家",
+      "on": [
+        "カ"
+      ],
+      "kun": [
+        "いえ"
+      ],
+      "meaning": {
+        "en": "house",
+        "pl": "dom"
+      },
+      "strokes": 10,
+      "words": [
+        {
+          "w": "家",
+          "r": "いえ",
+          "en": "house",
+          "pl": "dom",
+          "hl": true
+        },
+        {
+          "w": "家族",
+          "r": "かぞく",
+          "en": "family",
+          "pl": "rodzina",
+          "hl": false
+        },
+        {
+          "w": "家",
+          "r": "うち",
+          "en": "house; home",
+          "pl": "dom",
+          "hl": false
+        },
+        {
+          "w": "家内",
+          "r": "かない",
+          "en": "my wife",
+          "pl": "moja żona",
+          "hl": false
+        },
+        {
+          "w": "作家",
+          "r": "さっか",
+          "en": "author",
+          "pl": "pisarz",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 97,
+      "kanji": "話",
+      "on": [
+        "ワ"
+      ],
+      "kun": [
+        "はな",
+        "はなし"
+      ],
+      "meaning": {
+        "en": "to speak",
+        "pl": "mówić"
+      },
+      "strokes": 13,
+      "words": [
+        {
+          "w": "話す",
+          "r": "はなす",
+          "en": "to speak",
+          "pl": "mówić",
+          "hl": true
+        },
+        {
+          "w": "話",
+          "r": "はなし",
+          "en": "talk; story",
+          "pl": "rozmowa; opowieść",
+          "hl": true
+        },
+        {
+          "w": "電話",
+          "r": "でんわ",
+          "en": "telephone",
+          "pl": "telefon",
+          "hl": true
+        },
+        {
+          "w": "会話",
+          "r": "かいわ",
+          "en": "conversation",
+          "pl": "rozmowa",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 98,
+      "kanji": "少",
+      "on": [
+        "ショウ"
+      ],
+      "kun": [
+        "すこ",
+        "すく"
+      ],
+      "meaning": {
+        "en": "little",
+        "pl": "mało"
+      },
+      "strokes": 4,
+      "words": [
+        {
+          "w": "少し",
+          "r": "すこし",
+          "en": "little",
+          "pl": "trochę",
+          "hl": true
+        },
+        {
+          "w": "少ない",
+          "r": "すくない",
+          "en": "few",
+          "pl": "nieliczny; mało",
+          "hl": false
+        },
+        {
+          "w": "少々",
+          "r": "しょうしょう",
+          "en": "a little",
+          "pl": "odrobinę",
+          "hl": false
+        },
+        {
+          "w": "少女",
+          "r": "しょうじょ",
+          "en": "girl",
+          "pl": "dziewczynka",
+          "hl": false
+        },
+        {
+          "w": "少年",
+          "r": "しょうねん",
+          "en": "boy",
+          "pl": "chłopiec",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 99,
+      "kanji": "古",
+      "on": [
+        "コ"
+      ],
+      "kun": [
+        "ふる"
+      ],
+      "meaning": {
+        "en": "old",
+        "pl": "stary"
+      },
+      "strokes": 5,
+      "words": [
+        {
+          "w": "古い",
+          "r": "ふるい",
+          "en": "old (for things)",
+          "pl": "stary (o rzeczach)",
+          "hl": true
+        },
+        {
+          "w": "中古",
+          "r": "ちゅうこ",
+          "en": "secondhand",
+          "pl": "używany",
+          "hl": false
+        },
+        {
+          "w": "古代",
+          "r": "こだい",
+          "en": "ancient times",
+          "pl": "starożytność",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 100,
+      "kanji": "知",
+      "on": [
+        "チ"
+      ],
+      "kun": [
+        "し"
+      ],
+      "meaning": {
+        "en": "to know",
+        "pl": "wiedzieć"
+      },
+      "strokes": 8,
+      "words": [
+        {
+          "w": "知る",
+          "r": "しる",
+          "en": "to know",
+          "pl": "wiedzieć; znać",
+          "hl": true
+        },
+        {
+          "w": "知人",
+          "r": "ちじん",
+          "en": "acquaintance",
+          "pl": "znajomy",
+          "hl": false
+        },
+        {
+          "w": "知り合い",
+          "r": "しりあい",
+          "en": "acquaintance",
+          "pl": "znajomy",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 101,
+      "kanji": "来",
+      "on": [
+        "ライ"
+      ],
+      "kun": [
+        "く",
+        "き",
+        "こ"
+      ],
+      "meaning": {
+        "en": "to come",
+        "pl": "przychodzić"
+      },
+      "strokes": 7,
+      "words": [
+        {
+          "w": "来る",
+          "r": "くる",
+          "en": "to come",
+          "pl": "przychodzić",
+          "hl": true
+        },
+        {
+          "w": "来ます",
+          "r": "きます",
+          "en": "to come",
+          "pl": "przychodzić (forma -masu)",
+          "hl": true
+        },
+        {
+          "w": "来ない",
+          "r": "こない",
+          "en": "not to come",
+          "pl": "nie przychodzić",
+          "hl": true
+        },
+        {
+          "w": "来週",
+          "r": "らいしゅう",
+          "en": "next week",
+          "pl": "przyszły tydzień",
+          "hl": false
+        },
+        {
+          "w": "来日",
+          "r": "らいにち",
+          "en": "visit to Japan",
+          "pl": "przyjazd do Japonii",
+          "hl": false
+        }
+      ]
+    }
+  ]
+}

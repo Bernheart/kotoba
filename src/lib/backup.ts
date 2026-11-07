@@ -1,4 +1,4 @@
-import { db, getMeta, setMeta, type CardRow, type ReviewLogRow, type SettingRow, type UserWordRow } from './db'
+import { db, getMeta, setMeta, type CardRow, type KanjiProgressRow, type ReviewLogRow, type SettingRow, type UserWordRow } from './db'
 import { LOCAL_ONLY } from './settings'
 import { applyRemote, toRecord, type Collection } from './sync/core'
 
@@ -10,14 +10,17 @@ export interface Backup {
   cards: CardRow[]
   reviewLogs: ReviewLogRow[]
   settings: SettingRow[]
+  /** Kanji practice stats (missing in backups made before kanji practice) */
+  kanjiProgress?: KanjiProgressRow[]
 }
 
 export async function createBackup(): Promise<Backup> {
-  const [userWords, cards, reviewLogs, settings] = await Promise.all([
+  const [userWords, cards, reviewLogs, settings, kanjiProgress] = await Promise.all([
     db.userWords.toArray(),
     db.cards.toArray(),
     db.reviewLogs.toArray(),
     db.settings.toArray(),
+    db.kanjiProgress.toArray(),
   ])
   return {
     kotobaBackup: 1,
@@ -27,6 +30,7 @@ export async function createBackup(): Promise<Backup> {
     cards,
     reviewLogs,
     settings: settings.filter((s) => !LOCAL_ONLY.includes(s.key as never)),
+    kanjiProgress,
   }
 }
 
@@ -72,8 +76,8 @@ export function parseBackup(text: string): Backup {
 /** Merge = last-write-wins per record (like sync); replace = wipe this device first. Restored rows are marked dirty so they sync. */
 export async function restoreBackup(b: Backup, mode: 'merge' | 'replace') {
   if (mode === 'replace') {
-    await db.transaction('rw', [db.userWords, db.cards, db.reviewLogs, db.settings], async () => {
-      await Promise.all([db.userWords.clear(), db.cards.clear(), db.reviewLogs.clear(), db.settings.clear()])
+    await db.transaction('rw', [db.userWords, db.cards, db.reviewLogs, db.settings, db.kanjiProgress], async () => {
+      await Promise.all([db.userWords.clear(), db.cards.clear(), db.reviewLogs.clear(), db.settings.clear(), db.kanjiProgress.clear()])
     })
   }
   const recs = [
@@ -81,10 +85,12 @@ export async function restoreBackup(b: Backup, mode: 'merge' | 'replace') {
     ...b.cards.map((r) => toRecord('cards', r as never)),
     ...b.reviewLogs.map((r) => toRecord('logs', r as never)),
     ...b.settings.map((r) => toRecord('settings', r as never)),
+    ...(b.kanjiProgress ?? []).map((r) => toRecord('kanji', r as never)),
   ]
   await applyRemote(db, recs)
   // mark as dirty so a signed-in device uploads the restored data
-  await db.transaction('rw', [db.userWords, db.cards, db.reviewLogs, db.settings], async () => {
+  await db.transaction('rw', [db.userWords, db.cards, db.reviewLogs, db.settings, db.kanjiProgress], async () => {
+    await db.kanjiProgress.toCollection().modify({ dirty: 1 })
     await db.userWords.toCollection().modify({ dirty: 1 })
     await db.cards.toCollection().modify({ dirty: 1 })
     await db.reviewLogs.toCollection().modify({ dirty: 1 })
@@ -100,7 +106,7 @@ export async function daysSinceBackup(): Promise<number> {
 }
 
 export async function eraseAll() {
-  await db.transaction('rw', [db.userWords, db.cards, db.reviewLogs, db.settings, db.meta], async () => {
-    await Promise.all([db.userWords.clear(), db.cards.clear(), db.reviewLogs.clear(), db.settings.clear(), db.meta.clear()])
+  await db.transaction('rw', [db.userWords, db.cards, db.reviewLogs, db.settings, db.meta, db.kanjiProgress], async () => {
+    await Promise.all([db.userWords.clear(), db.cards.clear(), db.reviewLogs.clear(), db.settings.clear(), db.meta.clear(), db.kanjiProgress.clear()])
   })
 }

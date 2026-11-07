@@ -1,0 +1,635 @@
+{
+  "lesson": 7,
+  "kanji": [
+    {
+      "n": 59,
+      "kanji": "京",
+      "on": [
+        "キョウ"
+      ],
+      "kun": [],
+      "meaning": {
+        "en": "capital",
+        "pl": "stolica"
+      },
+      "strokes": 8,
+      "words": [
+        {
+          "w": "東京",
+          "r": "とうきょう",
+          "en": "Tokyo",
+          "pl": "Tokio",
+          "hl": true
+        },
+        {
+          "w": "京子",
+          "r": "きょうこ",
+          "en": "Kyoko",
+          "pl": "Kyoko (imię)",
+          "hl": true
+        },
+        {
+          "w": "京都",
+          "r": "きょうと",
+          "en": "Kyoto",
+          "pl": "Kioto",
+          "hl": false
+        },
+        {
+          "w": "上京する",
+          "r": "じょうきょうする",
+          "en": "to go to the capital",
+          "pl": "jechać do stolicy",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 60,
+      "kanji": "子",
+      "on": [
+        "シ"
+      ],
+      "kun": [
+        "こ"
+      ],
+      "meaning": {
+        "en": "child",
+        "pl": "dziecko"
+      },
+      "strokes": 3,
+      "words": [
+        {
+          "w": "子ども",
+          "r": "こども",
+          "en": "child",
+          "pl": "dziecko",
+          "hl": true
+        },
+        {
+          "w": "京子",
+          "r": "きょうこ",
+          "en": "Kyoko",
+          "pl": "Kyoko (imię)",
+          "hl": true
+        },
+        {
+          "w": "女の子",
+          "r": "おんなのこ",
+          "en": "girl",
+          "pl": "dziewczynka",
+          "hl": false
+        },
+        {
+          "w": "男の子",
+          "r": "おとこのこ",
+          "en": "boy",
+          "pl": "chłopiec",
+          "hl": false
+        },
+        {
+          "w": "女子学生",
+          "r": "じょしがくせい",
+          "en": "female student",
+          "pl": "studentka",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 61,
+      "kanji": "小",
+      "on": [
+        "ショウ"
+      ],
+      "kun": [
+        "ちい"
+      ],
+      "meaning": {
+        "en": "small",
+        "pl": "mały"
+      },
+      "strokes": 3,
+      "words": [
+        {
+          "w": "小さい",
+          "r": "ちいさい",
+          "en": "small",
+          "pl": "mały",
+          "hl": true
+        },
+        {
+          "w": "小学校",
+          "r": "しょうがっこう",
+          "en": "elementary school",
+          "pl": "szkoła podstawowa",
+          "hl": false
+        },
+        {
+          "w": "小学生",
+          "r": "しょうがくせい",
+          "en": "elementary school student",
+          "pl": "uczeń szkoły podstawowej",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 62,
+      "kanji": "会",
+      "on": [
+        "カイ"
+      ],
+      "kun": [
+        "あ"
+      ],
+      "meaning": {
+        "en": "to meet",
+        "pl": "spotykać"
+      },
+      "strokes": 6,
+      "words": [
+        {
+          "w": "会う",
+          "r": "あう",
+          "en": "to meet",
+          "pl": "spotykać się",
+          "hl": true
+        },
+        {
+          "w": "会社",
+          "r": "かいしゃ",
+          "en": "company",
+          "pl": "firma",
+          "hl": true
+        },
+        {
+          "w": "会社員",
+          "r": "かいしゃいん",
+          "en": "office worker",
+          "pl": "pracownik biurowy",
+          "hl": false
+        },
+        {
+          "w": "会議",
+          "r": "かいぎ",
+          "en": "meeting",
+          "pl": "zebranie",
+          "hl": false
+        },
+        {
+          "w": "教会",
+          "r": "きょうかい",
+          "en": "church",
+          "pl": "kościół",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 63,
+      "kanji": "社",
+      "on": [
+        "シャ",
+        "ジャ"
+      ],
+      "kun": [],
+      "meaning": {
+        "en": "company",
+        "pl": "firma"
+      },
+      "strokes": 7,
+      "words": [
+        {
+          "w": "会社",
+          "r": "かいしゃ",
+          "en": "company",
+          "pl": "firma",
+          "hl": true
+        },
+        {
+          "w": "神社",
+          "r": "じんじゃ",
+          "en": "shrine",
+          "pl": "świątynia shintō",
+          "hl": false
+        },
+        {
+          "w": "社会",
+          "r": "しゃかい",
+          "en": "society",
+          "pl": "społeczeństwo",
+          "hl": false
+        },
+        {
+          "w": "入社",
+          "r": "にゅうしゃ",
+          "en": "entry to a company",
+          "pl": "wstąpienie do firmy",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 64,
+      "kanji": "父",
+      "on": [
+        "フ"
+      ],
+      "kun": [
+        "ちち",
+        "とう"
+      ],
+      "meaning": {
+        "en": "father",
+        "pl": "ojciec"
+      },
+      "strokes": 4,
+      "words": [
+        {
+          "w": "父",
+          "r": "ちち",
+          "en": "father",
+          "pl": "ojciec",
+          "hl": true
+        },
+        {
+          "w": "お父さん",
+          "r": "おとうさん",
+          "en": "father",
+          "pl": "tata, ojciec",
+          "hl": true
+        },
+        {
+          "w": "父母",
+          "r": "ふぼ",
+          "en": "father and mother",
+          "pl": "rodzice",
+          "hl": false
+        },
+        {
+          "w": "祖父",
+          "r": "そふ",
+          "en": "grandfather",
+          "pl": "dziadek",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 65,
+      "kanji": "母",
+      "on": [
+        "ボ"
+      ],
+      "kun": [
+        "はは",
+        "かあ"
+      ],
+      "meaning": {
+        "en": "mother",
+        "pl": "matka"
+      },
+      "strokes": 5,
+      "words": [
+        {
+          "w": "母",
+          "r": "はは",
+          "en": "mother",
+          "pl": "matka",
+          "hl": true
+        },
+        {
+          "w": "お母さん",
+          "r": "おかあさん",
+          "en": "mother",
+          "pl": "mama, matka",
+          "hl": true
+        },
+        {
+          "w": "母語",
+          "r": "ぼご",
+          "en": "mother tongue",
+          "pl": "język ojczysty",
+          "hl": false
+        },
+        {
+          "w": "祖母",
+          "r": "そぼ",
+          "en": "grandmother",
+          "pl": "babcia",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 66,
+      "kanji": "高",
+      "on": [
+        "コウ"
+      ],
+      "kun": [
+        "たか"
+      ],
+      "meaning": {
+        "en": "high",
+        "pl": "wysoki"
+      },
+      "strokes": 10,
+      "words": [
+        {
+          "w": "高い",
+          "r": "たかい",
+          "en": "expensive; high",
+          "pl": "drogi; wysoki",
+          "hl": true
+        },
+        {
+          "w": "高校",
+          "r": "こうこう",
+          "en": "high school",
+          "pl": "liceum",
+          "hl": true
+        },
+        {
+          "w": "高校生",
+          "r": "こうこうせい",
+          "en": "high school student",
+          "pl": "licealista",
+          "hl": true
+        },
+        {
+          "w": "最高",
+          "r": "さいこう",
+          "en": "the best",
+          "pl": "najlepszy",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 67,
+      "kanji": "校",
+      "on": [
+        "コウ"
+      ],
+      "kun": [],
+      "meaning": {
+        "en": "school",
+        "pl": "szkoła"
+      },
+      "strokes": 10,
+      "words": [
+        {
+          "w": "学校",
+          "r": "がっこう",
+          "en": "school",
+          "pl": "szkoła",
+          "hl": true
+        },
+        {
+          "w": "高校",
+          "r": "こうこう",
+          "en": "high school",
+          "pl": "liceum",
+          "hl": true
+        },
+        {
+          "w": "高校生",
+          "r": "こうこうせい",
+          "en": "high school student",
+          "pl": "licealista",
+          "hl": true
+        },
+        {
+          "w": "中学校",
+          "r": "ちゅうがっこう",
+          "en": "junior high school",
+          "pl": "gimnazjum",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 68,
+      "kanji": "毎",
+      "on": [
+        "マイ"
+      ],
+      "kun": [],
+      "meaning": {
+        "en": "every",
+        "pl": "każdy"
+      },
+      "strokes": 6,
+      "words": [
+        {
+          "w": "毎日",
+          "r": "まいにち",
+          "en": "every day",
+          "pl": "codziennie",
+          "hl": true
+        },
+        {
+          "w": "毎週",
+          "r": "まいしゅう",
+          "en": "every week",
+          "pl": "co tydzień",
+          "hl": false
+        },
+        {
+          "w": "毎晩",
+          "r": "まいばん",
+          "en": "every night",
+          "pl": "co wieczór",
+          "hl": false
+        },
+        {
+          "w": "毎年",
+          "r": "まいねん／まいとし",
+          "en": "every year",
+          "pl": "co roku",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 69,
+      "kanji": "語",
+      "on": [
+        "ゴ"
+      ],
+      "kun": [],
+      "meaning": {
+        "en": "word",
+        "pl": "słowo; język"
+      },
+      "strokes": 14,
+      "words": [
+        {
+          "w": "日本語",
+          "r": "にほんご",
+          "en": "Japanese language",
+          "pl": "język japoński",
+          "hl": true
+        },
+        {
+          "w": "英語",
+          "r": "えいご",
+          "en": "English language",
+          "pl": "język angielski",
+          "hl": false
+        },
+        {
+          "w": "敬語",
+          "r": "けいご",
+          "en": "honorific expressions",
+          "pl": "język grzecznościowy",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 70,
+      "kanji": "文",
+      "on": [
+        "ブン"
+      ],
+      "kun": [],
+      "meaning": {
+        "en": "sentence",
+        "pl": "zdanie"
+      },
+      "strokes": 4,
+      "words": [
+        {
+          "w": "文学",
+          "r": "ぶんがく",
+          "en": "literature",
+          "pl": "literatura",
+          "hl": true
+        },
+        {
+          "w": "作文",
+          "r": "さくぶん",
+          "en": "composition",
+          "pl": "wypracowanie",
+          "hl": false
+        },
+        {
+          "w": "文字",
+          "r": "もじ",
+          "en": "letter; character",
+          "pl": "litera; znak pisma",
+          "hl": false
+        },
+        {
+          "w": "文化",
+          "r": "ぶんか",
+          "en": "culture",
+          "pl": "kultura",
+          "hl": false
+        },
+        {
+          "w": "文法",
+          "r": "ぶんぽう",
+          "en": "grammar",
+          "pl": "gramatyka",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 71,
+      "kanji": "帰",
+      "on": [
+        "キ"
+      ],
+      "kun": [
+        "かえ"
+      ],
+      "meaning": {
+        "en": "to return",
+        "pl": "wracać"
+      },
+      "strokes": 10,
+      "words": [
+        {
+          "w": "帰る",
+          "r": "かえる",
+          "en": "to return",
+          "pl": "wracać",
+          "hl": true
+        },
+        {
+          "w": "帰国",
+          "r": "きこく",
+          "en": "going home",
+          "pl": "powrót do kraju",
+          "hl": false
+        },
+        {
+          "w": "帰宅",
+          "r": "きたく",
+          "en": "returning home",
+          "pl": "powrót do domu",
+          "hl": false
+        },
+        {
+          "w": "帰り",
+          "r": "かえり",
+          "en": "return",
+          "pl": "powrót",
+          "hl": false
+        }
+      ]
+    },
+    {
+      "n": 72,
+      "kanji": "入",
+      "on": [
+        "ニュウ"
+      ],
+      "kun": [
+        "はい",
+        "い",
+        "いり"
+      ],
+      "meaning": {
+        "en": "to enter",
+        "pl": "wchodzić"
+      },
+      "strokes": 2,
+      "words": [
+        {
+          "w": "入る",
+          "r": "はいる",
+          "en": "to enter",
+          "pl": "wchodzić",
+          "hl": true
+        },
+        {
+          "w": "入り口／入口",
+          "r": "いりぐち",
+          "en": "entrance",
+          "pl": "wejście",
+          "hl": false
+        },
+        {
+          "w": "入れる",
+          "r": "いれる",
+          "en": "to put something in",
+          "pl": "wkładać",
+          "hl": false
+        },
+        {
+          "w": "輸入",
+          "r": "ゆにゅう",
+          "en": "import",
+          "pl": "import",
+          "hl": false
+        }
+      ]
+    }
+  ]
+}

@@ -225,6 +225,7 @@ export function SettingsPage() {
       <Group title={t.settings.about}>
         <div className="space-y-2 px-4 py-3.5 text-[14px] text-muted">
           <p>{t.settings.aboutBody}</p>
+          <p>{t.kanji.credit}</p>
           <a className="inline-block text-accent underline-offset-4 hover:underline" href="https://github.com/Bernheart/kotoba" target="_blank" rel="noreferrer">
             {t.settings.source} ↗
           </a>

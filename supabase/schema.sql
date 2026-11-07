@@ -1,12 +1,12 @@
 -- Kotoba sync schema. Run once in your Supabase project: Dashboard → SQL Editor → New query → paste → Run.
--- One table holds every synced record (cards, review logs, your words, settings) as JSON.
+-- One table holds every synced record (cards, review logs, your words, settings, kanji stats) as JSON.
 -- Conflict rule: last write wins per record (by the client's updated_at), enforced on the server.
 
 create sequence if not exists public.kotoba_seq;
 
 create table if not exists public.kotoba_records (
   user_id    uuid    not null default auth.uid() references auth.users on delete cascade,
-  collection text    not null check (collection in ('cards', 'logs', 'words', 'settings')),
+  collection text    not null check (collection in ('cards', 'logs', 'words', 'settings', 'kanji')),
   id         text    not null,
   data       jsonb   not null,
   updated_at bigint  not null,          -- client timestamp (ms) of the last edit
@@ -14,6 +14,11 @@ create table if not exists public.kotoba_records (
   seq        bigint  not null default nextval('public.kotoba_seq'), -- change feed cursor
   primary key (user_id, collection, id)
 );
+
+-- Migration for projects created before kanji practice (safe to re-run): allow the 'kanji' collection.
+alter table public.kotoba_records drop constraint if exists kotoba_records_collection_check;
+alter table public.kotoba_records add constraint kotoba_records_collection_check
+  check (collection in ('cards', 'logs', 'words', 'settings', 'kanji'));
 
 create index if not exists kotoba_records_user_seq on public.kotoba_records (user_id, seq);
 
