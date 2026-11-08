@@ -185,7 +185,7 @@ function DrawRunner({ items, mode, onExit, onDone }: { items: Item[]; mode: Mode
     if (!item || result !== null) return
     setResult(ok)
     if (!ok) setMissed((m) => [...m, item.kanji])
-    void recordKanji(kanjiKey(item.kanji.kanji), ok, 'write')
+    void recordKanji(kanjiKey(item.kanji.kanji), ok, 'meaning')
   }
   const next = () => {
     setResult(null)

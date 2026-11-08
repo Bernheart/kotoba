@@ -7,6 +7,7 @@ import {
   drawPrompt,
   pickForWriting,
   writeWeight,
+  writeScore,
   gradeDrawing,
   strokeFit,
   resample,
@@ -241,7 +242,7 @@ describe('draw-and-check leniency (simulated handwriting)', () => {
 })
 
 describe('write from meaning', () => {
-  const row = (r: number, w: number, last?: number) => ({ id: 'x', right: 0, wrong: 0, writeRight: r, writeWrong: w, writeLast: last, last: 0, updatedAt: 0, dirty: 0 as const })
+  const row = (r: number, w: number, last?: number) => ({ id: 'x', right: 0, wrong: 0, meaningRight: r, meaningWrong: w, meaningLast: last, last: 0, updatedAt: 0, dirty: 0 as const })
 
   it('blanks the kanji in the prompt word', () => {
     for (const k of KANJI) {
@@ -249,6 +250,17 @@ describe('write from meaning', () => {
       expect(p.blanked, k.kanji).not.toContain(k.kanji)
       expect(p.blanked, k.kanji).toContain('□')
     }
+  })
+
+  it('the write record counts only write-from-meaning answers', async () => {
+    const d = new KotobaDB(`meaning-${Math.random()}`)
+    await recordKanji('k:山', true, 'write', 1000, d)
+    expect(writeScore(await d.kanjiProgress.get('k:山'))).toBeUndefined()
+    await recordKanji('k:山', false, 'meaning', 2000, d)
+    const r = await d.kanjiProgress.get('k:山')
+    expect(r).toMatchObject({ writeRight: 1, writeWrong: 1, meaningWrong: 1, meaningLast: 2000 })
+    expect(writeScore(r)).toEqual({ right: 0, wrong: 1, rate: 0 })
+    await d.delete()
   })
 
   it('weights badly written, unwritten and long-unwritten kanji higher', () => {

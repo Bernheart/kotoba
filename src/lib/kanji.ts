@@ -94,7 +94,8 @@ export const wordKey = (k: string, w: Pick<KanjiWord, 'w' | 'r'>) => `w:${k}:${w
 /** Identity of an example word across kanji (三時 is listed under both 三 and 時). */
 export const wordId = (w: Pick<KanjiWord, 'w' | 'r'>) => `${w.w}|${w.r}`
 
-export type StatKind = 'read' | 'write'
+/** 'meaning' = write-from-meaning: counts as writing and in its own record */
+export type StatKind = 'read' | 'write' | 'meaning'
 
 export async function recordKanji(id: string, ok: boolean, kind: StatKind = 'read', now = Date.now(), database: KotobaDB = db) {
   await database.transaction('rw', database.kanjiProgress, async () => {
@@ -107,6 +108,11 @@ export async function recordKanji(id: string, ok: boolean, kind: StatKind = 'rea
       if (ok) row.writeRight = (row.writeRight ?? 0) + 1
       else row.writeWrong = (row.writeWrong ?? 0) + 1
       row.writeLast = now
+      if (kind === 'meaning') {
+        if (ok) row.meaningRight = (row.meaningRight ?? 0) + 1
+        else row.meaningWrong = (row.meaningWrong ?? 0) + 1
+        row.meaningLast = now
+      }
     }
     await database.kanjiProgress.put(row)
   })
@@ -346,13 +352,13 @@ export function drawPrompt(k: Kanji): DrawPrompt {
   return { word, blanked: variants(word.w)[0]!.split(k.kanji).join('□') }
 }
 
-/** How much a kanji needs writing practice: higher = drawn badly, never drawn, or not drawn for a while. */
+/** How much a kanji needs write-from-meaning practice: higher = drawn badly, never drawn, or not drawn for a while. */
 export function writeWeight(row: KanjiProgressRow | undefined, now = Date.now()): number {
-  const r = row?.writeRight ?? 0
-  const w = row?.writeWrong ?? 0
+  const r = row?.meaningRight ?? 0
+  const w = row?.meaningWrong ?? 0
   if (!r && !w) return 1.6
   const miss = (w + 1) / (r + w + 2)
-  const days = row?.writeLast ? (now - row.writeLast) / 86_400_000 : 30
+  const days = row?.meaningLast ? (now - row.meaningLast) / 86_400_000 : 30
   return 0.3 + 2.5 * miss + 0.7 * Math.min(1, Math.max(0, days) / 10)
 }
 
@@ -373,10 +379,10 @@ export function pickForWriting(pool: Kanji[], stats: Map<string, KanjiProgressRo
   return out
 }
 
-/** Writing record of one kanji (undefined = never drawn). */
+/** Write-from-meaning record of one kanji (undefined = never drawn there). */
 export function writeScore(row: KanjiProgressRow | undefined): { right: number; wrong: number; rate: number } | undefined {
-  const right = row?.writeRight ?? 0
-  const wrong = row?.writeWrong ?? 0
+  const right = row?.meaningRight ?? 0
+  const wrong = row?.meaningWrong ?? 0
   return right + wrong ? { right, wrong, rate: right / (right + wrong) } : undefined
 }
 

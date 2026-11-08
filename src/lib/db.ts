@@ -91,6 +91,10 @@ export interface KanjiProgressRow extends Syncable {
   writeWrong?: number
   /** Last writing answer, epoch ms */
   writeLast?: number
+  /** Write-from-meaning only (also counted in write*): drives "You write best" and the weak-more picking */
+  meaningRight?: number
+  meaningWrong?: number
+  meaningLast?: number
   /** Last answer, epoch ms */
   last: number
 }
