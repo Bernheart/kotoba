@@ -192,8 +192,9 @@ export function DrawCheck({ kanji, onDone, allowTrace = true }: { kanji: string;
 /**
  * Free draw: draw from memory, then "Check" compares the drawing with the model on the device (strokes in
  * any order) and suggests a grade, which you confirm or override. `hint` replaces the default help text.
+ * `practice`: a redraw after a miss — the check is shown but there is nothing to grade.
  */
-export function FreeDraw({ kanji, onGrade, hint }: { kanji: string; onGrade: (ok: boolean) => void; hint?: string }) {
+export function FreeDraw({ kanji, onGrade, hint, practice }: { kanji: string; onGrade?: (ok: boolean) => void; hint?: string; practice?: boolean }) {
   const t = useT()
   const data = STROKES[kanji]!
   const [lines, setLines] = useState<Pt[][]>([])
@@ -203,7 +204,7 @@ export function FreeDraw({ kanji, onGrade, hint }: { kanji: string; onGrade: (ok
   const unmatched = new Set(grade?.unmatched ?? [])
   const choose = (ok: boolean) => {
     setGraded(ok)
-    onGrade(ok)
+    onGrade?.(ok)
   }
   const right = (
     <Button key="r" variant={grade?.ok ? 'primary' : undefined} onClick={() => choose(true)}>
@@ -257,7 +258,7 @@ export function FreeDraw({ kanji, onGrade, hint }: { kanji: string; onGrade: (ok
               {t.common.check}
             </Button>
           </>
-        ) : graded === null ? (
+        ) : practice ? null : graded === null ? (
           grade.ok ? [right, wrong] : [wrong, right]
         ) : (
           <p data-testid="free-graded" className={`text-[15px] ${graded ? 'text-good' : 'text-accent'}`}>

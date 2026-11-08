@@ -361,6 +361,8 @@ export const en = {
     best: 'You write best',
     needsWork: 'Needs practice',
     reveal: 'Show the kanji',
+    drawAgain: 'Draw again',
+    showStrokes: 'Show strokes',
     writeRate: (r: number, n: number) => `${r}/${n}`,
   },
   conj: {

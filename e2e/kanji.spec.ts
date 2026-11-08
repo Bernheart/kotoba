@@ -146,11 +146,27 @@ test('write from meaning: prompt, free draw auto-check, results', async ({ page 
   await expect(page.getByTestId('write-record')).toContainText('You write best')
 })
 
-test('write from meaning: "Show the kanji" counts as a miss', async ({ page }) => {
+test('write from meaning: after a miss you can watch the strokes and draw again', async ({ page }) => {
   await page.goto('/?safe=1#/kanji/draw')
+  await page.getByRole('radio', { name: 'Free draw + auto-check' }).click()
   await page.getByRole('button', { name: 'Begin' }).click()
   await page.getByRole('button', { name: 'Show the kanji' }).click()
   await expect(page.getByRole('img')).toBeVisible()
+  // redraw: a fresh canvas whose check has nothing to grade (the miss already counted)
+  await page.getByRole('button', { name: /Draw again/ }).click()
+  const box = (await page.getByTestId('free-canvas').boundingBox())!
+  await page.mouse.move(box.x + box.width * 0.3, box.y + box.height * 0.5)
+  await page.mouse.down()
+  await page.mouse.move(box.x + box.width * 0.7, box.y + box.height * 0.5, { steps: 8 })
+  await page.mouse.up()
+  await page.getByRole('button', { name: 'Check' }).click()
+  await expect(page.getByTestId('free-result')).toBeVisible()
+  await expect(page.getByRole('button', { name: /I got it right/ })).toHaveCount(0)
+  // watch the stroke order again, then move on
+  await page.getByRole('button', { name: /Show strokes/ }).click()
+  await expect(page.getByRole('img')).toBeVisible()
+  await expect(page.getByRole('button', { name: /Replay strokes/ })).toBeVisible()
   await page.getByRole('button', { name: 'Continue' }).click()
   await expect(page.getByTestId('draw-prompt')).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Show the kanji' })).toBeVisible()
 })

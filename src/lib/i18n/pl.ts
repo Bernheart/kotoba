@@ -364,6 +364,8 @@ export const pl: Dict = {
     best: 'Najlepiej piszesz',
     needsWork: 'Do poćwiczenia',
     reveal: 'Pokaż kanji',
+    drawAgain: 'Narysuj jeszcze raz',
+    showStrokes: 'Pokaż kreski',
     writeRate: (r: number, n: number) => `${r}/${n}`,
   },
   conj: {

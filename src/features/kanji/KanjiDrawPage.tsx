@@ -175,6 +175,9 @@ function DrawRunner({ items, mode, onExit, onDone }: { items: Item[]; mode: Mode
   const [pos, setPos] = useState(0)
   const [result, setResult] = useState<boolean | null>(null)
   const [revealed, setRevealed] = useState(false)
+  // after answering: redraw for practice (attempt > 0) or watch the stroke order
+  const [attempt, setAttempt] = useState(0)
+  const [strokes, setStrokes] = useState(0)
   const [missed, setMissed] = useState<Kanji[]>([])
   const item = items[pos]
 
@@ -187,8 +190,17 @@ function DrawRunner({ items, mode, onExit, onDone }: { items: Item[]; mode: Mode
   const next = () => {
     setResult(null)
     setRevealed(false)
+    setAttempt(0)
+    setStrokes(0)
     setPos((p) => p + 1)
   }
+  const drawAgain = () => {
+    setRevealed(false)
+    setStrokes(0)
+    setAttempt((a) => a + 1)
+  }
+  // replays when already showing
+  const showStrokes = () => setStrokes((s) => s + 1)
 
   if (!item) {
     const n = items.length
@@ -243,19 +255,26 @@ function DrawRunner({ items, mode, onExit, onDone }: { items: Item[]; mode: Mode
           </div>
         </div>
         <div className="mt-3">
-          {revealed ? (
-            <StrokeAnimation kanji={k.kanji} />
+          {revealed || strokes > 0 ? (
+            <StrokeAnimation kanji={k.kanji} run={strokes} />
           ) : mode === 'free' ? (
-            <FreeDraw key={pos} kanji={k.kanji} onGrade={answer} hint={t.kanji.drawHint} />
+            // a redraw after answering is practice only: the first attempt is what counts
+            <FreeDraw key={`${pos}-${attempt}`} kanji={k.kanji} onGrade={attempt ? undefined : answer} practice={attempt > 0} hint={t.kanji.drawHint} />
           ) : (
-            <DrawCheck key={pos} kanji={k.kanji} allowTrace={false} onDone={(misses) => answer(misses === 0)} />
+            <DrawCheck key={`${pos}-${attempt}`} kanji={k.kanji} allowTrace={false} onDone={(misses) => !attempt && answer(misses === 0)} />
           )}
         </div>
         <div className="mt-auto pt-4">
           {result !== null || revealed ? (
-            <Button variant="primary" size="lg" className="w-full" onClick={next}>
-              {t.common.continue}
-            </Button>
+            <>
+              <div className={`mb-2 grid gap-2 ${result === true ? 'grid-cols-1' : 'grid-cols-2'}`}>
+                {result !== true && <Button onClick={drawAgain}>↻ {t.kanji.drawAgain}</Button>}
+                <Button onClick={showStrokes}>▶ {strokes > 0 ? t.kanji.replay : t.kanji.showStrokes}</Button>
+              </div>
+              <Button variant="primary" size="lg" className="w-full" onClick={next}>
+                {t.common.continue}
+              </Button>
+            </>
           ) : (
             <button
               className="w-full py-2 text-center text-[14px] text-muted underline-offset-4 hover:underline"
