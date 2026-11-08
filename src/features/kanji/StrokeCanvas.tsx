@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type PointerEvent as RPointerEvent, type ReactNode } from 'react'
 import { Button } from '../../components/ui'
 import { useT } from '../../lib/i18n'
-import { checkStroke, resample, strokeFit, STROKE_BOX, STROKES, type Pt, type StrokeVerdict } from '../../lib/kanji'
+import { checkStroke, gradeDrawing, resample, strokeFit, STROKE_BOX, STROKES, type DrawingGrade, type Pt, type StrokeVerdict } from '../../lib/kanji'
 
 const B = STROKE_BOX
 const toPoints = (pts: Pt[]) => pts.map((p) => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ')
@@ -98,7 +98,7 @@ function useDrawing(onStroke: (pts: Pt[]) => void) {
  * Draw-and-check: draw each stroke in order; a stroke in the wrong direction/order/shape is rejected
  * and the correct one is animated. `onDone(misses)` fires after the last stroke.
  */
-export function DrawCheck({ kanji, onDone }: { kanji: string; onDone: (misses: number) => void }) {
+export function DrawCheck({ kanji, onDone, allowTrace = true }: { kanji: string; onDone: (misses: number) => void; allowTrace?: boolean }) {
   const t = useT()
   const data = STROKES[kanji]!
   const [idx, setIdx] = useState(0)
@@ -179,72 +179,86 @@ export function DrawCheck({ kanji, onDone }: { kanji: string; onDone: (misses: n
       >
         {message}
       </p>
-      <div className="mt-2 flex justify-center">
+      {allowTrace && <div className="mt-2 flex justify-center">
         <button className="text-[13px] text-muted underline-offset-4 hover:underline" aria-pressed={trace} onClick={() => setTrace((x) => !x)}>
           {trace ? '✓ ' : ''}
           {t.kanji.trace}
         </button>
-      </div>
+      </div>}
     </div>
   )
 }
 
-/** Free draw: draw from memory, compare with the model, then grade yourself. */
-export function FreeDraw({ kanji, onGrade }: { kanji: string; onGrade: (ok: boolean) => void }) {
+/**
+ * Free draw: draw from memory, then "Check" compares the drawing with the model on the device (strokes in
+ * any order) and suggests a grade, which you confirm or override. `hint` replaces the default help text.
+ */
+export function FreeDraw({ kanji, onGrade, hint }: { kanji: string; onGrade: (ok: boolean) => void; hint?: string }) {
   const t = useT()
   const data = STROKES[kanji]!
   const [lines, setLines] = useState<Pt[][]>([])
-  const [shown, setShown] = useState(false)
+  const [grade, setGrade] = useState<DrawingGrade | null>(null)
   const [graded, setGraded] = useState<boolean | null>(null)
-  const { ref, current, handlers } = useDrawing((pts) => !shown && setLines((l) => [...l, pts]))
+  const { ref, current, handlers } = useDrawing((pts) => !grade && !isTap(pts) && setLines((l) => [...l, pts]))
+  const unmatched = new Set(grade?.unmatched ?? [])
+  const choose = (ok: boolean) => {
+    setGraded(ok)
+    onGrade(ok)
+  }
+  const right = (
+    <Button key="r" variant={grade?.ok ? 'primary' : undefined} onClick={() => choose(true)}>
+      ✓ {t.kanji.gotIt}
+    </Button>
+  )
+  const wrong = (
+    <Button key="w" variant={grade?.ok ? undefined : 'primary'} onClick={() => choose(false)}>
+      ✗ {t.kanji.notYet}
+    </Button>
+  )
   return (
     <div>
       <Box ref={ref} data-testid="free-canvas" className="touch-none select-none" style={{ touchAction: 'none' }} {...handlers}>
-        {shown && (
-          <g {...strokeProps} stroke="var(--k-good)" strokeOpacity={0.55} strokeWidth={4.5}>
+        {grade && (
+          <g {...strokeProps} stroke="var(--k-good)" strokeOpacity={0.5} strokeWidth={4.5}>
             {data.d.map((d, i) => (
-              <path key={i} d={d} pathLength={1} className="kanji-stroke-anim" style={{ ['--delay' as string]: `${i * 0.3}s`, ['--dur' as string]: '0.3s' }} />
+              <path key={i} d={d} pathLength={1} className="kanji-stroke-anim" style={{ ['--delay' as string]: `${i * 0.25}s`, ['--dur' as string]: '0.25s' }} />
             ))}
           </g>
         )}
-        <g {...strokeProps} stroke="var(--k-text)" strokeWidth={3.6}>
+        <g {...strokeProps} strokeWidth={3.6}>
           {lines.map((l, i) => (
-            <polyline key={i} points={toPoints(l)} />
+            <polyline key={i} points={toPoints(l)} stroke={unmatched.has(i) ? 'var(--k-accent)' : 'var(--k-text)'} />
           ))}
-          {current && <polyline points={toPoints(current)} />}
+          {current && <polyline points={toPoints(current)} stroke="var(--k-text)" />}
         </g>
       </Box>
-      <p className="mt-3 text-center text-[14px] text-muted">{t.kanji.freeHint}</p>
+      {grade ? (
+        <div data-testid="free-result" className="mt-3 text-center">
+          <p className={`text-[16px] font-semibold ${grade.ok ? 'text-good' : 'text-accent'}`}>
+            {grade.ok ? `✓ ${t.kanji.allMatch(grade.total)}` : t.kanji.someMatch(grade.matched, grade.total, grade.drawn)}
+          </p>
+          {grade.matched > 1 && (!grade.order || !grade.direction) && (
+            <p className="mt-1 text-[13px] text-warn">{[!grade.order && t.kanji.orderDiffers, !grade.direction && t.kanji.directionDiffers].filter(Boolean).join(' · ')}</p>
+          )}
+        </div>
+      ) : (
+        <p className="mt-3 text-center text-[14px] text-muted">{hint ?? t.kanji.freeHint}</p>
+      )}
       <div className="mt-3 flex flex-wrap justify-center gap-2">
-        {!shown ? (
+        {!grade ? (
           <>
+            <Button onClick={() => setLines((l) => l.slice(0, -1))} disabled={!lines.length}>
+              ↶ {t.kanji.undo}
+            </Button>
             <Button onClick={() => setLines([])} disabled={!lines.length}>
               {t.kanji.clear}
             </Button>
-            <Button variant="primary" onClick={() => setShown(true)} disabled={!lines.length}>
-              {t.kanji.showModel}
+            <Button variant="primary" onClick={() => setGrade(gradeDrawing(lines, data.pts))} disabled={!lines.length}>
+              {t.common.check}
             </Button>
           </>
         ) : graded === null ? (
-          <>
-            <Button
-              variant="primary"
-              onClick={() => {
-                setGraded(true)
-                onGrade(true)
-              }}
-            >
-              ✓ {t.kanji.gotIt}
-            </Button>
-            <Button
-              onClick={() => {
-                setGraded(false)
-                onGrade(false)
-              }}
-            >
-              ✗ {t.kanji.notYet}
-            </Button>
-          </>
+          grade.ok ? [right, wrong] : [wrong, right]
         ) : (
           <p data-testid="free-graded" className={`text-[15px] ${graded ? 'text-good' : 'text-accent'}`}>
             {graded ? `✓ ${t.kanji.gotIt}` : `✗ ${t.kanji.notYet}`}

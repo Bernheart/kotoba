@@ -103,8 +103,11 @@ export async function recordKanji(id: string, ok: boolean, kind: StatKind = 'rea
     if (kind === 'read') {
       if (ok) row.right++
       else row.wrong++
-    } else if (ok) row.writeRight = (row.writeRight ?? 0) + 1
-    else row.writeWrong = (row.writeWrong ?? 0) + 1
+    } else {
+      if (ok) row.writeRight = (row.writeRight ?? 0) + 1
+      else row.writeWrong = (row.writeWrong ?? 0) + 1
+      row.writeLast = now
+    }
     await database.kanjiProgress.put(row)
   })
 }
@@ -327,4 +330,158 @@ export function checkStroke(drawn: Pt[], expected: number, model: Pt[][], fit: F
   if (fwd <= STROKE_TOLERANCE && sizeOk && fwd <= rev) return 'ok'
   if (rev <= STROKE_TOLERANCE && sizeOk && rev < fwd) return 'direction'
   return 'shape'
+}
+
+/* ---------- writing from meaning ---------- */
+
+/** A word to give as the writing prompt, with the kanji blanked out: 午後 → 午□. */
+export interface DrawPrompt {
+  word: KanjiWord
+  blanked: string
+}
+
+export function drawPrompt(k: Kanji): DrawPrompt {
+  const words = quizWords(k)
+  const word = words[Math.floor(Math.random() * words.length)]!
+  return { word, blanked: variants(word.w)[0]!.split(k.kanji).join('□') }
+}
+
+/** How much a kanji needs writing practice: higher = drawn badly, never drawn, or not drawn for a while. */
+export function writeWeight(row: KanjiProgressRow | undefined, now = Date.now()): number {
+  const r = row?.writeRight ?? 0
+  const w = row?.writeWrong ?? 0
+  if (!r && !w) return 1.6
+  const miss = (w + 1) / (r + w + 2)
+  const days = row?.writeLast ? (now - row.writeLast) / 86_400_000 : 30
+  return 0.3 + 2.5 * miss + 0.7 * Math.min(1, Math.max(0, days) / 10)
+}
+
+/**
+ * `count` kanji to write. With `weakMore` the ones you draw badly (or haven't drawn) come up more often,
+ * well-drawn ones still now and then; otherwise an even shuffle. No repeats until the pool is used up.
+ */
+export function pickForWriting(pool: Kanji[], stats: Map<string, KanjiProgressRow>, count: number, weakMore: boolean, now = Date.now(), rand = Math.random): Kanji[] {
+  const out: Kanji[] = []
+  while (pool.length && out.length < count) {
+    // weighted sampling without replacement (Efraimidis–Spirakis)
+    const round = pool
+      .map((k) => ({ k, key: Math.pow(rand(), 1 / (weakMore ? writeWeight(stats.get(kanjiKey(k.kanji)), now) : 1)) }))
+      .sort((a, b) => b.key - a.key)
+      .map((x) => x.k)
+    out.push(...round.slice(0, count - out.length))
+  }
+  return out
+}
+
+/** Writing record of one kanji (undefined = never drawn). */
+export function writeScore(row: KanjiProgressRow | undefined): { right: number; wrong: number; rate: number } | undefined {
+  const right = row?.writeRight ?? 0
+  const wrong = row?.writeWrong ?? 0
+  return right + wrong ? { right, wrong, rate: right / (right + wrong) } : undefined
+}
+
+/* ---------- free-draw auto-check ---------- */
+
+export interface DrawingGrade {
+  /** Model strokes matched by a drawn stroke */
+  matched: number
+  /** Strokes in the model / drawn */
+  total: number
+  drawn: number
+  /** Drawn strokes that match no model stroke (indices into the drawing) */
+  unmatched: number[]
+  /** Matched strokes were drawn in the book's order / direction */
+  order: boolean
+  direction: boolean
+  /** matched / max(drawn, total) */
+  score: number
+  /** Every stroke there, nothing extra: the suggested grade */
+  ok: boolean
+}
+
+/** Mean distance under which a drawn stroke counts as a model stroke in free draw. */
+export const FREE_TOLERANCE = 18
+
+/**
+ * Check a free drawing against the model, strokes in any order: line the drawing up with the model
+ * (size and position), pair each drawn stroke with the model stroke it fits best, then refit on the
+ * pairs and pair again. No handwriting recognition: it only says how well this drawing fits this kanji.
+ */
+export function gradeDrawing(strokes: Pt[][], model: Pt[][]): DrawingGrade {
+  const drawn = strokes.filter((s) => s.length >= 2)
+  const empty = { matched: 0, total: model.length, drawn: drawn.length, unmatched: drawn.map((_, i) => i), order: false, direction: false, score: 0, ok: false }
+  if (!drawn.length) return empty
+  // first fit: bounding boxes
+  const box = (pts: Pt[]) => {
+    const xs = pts.map((p) => p[0])
+    const ys = pts.map((p) => p[1])
+    return { x0: Math.min(...xs), x1: Math.max(...xs), y0: Math.min(...ys), y1: Math.max(...ys) }
+  }
+  const bd = box(drawn.flat())
+  const bm = box(model.flat())
+  const size = (b: ReturnType<typeof box>) => Math.max(b.x1 - b.x0, b.y1 - b.y0, 1)
+  const c = STROKE_BOX / 2
+  const scale = Math.min(2, Math.max(0.5, size(bm) / size(bd)))
+  const byBox: Fit = {
+    scale,
+    dx: (bm.x0 + bm.x1) / 2 - c - scale * ((bd.x0 + bd.x1) / 2 - c),
+    dy: (bm.y0 + bm.y1) / 2 - c - scale * ((bd.y0 + bd.y1) / 2 - c),
+  }
+  type Pair = { i: number; j: number; fwd: number; rev: number }
+  const cost = (p: Pair) => Math.min(p.fwd, p.rev)
+  // pair drawn strokes with model strokes (best fits first), refit on the pairs, pair again
+  const solve = (start: Fit): Pair[] => {
+    let fit = start
+    let pairs: Pair[] = []
+    for (let pass = 0; pass < 3; pass++) {
+      const fitted = drawn.map((s) => applyFit(s, fit))
+      const cand: Pair[] = []
+      fitted.forEach((s, i) =>
+        model.forEach((m, j) => {
+          const u = resample(s, m.length)
+          const ratio = pathLen(u) / Math.max(1, pathLen(m))
+          if (ratio < 0.35 || ratio > 2.5) return
+          cand.push({ i, j, fwd: meanDist(u, m), rev: meanDist([...u].reverse(), m) })
+        }),
+      )
+      cand.sort((a, b) => cost(a) - cost(b))
+      const usedI = new Set<number>()
+      const usedJ = new Set<number>()
+      pairs = []
+      for (const p of cand) {
+        if (usedI.has(p.i) || usedJ.has(p.j) || cost(p) > FREE_TOLERANCE) continue
+        usedI.add(p.i)
+        usedJ.add(p.j)
+        pairs.push(p)
+      }
+      if (pairs.length < 2) break
+      const next = fitStrokes(
+        pairs.map((p) => {
+          const m = model[p.j]!
+          const d = resample(drawn[p.i]!, m.length)
+          return { drawn: p.fwd <= p.rev ? d : [...d].reverse(), model: m }
+        }),
+      )
+      if (Math.abs(next.scale - fit.scale) < 0.01 && Math.abs(next.dx - fit.dx) < 0.5 && Math.abs(next.dy - fit.dy) < 0.5) break
+      fit = next
+    }
+    return pairs
+  }
+  // Lining up the outlines fails when strokes are missing (one line of 二 would be stretched over the
+  // whole kanji), so also try the drawing as it is, and keep whichever pairs more strokes, more closely.
+  const quality = (ps: Pair[]) => ps.length * 1000 - ps.reduce((s, p) => s + cost(p), 0)
+  const pairs = [solve(byBox), solve(NO_FIT)].sort((a, b) => quality(b) - quality(a))[0]!
+  const matchedI = new Set(pairs.map((p) => p.i))
+  const byDrawOrder = [...pairs].sort((a, b) => a.i - b.i).map((p) => p.j)
+  const matched = pairs.length
+  return {
+    matched,
+    total: model.length,
+    drawn: drawn.length,
+    unmatched: drawn.map((_, i) => i).filter((i) => !matchedI.has(i)),
+    order: byDrawOrder.every((j, n) => n === 0 || j > byDrawOrder[n - 1]!),
+    direction: pairs.every((p) => p.fwd <= p.rev),
+    score: matched / Math.max(drawn.length, model.length),
+    ok: matched === model.length && drawn.length === model.length,
+  }
 }

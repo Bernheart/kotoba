@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test'
 import { readFileSync } from 'node:fs'
 
 const lesson3 = JSON.parse(readFileSync(new URL('../data/kanji/lesson-03.json', import.meta.url), 'utf8')) as {
-  kanji: { words: { w: string; r: string }[] }[]
+  kanji: { kanji: string; meaning: { en: string }; words: { w: string; r: string }[] }[]
 }
 
 const shot = (page: Page, project: string, n: string) => page.screenshot({ path: `e2e/screenshots/${project}/${n}.png` })
@@ -91,7 +91,9 @@ test('free draw shows the model and records the self-grade', async ({ page }) =>
   await page.mouse.down()
   await page.mouse.move(box.x + box.width * 0.7, box.y + box.height * 0.35, { steps: 8 })
   await page.mouse.up()
-  await page.getByRole('button', { name: 'Compare with the model' }).click()
+  await page.getByRole('button', { name: 'Check' }).click()
+  // one line is not 二: the auto-check says so and suggests "Not quite"; overriding it is allowed
+  await expect(page.getByTestId('free-result')).toContainText('1 of 2 strokes match')
   await page.getByRole('button', { name: /I got it right/ }).click()
   await expect(page.getByTestId('free-graded')).toBeVisible()
   // the grade is stored as kanji stats: Back opens the detail sheet, which shows them
@@ -105,4 +107,50 @@ test('library links to the kanji grid', async ({ page }) => {
   await page.getByRole('link', { name: 'L5' }).first().click()
   await expect(page.locator('[data-kanji="山"]')).toBeVisible()
   await expect(page.locator('[data-kanji="一"]')).toHaveCount(0)
+})
+
+test('write from meaning: prompt, free draw auto-check, results', async ({ page }, info) => {
+  await page.goto('/?safe=1#/study')
+  await page.getByRole('link', { name: /Write kanji/ }).click()
+  await chooseChips(page, ['L3', 'L4', 'L5', 'L6', 'L7', 'L8', 'L9', 'L10', 'L11', 'L12'], ['L3'])
+  await page.getByRole('radio', { name: 'Free draw + auto-check' }).click()
+  await page.getByRole('radio', { name: '10' }).click()
+  await page.getByRole('button', { name: 'Begin' }).click()
+  await expect(page.getByTestId('draw-prompt')).toContainText('□')
+  await shot(page, info.project.name, 'kanji-draw-prompt')
+  // draw the answer itself, stroke by stroke, from the stroke data the app uses
+  const strokes = JSON.parse(readFileSync(new URL('../data/kanji/strokes.json', import.meta.url), 'utf8')) as { strokes: Record<string, { pts: [number, number][][] }> }
+  const lessonKanji = new Set(lesson3.kanji.map((k) => k.kanji))
+  for (let i = 0; i < 10; i++) {
+    // the kanji is revealed in the word once answered; before that, find it by elimination from the meaning
+    const meaning = (await page.getByTestId('draw-prompt').locator('div').first().textContent())!.trim()
+    const k = lesson3.kanji.find((x) => x.meaning.en === meaning)!
+    expect(lessonKanji.has(k.kanji)).toBe(true)
+    const box = (await page.getByTestId('free-canvas').boundingBox())!
+    for (const st of strokes.strokes[k.kanji]!.pts) {
+      await page.mouse.move(box.x + (box.width * st[0]![0]) / 109, box.y + (box.height * st[0]![1]) / 109)
+      await page.mouse.down()
+      for (const p of st.slice(1)) await page.mouse.move(box.x + (box.width * p[0]) / 109, box.y + (box.height * p[1]) / 109)
+      await page.mouse.up()
+    }
+    await page.getByRole('button', { name: 'Check' }).click()
+    await expect(page.getByTestId('free-result')).toContainText('match')
+    await expect(page.getByTestId('free-result')).not.toContainText(' of ')
+    if (i === 0) await shot(page, info.project.name, 'kanji-draw-checked')
+    await page.getByRole('button', { name: /I got it right/ }).click()
+    await page.getByRole('button', { name: 'Continue' }).click()
+  }
+  await expect(page.getByText('Session complete')).toBeVisible()
+  // the record on the setup screen now lists what you write best
+  await page.getByRole('button', { name: 'Again' }).click()
+  await expect(page.getByTestId('write-record')).toContainText('You write best')
+})
+
+test('write from meaning: "Show the kanji" counts as a miss', async ({ page }) => {
+  await page.goto('/?safe=1#/kanji/draw')
+  await page.getByRole('button', { name: 'Begin' }).click()
+  await page.getByRole('button', { name: 'Show the kanji' }).click()
+  await expect(page.getByRole('img')).toBeVisible()
+  await page.getByRole('button', { name: 'Continue' }).click()
+  await expect(page.getByTestId('draw-prompt')).toBeVisible()
 })

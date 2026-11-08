@@ -29,10 +29,11 @@ const QuizPage = lazy(() => import('./features/quiz/QuizPage').then((m) => ({ de
 const SessionPage = lazy(() => import('./features/quiz/SessionPage').then((m) => ({ default: m.SessionPage })))
 const ShadowingPage = lazy(() => import('./features/quiz/ShadowingPage').then((m) => ({ default: m.ShadowingPage })))
 const KanjiPage = lazy(() => import('./features/kanji/KanjiPage').then((m) => ({ default: m.KanjiPage })))
+const KanjiDrawPage = lazy(() => import('./features/kanji/KanjiDrawPage').then((m) => ({ default: m.KanjiDrawPage })))
 const KanjiQuizPage = lazy(() => import('./features/kanji/KanjiQuizPage').then((m) => ({ default: m.KanjiQuizPage })))
 const KanjiWritePage = lazy(() => import('./features/kanji/KanjiWritePage').then((m) => ({ default: m.KanjiWritePage })))
 const StatsPage = lazy(() => import('./features/stats/StatsPage').then((m) => ({ default: m.StatsPage })))
-const FOCUS_ROUTES = ['/review', '/session', '/quiz', '/conjugation', '/kana', '/shadowing', '/matching', '/kanji/quiz', '/kanji/write']
+const FOCUS_ROUTES = ['/review', '/session', '/quiz', '/conjugation', '/kana', '/shadowing', '/matching', '/kanji/quiz', '/kanji/write', '/kanji/draw']
 
 function useApplySettings() {
   const s = useSettings()
@@ -90,6 +91,7 @@ function Shell() {
           <Route path="/session" component={SessionPage} />
           <Route path="/kanji" component={KanjiPage} />
           <Route path="/kanji/quiz" component={KanjiQuizPage} />
+          <Route path="/kanji/draw" component={KanjiDrawPage} />
           <Route path="/kanji/write/:ch" component={KanjiWritePage} />
           <Route>
             <Page title="404">

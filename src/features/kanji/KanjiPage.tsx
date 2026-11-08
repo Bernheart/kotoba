@@ -31,9 +31,14 @@ export function KanjiPage() {
       title={t.kanji.title}
       subtitle={t.kanji.subtitle(KANJI.length)}
       actions={
-        <Button variant="primary" size="sm" onClick={() => navigate('/kanji/quiz')}>
-          {t.kanji.quiz}
-        </Button>
+        <>
+          <Button size="sm" onClick={() => navigate('/kanji/draw')}>
+            ✎ {t.kanji.drawTile}
+          </Button>
+          <Button variant="primary" size="sm" onClick={() => navigate('/kanji/quiz')}>
+            {t.kanji.quiz}
+          </Button>
+        </>
       }
     >
       <div className="no-scrollbar -mx-4 mb-5 flex gap-2 overflow-x-auto px-4 sm:-mx-6 sm:px-6">

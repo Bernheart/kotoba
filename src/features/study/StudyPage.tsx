@@ -71,6 +71,7 @@ export function StudyPage() {
         <Tile href="/matching" glyph="合" title={t.study.matching} desc={t.study.matchingDesc} />
         <Tile href="/kana" glyph="仮" title={t.study.kana} desc={t.study.kanaDesc} />
         <Tile href="/kanji?" glyph="漢" title={t.kanji.tile} desc={t.kanji.tileDesc} />
+        <Tile href="/kanji/draw?" glyph="筆" title={t.kanji.drawTile} desc={t.kanji.drawDesc} />
         <Tile href="/quiz/weak" glyph="弱" title={t.study.weak} desc={t.study.weakDesc} badge={stats?.leeches || undefined} />
       </div>
     </Page>

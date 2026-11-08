@@ -4,6 +4,10 @@ import { KotobaDB } from '../src/lib/db'
 import {
   checkQuizReading,
   checkStroke,
+  drawPrompt,
+  pickForWriting,
+  writeWeight,
+  gradeDrawing,
   strokeFit,
   resample,
   checkWordReading,
@@ -203,6 +207,75 @@ describe('draw-and-check leniency (simulated handwriting)', () => {
       expect(checkStroke(drawn, i, model, strokeFit(accepted, drawn, model[i]!)), `stroke ${i + 1}`).toBe('ok')
       accepted.push({ drawn: resample(drawn, model[i]!.length), model: model[i]! })
     }
+  })
+
+  it('free-draw auto-check: sloppy correct drawings pass, other kanji and missing strokes do not', () => {
+    let ok = 0
+    let n = 0
+    let otherOk = 0
+    let otherN = 0
+    let missingOk = 0
+    let shuffledOk = 0
+    for (let rep = 0; rep < 2; rep++)
+      for (const k of KANJI) {
+        const model = STROKES[k.kanji]!.pts
+        const g = { s: between(0.73, 1.12), dx: between(-12, 12), dy: between(-12, 12), rot: between(-0.09, 0.09) }
+        const drawing = model.map((m) => hand(m, g))
+        n++
+        if (gradeDrawing(drawing, model).ok) ok++
+        // the same strokes in a random order still count (free draw is about recall)
+        if (gradeDrawing([...drawing].sort(() => rnd() - 0.5), model).ok) shuffledOk++
+        if (model.length > 1 && gradeDrawing(drawing.slice(0, -1), model).ok) missingOk++
+        // a different kanji with the same number of strokes
+        for (const o of KANJI) {
+          if (o === k || STROKES[o.kanji]!.pts.length !== model.length) continue
+          otherN++
+          if (gradeDrawing(STROKES[o.kanji]!.pts.map((m) => hand(m, g)), model).ok) otherOk++
+        }
+      }
+    expect(ok / n).toBeGreaterThan(0.9)
+    expect(shuffledOk / n).toBeGreaterThan(0.9)
+    expect(missingOk).toBe(0)
+    expect(otherOk / otherN).toBeLessThan(0.02)
+  })
+})
+
+describe('write from meaning', () => {
+  const row = (r: number, w: number, last?: number) => ({ id: 'x', right: 0, wrong: 0, writeRight: r, writeWrong: w, writeLast: last, last: 0, updatedAt: 0, dirty: 0 as const })
+
+  it('blanks the kanji in the prompt word', () => {
+    for (const k of KANJI) {
+      const p = drawPrompt(k)
+      expect(p.blanked, k.kanji).not.toContain(k.kanji)
+      expect(p.blanked, k.kanji).toContain('□')
+    }
+  })
+
+  it('weights badly written, unwritten and long-unwritten kanji higher', () => {
+    const now = 100 * 86_400_000
+    expect(writeWeight(row(0, 4, now), now)).toBeGreaterThan(writeWeight(row(8, 0, now), now))
+    expect(writeWeight(undefined, now)).toBeGreaterThan(writeWeight(row(8, 0, now), now))
+    expect(writeWeight(row(8, 0, now - 20 * 86_400_000), now)).toBeGreaterThan(writeWeight(row(8, 0, now), now))
+  })
+
+  it('picks weak kanji more often but still includes strong ones, without repeats', () => {
+    const pool = KANJI.filter((k) => k.lesson === 3)
+    const [weak, strong] = [pool[0]!, pool[1]!]
+    const now = Date.now()
+    const stats = new Map(pool.map((k) => [`k:${k.kanji}`, row(k === weak ? 0 : 6, k === weak ? 5 : 0, now)]))
+    let weakIn = 0
+    let strongIn = 0
+    for (let i = 0; i < 400; i++) {
+      const picked = pickForWriting(pool, stats, 5, true, now)
+      expect(new Set(picked).size).toBe(5)
+      if (picked.includes(weak)) weakIn++
+      if (picked.includes(strong)) strongIn++
+    }
+    expect(weakIn).toBeGreaterThan(strongIn * 2)
+    expect(strongIn).toBeGreaterThan(0)
+    // more than the pool: every kanji once before any repeats
+    const many = pickForWriting(pool, stats, pool.length + 3, true, now)
+    expect(new Set(many.slice(0, pool.length)).size).toBe(pool.length)
   })
 })
 

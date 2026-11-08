@@ -89,6 +89,8 @@ export interface KanjiProgressRow extends Syncable {
   /** Writing practice (draw-and-check, self-graded free draw) */
   writeRight?: number
   writeWrong?: number
+  /** Last writing answer, epoch ms */
+  writeLast?: number
   /** Last answer, epoch ms */
   last: number
 }
